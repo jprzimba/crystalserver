@@ -4,7 +4,7 @@ local monster = {}
 monster.description = "a bakragore"
 monster.experience = 15000000
 monster.outfit = {
-	lookType = 1665,
+	lookType = 1671,
 	lookHead = 0,
 	lookBody = 0,
 	lookLegs = 0,
@@ -14,13 +14,13 @@ monster.outfit = {
 }
 
 monster.events = {
-	"RottenBloodBossDeath",
+	"RottenBloodBossOutFitDeath",
 }
 
 monster.health = 1200000
 monster.maxHealth = 1200000
 monster.race = "undead"
-monster.corpse = 44018
+monster.corpse = 44012
 monster.speed = 195
 monster.manaCost = 0
 

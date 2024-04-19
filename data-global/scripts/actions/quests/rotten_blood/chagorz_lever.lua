@@ -13,14 +13,14 @@ local config = {
 		{ pos = Position(33074, 32367, 15), teleport = Position(33045, 32372, 15), effect = CONST_ME_TELEPORT },
 	},
 	specPos = {
-		from = Position(33034, 32358, 15),
-		to = Position(32051, 32374, 15),
+		from = Position(33033, 32357, 15),
+		to = Position(33053, 32376, 15),
 	},
 	exit = Position(),
 }
 
 local mitmahSummons = {
-	Position(33041, 32364, 15),
+	Position(33039, 32363, 15),
 	Position(33048, 32364, 15),
 
 }
