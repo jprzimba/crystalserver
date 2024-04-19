@@ -427,7 +427,7 @@ maxDamageReflection = 200
 -- NOTE: combatChainDelay: set to minimum 50 miliseconds
 -- combatChainSkillFormulaMissile is used for weapons like assassin star/viper star and others,
 -- combatChainSkillFormulaDistance used for weapons like arrows/bols
--- combatChainSkillFormulaWandAndRods used for weapons like wands/rods
+-- combatChainSkillFormulaWandsAndRods used for weapons like wands/rods
 toggleChainSystem = false
 combatChainDelay = 50
 combatChainTargets = 5
@@ -436,7 +436,7 @@ combatChainSkillFormulaClub = 0.7
 combatChainSkillFormulaSword = 1.1
 combatChainSkillFormulaDistance = 0.9
 combatChainSkillFormulaMissile = 0.9
-combatChainSkillFormulaWandAndRods = 1.0
+combatChainSkillFormulaWandsAndRods = 1.0
 
 -- Global server Save
 -- NOTE: globalServerSaveNotifyDuration in minutes
