@@ -9,12 +9,14 @@
 
 ### Bug Fixes
   - Fix chain system. Now works properly for Mages and distance weapowns (Tryller).
+  - Fix V.I.P List (Tryller).
   - Fix damage reflection not working properly (Tryller).
   - Optimized onPlayerSellAllLoot in npc code to avoid long freeze (Tryller).
   - Fix data/scripts/talkactions/player/refill.lua, now check if player has capacity to receive items. (Tryller).
   - Fix Gold pouch using in the Obtain method. (carlospess0a).
   - Fix destroy field is working inside pz. (carlospess0a).
   - Fix diamond arrow static attack points. (svetrey).
+  - Fix stamina not recovering when dead. (carlospess0a)
 
 ### Changed Features
   - Removed old removeBeginningWeaponAmmunition and implemented removeBreakWeaponsCharges at config.lua (Tryller)
