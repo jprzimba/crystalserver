@@ -5392,6 +5392,11 @@ void Game::playerSetManagedContainer(uint32_t playerId, ObjectCategory_t categor
 		return;
 	}
 
+	if (container->getID() == ITEM_GOLD_POUCH && !isLootContainer) {
+		player->sendCancelMessage("You can only set the gold pouch as a loot container.");
+		return;
+	}
+
 	if (container->getHoldingPlayer() != player) {
 		player->sendCancelMessage("You must be holding the container to set it as a loot container.");
 		return;
