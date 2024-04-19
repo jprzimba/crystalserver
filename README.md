@@ -4,13 +4,14 @@
 
 Crystal Server is a free and open-source MMORPG server emulator written in C++.
 
-It is based on [The Forgotten Server](https://github.com/otland/forgottenserver) project.
+It is based on [The Forgotten Server](https://github.com/otland/forgottenserver) project forked from [Open Tibia](https://github.com/opentibia/server).
 
 This project was created a long time ago to distribute a stable and safe distro for those who want to have a Tibia otserv.
 
 To connect to the server and to take a stable experience, you can
-use [mehah's otclient](https://github.com/mehah/otclient)
-or [tibia client](https://github.com/dudantas/tibia-client/releases/latest) and if you want to edit something.
+use [mehah's otclient](https://github.com/mehah/otclient).
+
+You can see the complete change log for Crystal Server at [this link](https://github.com/jprzimba/crystalserver/blob/main/CHANGELOG.md).
 
 If you want edit the map, use the [Remere's Map Editor](https://www.mediafire.com/file/o2e06j8j2lsxmh8/RME.rar/file).
 

@@ -4,7 +4,7 @@
 
 ### Features
   - Implemented Surprise Bags System: data/items/bags.xml (Tryller, dgprado).
-  - New configs to chain system at config.lua combatChainSkillFormulaMissile is used for weapons like assassin star/viper star and others, combatChainSkillFormulaDistance used for weapons like arrows/bols and combatChainSkillFormulaWandsAndRods used for weapons like wands/rods (Tryller).
+  - New configs to chain system at config.lua "combatChainSkillFormulaMissile" is used for weapons like assassin star/viper star and others, "combatChainSkillFormulaDistance" used for weapons like arrows/bols and "combatChainSkillFormulaWandsAndRods" used for weapons like wands/rods (Tryller).
   - Updated npc data-global/npc/hireling.lua, now it sell imbuement packages and also buy all loots inside Gold Pouch (Tryller).
 
 ### Bug Fixes
@@ -21,7 +21,8 @@
   - Fixed stamina not recovering when dead (carlospess0a).
 
 ### Changed Features
-  - Removed old removeBeginningWeaponAmmunition and implemented removeBreakWeaponsCharges at config.lua (Tryller).
+  - Removed old "removeBeginningWeaponAmmunition" and implemented "removeBreakWeaponsCharges" at config.lua (Tryller).
+  - Removed "useAnyDatapackFolder" at config.lua, now it's enable by default (Tryller).
 
 ### Map and Datapack updates
 - **Rotten Blood Quest**
