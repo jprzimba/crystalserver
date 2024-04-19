@@ -3,39 +3,20 @@
 ## Version 4.0
 
 ### Features
-- **Surprise Bags System**
   - Implemented Surprise Bags System: data/items/bags.xml (Tryller, dgprado)
-
-- **Chain System**
   - New configs to chain system at config.lua combatChainSkillFormulaMissile is used for weapons like assassin star/viper star and others, combatChainSkillFormulaDistance used for weapons like arrows/bols and combatChainSkillFormulaWandAndRods used for weapons like wands/rods (Tryller)
-
-- **Take Screenshoot**
-  - Implemented take screen shoot on player advance/death (Tryller, TFS)
-
-- **Hirelings**
-  - Updated npc data-global/npc/hireling.lua, now it sell imbuement packages and also buy all loots from Loot Pouch. (Tryller)
+  - Updated npc data-global/npc/hireling.lua, now it sell imbuement packages and also buy all loots inside Gold Pouch. (Tryller)
 
 ### Bug Fixes
-- **Chain System**
   - Fix chain system. Now works properly for Mages and distance weapowns (Tryller).
-
-- **Damage Reflection**
   - Fix damage reflection not working properly (Tryller).
-
-- **onPlayerSellAllLoot**
   - Optimized onPlayerSellAllLoot in npc code to avoid long freeze (Tryller).
-  
-- **TalkActions**
   - Fix data/scripts/talkactions/player/refill.lua, now check if player has capacity to receive items. (Tryller).
-
-- **Gold Pouch**
   - Fix Gold pouch using in the Obtain method. (carlospess0a).
-
-- **Diamond Arrow**
+  - Fix destroy field is working inside pz. (carlospess0a).
   - Fix diamond arrow static attack points. (svetrey).
 
 ### Changed Features
-- **removeBeginningWeaponAmmunition**
   - Removed old removeBeginningWeaponAmmunition and implemented removeBreakWeaponsCharges at config.lua (Tryller)
 
 ### Map and Datapack updates
