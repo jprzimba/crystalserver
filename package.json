@@ -1,0 +1,8 @@
+{
+  "name": "crystal",
+  "version": "1.4.1",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jprzimba/crystalserver.git"
+  }
+}
