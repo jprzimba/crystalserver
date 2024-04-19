@@ -17,7 +17,10 @@
 
 ### Bug Fixes
 - **Chain System**
-  - Now chain system works properly for Mages and distance weapowns (Tryller).
+  - Fix chain system. Now works properly for Mages and distance weapowns (Tryller).
+
+- **Damage Reflection**
+  - Fix damage reflection not working properly (Tryller).
 
 - **onPlayerSellAllLoot**
   - Optimized onPlayerSellAllLoot in npc code to avoid long freeze (Tryller).
@@ -25,13 +28,19 @@
 - **TalkActions**
   - Fix data/scripts/talkactions/player/refill.lua, now check if player has capacity to receive items. (Tryller).
 
+- **Gold Pouch**
+  - Fix Gold pouch using in the Obtain method. (carlospess0a).
+
+- **Diamond Arrow**
+  - Fix diamond arrow static attack points. (svetrey).
+
 ### Changed Features
 - **removeBeginningWeaponAmmunition**
   - Removed old removeBeginningWeaponAmmunition and implemented removeBreakWeaponsCharges at config.lua (Tryller)
 
 ### Map and Datapack updates
 - **Rotten Blood Quest**
-  - Add Rottten Blood Quest Scripts (dgprado).
+  - Add Rotten Blood Quest Scripts (dgprado).
   - Add Rotten Blood Creatures and Bosses. (dgprado, Tryller)
 
 ---
