@@ -507,6 +507,10 @@ dropSurpriseBagsFromMonsters = false
 -- Stamina
 staminaSystem = true
 
+-- Screenshots
+-- Set enableScreenshots to true to anable game screenshots.
+enableScreenshots = true
+
 -- Scripts
 warnUnsafeScripts = true
 convertUnsafeScripts = true

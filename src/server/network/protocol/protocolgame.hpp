@@ -243,6 +243,7 @@ private:
 	void sendPrivateMessage(std::shared_ptr<Player> speaker, SpeakClasses type, const std::string &text);
 	void sendIcons(uint32_t icons);
 	void sendFYIBox(const std::string &message);
+	void takeScreenshot(Screenshot_t screenshotType);
 
 	void openImbuementWindow(std::shared_ptr<Item> item);
 	void sendImbuementResult(const std::string message);

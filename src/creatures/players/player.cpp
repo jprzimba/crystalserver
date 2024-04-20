@@ -703,6 +703,7 @@ void Player::addSkillAdvance(skills_t skill, uint64_t count) {
 		sendTextMessage(MESSAGE_EVENT_ADVANCE, ss.str());
 
 		g_creatureEvents().playerAdvance(static_self_cast<Player>(), skill, (skills[skill].level - 1), skills[skill].level);
+		takeScreenshot(SCREENSHOT_TYPE_SKILLUP);
 
 		sendUpdateSkills = true;
 		currReqTries = nextReqTries;
@@ -2308,7 +2309,7 @@ void Player::addManaSpent(uint64_t amount) {
 		std::ostringstream ss;
 		ss << "You advanced to magic level " << magLevel << '.';
 		sendTextMessage(MESSAGE_EVENT_ADVANCE, ss.str());
-
+		takeScreenshot(SCREENSHOT_TYPE_SKILLUP);
 		g_creatureEvents().playerAdvance(static_self_cast<Player>(), SKILL_MAGLEVEL, magLevel - 1, magLevel);
 
 		sendUpdateStats = true;
@@ -2447,6 +2448,7 @@ void Player::addExperience(std::shared_ptr<Creature> target, uint64_t exp, bool 
 		std::ostringstream ss;
 		ss << "You advanced from Level " << prevLevel << " to Level " << level << '.';
 		sendTextMessage(MESSAGE_EVENT_ADVANCE, ss.str());
+		takeScreenshot(SCREENSHOT_TYPE_LEVELUP);
 	}
 
 	if (nextLevelExp > currLevelExp) {

@@ -8631,6 +8631,25 @@ void ProtocolGame::sendBosstiaryEntryChanged(uint32_t bossid) {
 	writeToOutputBuffer(msg);
 }
 
+void ProtocolGame::takeScreenshot(Screenshot_t screenshotType) {
+	if (!g_configManager().getBoolean(ENABLE_SCREENSHOTS, __FUNCTION__)) {
+		return;
+	}
+
+	if (oldProtocol) {
+		return;
+	}
+
+	if (screenshotType < SCREENSHOT_TYPE_FIRST || screenshotType > SCREENSHOT_TYPE_LAST) {
+		return;
+	}
+
+	NetworkMessage msg;
+	msg.addByte(0x75);
+	msg.addByte(screenshotType);
+	writeToOutputBuffer(msg);
+}
+
 void ProtocolGame::sendSingleSoundEffect(const Position &pos, SoundEffect_t id, SourceEffect_t source) {
 	if (oldProtocol) {
 		return;

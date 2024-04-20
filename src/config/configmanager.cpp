@@ -172,6 +172,7 @@ bool ConfigManager::load() {
 	loadBoolConfig(L, WARN_UNSAFE_SCRIPTS, "warnUnsafeScripts", true);
 	loadBoolConfig(L, XP_DISPLAY_MODE, "experienceDisplayRates", true);
 	loadBoolConfig(L, SURPRISE_BAGS, "dropSurpriseBagsFromMonsters", false);
+	loadBoolConfig(L, ENABLE_SCREENSHOTS, "enableScreenshots", true);
 
 	loadFloatConfig(L, BESTIARY_RATE_CHARM_SHOP_PRICE, "bestiaryRateCharmShopPrice", 1.0);
 	loadFloatConfig(L, FORGE_AMOUNT_MULTIPLIER, "forgeAmountMultiplier", 3.0);

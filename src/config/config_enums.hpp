@@ -334,4 +334,5 @@ enum ConfigKey_t : uint16_t {
 	WORLD_TYPE,
 	XP_DISPLAY_MODE,
 	SURPRISE_BAGS,
+	ENABLE_SCREENSHOTS,
 };

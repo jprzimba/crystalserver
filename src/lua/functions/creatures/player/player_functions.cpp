@@ -1133,6 +1133,19 @@ int PlayerFunctions::luaPlayerAddSkillTries(lua_State* L) {
 	return 1;
 }
 
+int PlayerFunctions::luaPlayerTakeScreenshot(lua_State* L) {
+	// player:takeScreenshot(screenshotType)
+	std::shared_ptr<Player> player = getUserdataShared<Player>(L, 1);
+	if (player) {
+		Screenshot_t screenshotType = getNumber<Screenshot_t>(L, 2);
+		player->takeScreenshot(screenshotType);
+		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
 int PlayerFunctions::luaPlayerSetLevel(lua_State* L) {
 	// player:setLevel(level)
 	std::shared_ptr<Player> player = getUserdataShared<Player>(L, 1);

@@ -1399,6 +1399,11 @@ public:
 			client->sendIcons(getClientIcons());
 		}
 	}
+	void takeScreenshot(Screenshot_t screenshotType) {
+		if (client) {
+			client->takeScreenshot(screenshotType);
+		}
+	}
 	void sendClientCheck() const {
 		if (client) {
 			client->sendClientCheck();
