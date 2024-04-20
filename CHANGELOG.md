@@ -19,6 +19,7 @@
   - Fixed destroy field is working inside pz (carlospess0a).
   - Fixed diamond arrow static attack points (svetrey).
   - Fixed stamina not recovering when dead (carlospess0a).
+  - Fixed alana sio only to "aleta som" users (carlospess0a).
 
 ### Changed Features
   - Removed old "removeBeginningWeaponAmmunition" and implemented "removeBreakWeaponsCharges" at config.lua (Tryller).
