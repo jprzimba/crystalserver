@@ -1,4 +1,4 @@
-local fileToUpdate = CORE_DIRECTORY .. "/update.lua"
+local fileToUpdate = "data/update.lua"
 dofile(fileToUpdate)
 
 local update = GlobalEvent("Update")
