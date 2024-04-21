@@ -364,7 +364,7 @@ void CrystalServer::loadModules() {
 	// Load scripts
 	modulesLoadHelper(g_scripts().loadScripts(datapackFolder + "/scripts", false, false), datapackFolder + "/scripts");
 	// Load monsters
-	modulesLoadHelper(g_scripts().loadScripts(datapackFolder + "/monster", false, false), datapackFolder + "/monster");
+	modulesLoadHelper(g_scripts().loadScripts("data/monster", false, false), "data/monster");
 	modulesLoadHelper((g_npcs().load(false, true)), "npc");
 
 	g_game().loadBoostedCreature();
