@@ -16,7 +16,7 @@ function nightmareIsleEvent.onStartup()
 	end
 
 	local randomMap = nightmareIsleConfig[math.random(#nightmareIsleConfig)]
-	Game.loadMap(DATA_DIRECTORY .. "/world/world_changes/nightmare_isle/" .. randomMap.mapName .. ".otbm")
+	Game.loadMap("data/world/world_changes/nightmare_isle/" .. randomMap.mapName .. ".otbm")
 	Game.setStorageValue(randomMap.storage, 1)
 
 	logger.info("[World Change] Nightmare Isle is active in " .. randomMap.displayName)

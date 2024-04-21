@@ -25,7 +25,7 @@ function furyGates.onStartup(interval)
 
 	local gateId = math.random(1, totalGates)
 	local selectedGate = gates[gateId]
-	Game.loadMap(DATA_DIRECTORY .. "/world/world_changes/fury_gates/" .. selectedGate.mapName .. ".otbm")
+	Game.loadMap("data/world/world_changes/fury_gates/" .. selectedGate.mapName .. ".otbm")
 	Game.setStorageValue(GlobalStorage.FuryGates, gateId)
 
 	logger.info("[World Change] Fury Gate has arrived in {}!", selectedGate.city)

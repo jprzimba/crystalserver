@@ -18,7 +18,7 @@ function dreamCourtsEvent.onStartup()
 		return false
 	end
 
-	Game.loadMap(DATA_DIRECTORY .. "/world/quest/the_dream_courts/" .. dayConfig.map .. ".otbm")
+	Game.loadMap("data/world/quest/the_dream_courts/" .. dayConfig.map .. ".otbm")
 	logger.info("[World Change] The Dream Courts today's boss is: {}!", dayConfig.bossName)
 	return true
 end

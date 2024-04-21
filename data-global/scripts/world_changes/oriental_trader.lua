@@ -59,7 +59,7 @@ function orientalTrader.onStartup()
 		end
 
 		local mapName = string.removeAllSpaces(randTown.mapName):lower()
-		Game.loadMap(DATA_DIRECTORY .. "/world/world_changes/oriental_trader/" .. mapName .. ".otbm")
+		Game.loadMap("data/world/world_changes/oriental_trader/" .. mapName .. ".otbm")
 
 		message = string.format("[World Change] Yasir has arrived in %s today!", randTown.mapName)
 		addEvent(spawnYasir, 60000, randTown.yasirPosition)

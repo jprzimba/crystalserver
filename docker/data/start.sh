@@ -35,19 +35,16 @@ echo "================================"
 echo ""
 
 echo ""
-echo "===== OTBR Global Data Pack ====="
+echo "===== Global Data Pack ====="
 echo ""
 
-if [ "$OT_SERVER_DATA" = "data-global" ] && [ ! -f data-global/world/world.otbm ]; then
+if [ "$OT_SERVER_DATA" = "data" ] && [ ! -f data/world/world.otbm ]; then
 	echo "YES"
-
-	echo "Downloading OTBR Map..."
-	wget --no-check-certificate "$OT_SERVER_MAP" -O data-global/world/world.otbm
-
+	echo "Downloading Map..."
+	wget --no-check-certificate "$OT_SERVER_MAP" -O data/world/world.otbm
 	echo "Done"
-
 else
-	echo "Not Using OTBR Data pack"
+	echo "Not Using Data pack"
 fi
 
 echo ""

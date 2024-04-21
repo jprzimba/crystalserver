@@ -398,7 +398,7 @@ function resetFerumbrasAscendantHabitats()
 		end
 	end
 
-	Game.loadMap(DATA_DIRECTORY .. "/world/quest/ferumbras_ascendant/habitats.otbm")
+	Game.loadMap("data/world/quest/ferumbras_ascendant/habitats.otbm")
 	return true
 end
 
