@@ -1,0 +1,6 @@
+dofile("data/npc/npclib/npc.lua")
+dofile("data/npc/npclib/npc_system/npc_handler.lua")
+dofile("data/npc/npclib/npc_system/keyword_handler.lua")
+dofile("data/npc/npclib/npc_system/modules.lua")
+dofile("data/npc/npclib/npc_system/custom_modules.lua")
+dofile("data/npc/npclib/npc_system/bank_system.lua")

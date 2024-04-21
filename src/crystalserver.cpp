@@ -351,7 +351,7 @@ void CrystalServer::loadModules() {
 	modulesLoadHelper(Item::items.loadFromXml(), "items.xml");
 
 	const auto datapackFolder = g_configManager().getString(DATA_DIRECTORY, __FUNCTION__);
-	logger.debug("Loading core scripts on folder: {}/", coreFolder);
+
 	// Load first core Lua libs
 	modulesLoadHelper((g_luaEnvironment().loadFile(coreFolder + "/core.lua", "core.lua") == 0), "core.lua");
 	modulesLoadHelper(g_scripts().loadScripts(coreFolder + "/scripts/lib", true, false), coreFolder + "/scripts/libs");
@@ -361,7 +361,6 @@ void CrystalServer::loadModules() {
 	modulesLoadHelper(g_events().loadFromXml(), "events/events.xml");
 	modulesLoadHelper(g_modules().loadFromXml(), "modules/modules.xml");
 
-	logger.info("Using datapack folder in: {}/", datapackFolder);
 	// Load scripts
 	modulesLoadHelper(g_scripts().loadScripts(datapackFolder + "/scripts", false, false), datapackFolder + "/scripts");
 	// Load monsters
