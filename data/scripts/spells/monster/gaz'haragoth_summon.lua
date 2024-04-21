@@ -1,4 +1,4 @@
-dofile(DATA_DIRECTORY .. "/scripts/spells/monster/gaz_functions.lua")
+dofile("data/scripts/spells/monster/gaz_functions.lua")
 
 local spell = Spell("instant")
 
