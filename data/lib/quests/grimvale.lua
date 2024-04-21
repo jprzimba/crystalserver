@@ -12,7 +12,7 @@ local function teleportPlayer(playerId, pos)
 end
 
 local function loadMap()
-	Game.loadMap(DATA_DIRECTORY .. "/world/world_changes/full_moon/final.otbm")
+	Game.loadMap("data/world/world_changes/full_moon/final.otbm")
 end
 
 local function removeFeroxa(feroxa)
