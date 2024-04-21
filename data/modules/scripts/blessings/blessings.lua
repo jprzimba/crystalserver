@@ -28,7 +28,7 @@ Blessings.Config = {
 	Debug = false, -- Prin debug messages in console if enabled
 }
 
-dofile(CORE_DIRECTORY .. "/modules/scripts/blessings/assets.lua")
+dofile("data/modules/scripts/blessings/assets.lua")
 
 --[=====[
 --

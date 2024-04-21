@@ -414,13 +414,15 @@ local function hasPendingReport(playerGuid, targetName, reportType)
 	if not player then
 		return false
 	end
+
 	local name = player:getName():gsub("%s+", "_")
-	FS.mkdir_p(string.format("%s/reports/players/%s", CORE_DIRECTORY, name))
-	local file = io.open(string.format("%s/reports/players/%s-%s-%d.txt", CORE_DIRECTORY, name, targetName, reportType), "r")
+	FS.mkdir_p(string.format("data/reports/players/%s", name))
+	local file = io.open(string.format("data/reports/players/%s-%s-%d.txt", name, targetName, reportType), "r")
 	if file then
 		io.close(file)
 		return true
 	end
+
 	return false
 end
 
@@ -431,7 +433,7 @@ function Player:onReportRuleViolation(targetName, reportType, reportReason, comm
 		return
 	end
 
-	local file = io.open(string.format("%s/reports/players/%s-%s-%d.txt", CORE_DIRECTORY, name, targetName, reportType), "a")
+	local file = io.open(string.format("data/reports/players/%s-%s-%d.txt", name, targetName, reportType), "a")
 	if not file then
 		self:sendTextMessage(MESSAGE_EVENT_ADVANCE, "There was an error when processing your report, please contact a gamemaster.")
 		return
@@ -463,8 +465,8 @@ end
 
 function Player:onReportBug(message, position, category)
 	local name = self:getName():gsub("%s+", "_")
-	FS.mkdir_p(string.format("%s/reports/bugs/%s", CORE_DIRECTORY, name))
-	local file = io.open(string.format("%s/reports/bugs/%s/report.txt", CORE_DIRECTORY, name), "a")
+	FS.mkdir_p(string.format("data/reports/bugs/%s", name))
+	local file = io.open(string.format("data/reports/bugs/%s/report.txt", name), "a")
 
 	if not file then
 		self:sendTextMessage(MESSAGE_EVENT_ADVANCE, "There was an error when processing your report, please contact a gamemaster.")

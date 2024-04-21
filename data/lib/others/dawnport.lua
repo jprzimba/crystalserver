@@ -1,4 +1,4 @@
-dofile(CORE_DIRECTORY .. "/libs/functions/vocation.lua")
+dofile("data/libs/functions/vocation.lua")
 
 Dawnport = {
 	skillsLimit = {
