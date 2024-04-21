@@ -34,7 +34,7 @@ bool Raids::loadFromXml() {
 	}
 
 	pugi::xml_document doc;
-	auto folder = g_configManager().getString(DATA_DIRECTORY, __FUNCTION__) + "/raids/raids.xml";
+	std::string folder = "data/raids/raids.xml";
 	pugi::xml_parse_result result = doc.load_file(folder.c_str());
 	if (!result) {
 		printXMLError(__FUNCTION__, folder, result);
@@ -90,7 +90,7 @@ bool Raids::loadFromXml() {
 		}
 
 		auto newRaid = std::make_shared<Raid>(name, interval, margin, repeat);
-		if (newRaid->loadFromXml(g_configManager().getString(DATA_DIRECTORY, __FUNCTION__) + "/raids/" + file)) {
+		if (newRaid->loadFromXml("data/raids/" + file)) {
 			raidList.push_back(newRaid);
 		} else {
 			g_logger().error("{} - Failed to load raid: {}", __FUNCTION__, name);
