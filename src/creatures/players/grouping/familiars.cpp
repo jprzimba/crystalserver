@@ -24,7 +24,7 @@
 
 bool Familiars::loadFromXml() {
 	pugi::xml_document doc;
-	auto folder = g_configManager().getString(CORE_DIRECTORY, __FUNCTION__) + "/XML/familiars.xml";
+	std::string folder = "data/XML/familiars.xml";
 	pugi::xml_parse_result result = doc.load_file(folder.c_str());
 	if (!result) {
 		g_logger().error("Failed to load Familiars");

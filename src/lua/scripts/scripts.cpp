@@ -43,10 +43,9 @@ void Scripts::clearAllScripts() const {
 }
 
 bool Scripts::loadEventSchedulerScripts(const std::string &fileName) {
-	auto coreFolder = g_configManager().getString(CORE_DIRECTORY, __FUNCTION__);
-	const auto dir = std::filesystem::current_path() / coreFolder / "events" / "scripts" / "scheduler";
+	const auto dir = std::filesystem::current_path() / "data" / "events" / "scripts" / "scheduler";
 	if (!std::filesystem::exists(dir) || !std::filesystem::is_directory(dir)) {
-		g_logger().warn("{} - Can not load folder 'scheduler' on {}/events/scripts'", __FUNCTION__, coreFolder);
+		g_logger().warn("{} - Can not load folder 'scheduler' on {}/events/scripts'", __FUNCTION__, "data");
 		return false;
 	}
 

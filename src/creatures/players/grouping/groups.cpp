@@ -77,7 +77,7 @@ void parseGroupFlags(Group &group, const pugi::xml_node &groupNode) {
 
 bool Groups::load() {
 	pugi::xml_document doc;
-	auto folder = g_configManager().getString(CORE_DIRECTORY, __FUNCTION__) + "/XML/groups.xml";
+	std::string folder = "data/XML/groups.xml";
 	pugi::xml_parse_result result = doc.load_file(folder.c_str());
 	if (!result) {
 		printXMLError(__FUNCTION__, folder, result);

@@ -24,6 +24,8 @@
 ### Changed Features
   - Removed old "removeBeginningWeaponAmmunition" and implemented "removeBreakWeaponsCharges" at config.lua (Tryller).
   - Removed "useAnyDatapackFolder" at config.lua, now it's enable by default (Tryller).
+  - Removed "dataPackDirectory" and "coreDirectory" at config.lua, now server use only one data pack (Tryller).
+  - Move  all files from old "coreDirectory" to data pack (Tryller).
 
 ### Map and Datapack updates
 - **Rotten Blood Quest**

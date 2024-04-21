@@ -118,12 +118,10 @@ bool GameReload::reloadEvents() const {
 }
 
 bool GameReload::reloadCore() const {
-	const auto &coreFolder = g_configManager().getString(CORE_DIRECTORY, __FUNCTION__);
-	const bool coreLoaded = g_luaEnvironment().loadFile(coreFolder + "/core.lua", "core.lua") == 0;
+	const bool coreLoaded = g_luaEnvironment().loadFile("data/core.lua", "core.lua") == 0;
 
 	if (coreLoaded) {
-		const auto &datapackFolder = g_configManager().getString(CORE_DIRECTORY, __FUNCTION__);
-		const bool scriptsLoaded = g_scripts().loadScripts(coreFolder + "/scripts/lib", true, false);
+		const bool scriptsLoaded = g_scripts().loadScripts("data/scripts/lib", true, false);
 		if (scriptsLoaded) {
 			return true;
 		}
@@ -153,11 +151,9 @@ bool GameReload::reloadModules() const {
 
 bool GameReload::reloadMonsters() const {
 	g_monsters().clear();
-	const auto &datapackFolder = g_configManager().getString(DATA_DIRECTORY, __FUNCTION__);
-	const auto &coreFolder = g_configManager().getString(CORE_DIRECTORY, __FUNCTION__);
 
-	const bool scriptsLoaded = g_scripts().loadScripts(coreFolder + "/scripts/lib", true, false);
-	const bool monsterScriptsLoaded = g_scripts().loadScripts(datapackFolder + "/monster", false, true);
+	const bool scriptsLoaded = g_scripts().loadScripts("data/scripts/lib", true, false);
+	const bool monsterScriptsLoaded = g_scripts().loadScripts("data/monster", false, true);
 
 	if (scriptsLoaded && monsterScriptsLoaded) {
 		logReloadStatus("Monsters", true);
@@ -190,12 +186,8 @@ bool GameReload::reloadScripts() const {
 	g_scripts().clearAllScripts();
 	Zone::clearZones();
 
-	const auto &datapackFolder = g_configManager().getString(DATA_DIRECTORY, __FUNCTION__);
-	const auto &coreFolder = g_configManager().getString(CORE_DIRECTORY, __FUNCTION__);
-
-	g_scripts().loadScripts(coreFolder + "/scripts/lib", true, false);
-	g_scripts().loadScripts(datapackFolder + "/scripts", false, true);
-	g_scripts().loadScripts(coreFolder + "/scripts", false, true);
+	g_scripts().loadScripts("data/scripts/lib", true, false);
+	g_scripts().loadScripts("data/scripts", false, true);
 
 	// It should come last, after everything else has been cleaned up.
 	reloadMonsters();

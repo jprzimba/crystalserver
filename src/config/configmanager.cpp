@@ -358,8 +358,6 @@ bool ConfigManager::load() {
 	loadIntConfig(L, WHEEL_POINTS_PER_LEVEL, "wheelPointsPerLevel", 1);
 	loadIntConfig(L, WHITE_SKULL_TIME, "whiteSkullTime", 15 * 60 * 1000);
 
-	loadStringConfig(L, CORE_DIRECTORY, "coreDirectory", "data");
-	loadStringConfig(L, DATA_DIRECTORY, "dataPackDirectory", "data-global");
 	loadStringConfig(L, DEFAULT_PRIORITY, "defaultPriority", "high");
 	loadStringConfig(L, DISCORD_WEBHOOK_URL, "discordWebhookURL", "");
 	loadStringConfig(L, FORGE_FIENDISH_INTERVAL_TIME, "forgeFiendishIntervalTime", "1");

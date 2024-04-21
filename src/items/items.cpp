@@ -205,7 +205,7 @@ void Items::loadFromProtobuf() {
 
 bool Items::loadFromXml() {
 	pugi::xml_document doc;
-	auto folder = g_configManager().getString(CORE_DIRECTORY, __FUNCTION__) + "/items/items.xml";
+	std::string folder = "data/items/items.xml";
 	pugi::xml_parse_result result = doc.load_file(folder.c_str());
 	if (!result) {
 		printXMLError(__FUNCTION__, folder, result);
@@ -241,7 +241,7 @@ bool Items::loadFromXml() {
 
 	// Load bags.xml
 	pugi::xml_document docBags;
-	auto folderBags = g_configManager().getString(CORE_DIRECTORY, __FUNCTION__) + "/items/bags.xml";
+	std::string folderBags = "data/items/bags.xml";
 	pugi::xml_parse_result resultBags = docBags.load_file(folderBags.c_str());
 	if (!resultBags) {
 		printXMLError(__FUNCTION__, folderBags, resultBags);

@@ -585,7 +585,7 @@ bool ScriptEvent::configureRaidEvent(const pugi::xml_node &eventNode) {
 
 	std::string scriptName = std::string(scriptAttribute.as_string());
 
-	if (!loadScript(g_configManager().getString(DATA_DIRECTORY, __FUNCTION__) + "/raids/scripts/" + scriptName, scriptName)) {
+	if (!loadScript("data/raids/scripts/" + scriptName, scriptName)) {
 		g_logger().error("[{}] can not load raid script: {}", __FUNCTION__, scriptName);
 		return false;
 	}

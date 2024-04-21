@@ -278,8 +278,7 @@ Chat::Chat() :
 
 bool Chat::load() {
 	pugi::xml_document doc;
-	auto coreFolder = g_configManager().getString(CORE_DIRECTORY, __FUNCTION__);
-	auto folder = coreFolder + "/chatchannels/chatchannels.xml";
+	std::string folder = "data/chatchannels/chatchannels.xml";
 	pugi::xml_parse_result result = doc.load_file(folder.c_str());
 	if (!result) {
 		printXMLError(__FUNCTION__, folder, result);
@@ -299,7 +298,7 @@ bool Chat::load() {
 			channel->name = channelName;
 
 			if (scriptAttribute) {
-				if (scriptInterface.loadFile(coreFolder + "/chatchannels/scripts/" + std::string(scriptAttribute.as_string()), scriptAttribute.as_string()) == 0) {
+				if (scriptInterface.loadFile("data/chatchannels/scripts/" + std::string(scriptAttribute.as_string()), scriptAttribute.as_string()) == 0) {
 					channel->onSpeakEvent = scriptInterface.getEvent("onSpeak");
 					channel->canJoinEvent = scriptInterface.getEvent("canJoin");
 					channel->onJoinEvent = scriptInterface.getEvent("onJoin");
@@ -320,7 +319,7 @@ bool Chat::load() {
 		channel->publicChannel = isPublic;
 
 		if (scriptAttribute) {
-			if (scriptInterface.loadFile(coreFolder + "/chatchannels/scripts/" + std::string(scriptAttribute.as_string()), scriptAttribute.as_string()) == 0) {
+			if (scriptInterface.loadFile("data/chatchannels/scripts/" + std::string(scriptAttribute.as_string()), scriptAttribute.as_string()) == 0) {
 				channel->onSpeakEvent = scriptInterface.getEvent("onSpeak");
 				channel->canJoinEvent = scriptInterface.getEvent("canJoin");
 				channel->onJoinEvent = scriptInterface.getEvent("onJoin");
