@@ -27,6 +27,8 @@ function playerDeath.onDeath(player, corpse, killer, mostDamageKiller, unjustifi
 		killerName = "field item"
 	end
 
+	player:takeScreenshot(byPlayer == 1 and SCREENSHOT_TYPE_DEATHPVP or SCREENSHOT_TYPE_DEATHPVE)
+
 	local byPlayerMostDamage = 0
 	local mostDamageKillerName
 	if mostDamageKiller ~= nil then
@@ -42,6 +44,14 @@ function playerDeath.onDeath(player, corpse, killer, mostDamageKiller, unjustifi
 		mostDamageName = mostDamageKiller:isMonster() and mostDamageKiller:getType():getNameDescription() or mostDamageKiller:getName()
 	else
 		mostDamageName = "field item"
+	end
+
+	if byPlayer then
+		killer:takeScreenshot(SCREENSHOT_TYPE_PLAYERKILL)
+	end
+
+	if mostDamageKiller and mostDamageKiller:isPlayer() then
+		mostDamageKiller:takeScreenshot(SCREENSHOT_TYPE_PLAYERKILL)
 	end
 
 	local playerGuid = player:getGuid()
