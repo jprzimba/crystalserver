@@ -800,10 +800,10 @@ CREATE TABLE IF NOT EXISTS `kv_store` (
   PRIMARY KEY (`key_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- Create Account god/god
+-- Create Account crystal/tibia
 INSERT INTO `accounts`
 (`id`, `name`, `email`, `password`, `type`) VALUES
-(1, 'god', '@god', '21298df8a3277357ee55b01df9530b535cf08ec1', 5);
+(1, 'crystal', 'crystal@server', '41da8bef22aaef9d7c5821fa0f0de7cccc4dda4d', 5);
 
 -- Create player on GOD account
 -- Create sample characters
@@ -814,4 +814,4 @@ INSERT INTO `players`
 (3, 'Druid Sample', 1, 1, 8, 2, 185, 185, 4200, 113, 115, 95, 39, 129, 0, 90, 90, 0, 8, '', 470, 1, 10, 0, 10, 0, 10, 0, 10, 0),
 (4, 'Paladin Sample', 1, 1, 8, 3, 185, 185, 4200, 113, 115, 95, 39, 129, 0, 90, 90, 0, 8, '', 470, 1, 10, 0, 10, 0, 10, 0, 10, 0),
 (5, 'Knight Sample', 1, 1, 8, 4, 185, 185, 4200, 113, 115, 95, 39, 129, 0, 90, 90, 0, 8, '', 470, 1, 10, 0, 10, 0, 10, 0, 10, 0),
-(6, 'GOD', 6, 1, 2, 0, 155, 155, 100, 113, 115, 95, 39, 75, 0, 60, 60, 0, 8, '', 410, 1, 10, 0, 10, 0, 10, 0, 10, 0);
+(6, 'GOD Crystal', 6, 1, 2, 0, 155, 155, 100, 113, 115, 95, 39, 75, 0, 60, 60, 0, 8, '', 410, 1, 10, 0, 10, 0, 10, 0, 10, 0);
