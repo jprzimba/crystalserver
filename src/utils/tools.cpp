@@ -616,12 +616,6 @@ using WeaponActionNames = phmap::flat_hash_map<std::string, WeaponAction_t>;
 using SkullNames = phmap::flat_hash_map<std::string, Skulls_t>;
 using ImbuementTypeNames = phmap::flat_hash_map<std::string, ImbuementTypes_t>;
 
-/**
- * @Deprecated
- * It will be dropped with monsters. Use RespawnPeriod_t instead.
- */
-using SpawnTypeNames = phmap::flat_hash_map<std::string, SpawnType_t>;
-
 MagicEffectNames magicEffectNames = {
 	{ "assassin", CONST_ME_ASSASSIN },
 	{ "bluefireworks", CONST_ME_BLUE_FIREWORKS },
@@ -880,18 +874,6 @@ const ImbuementTypeNames imbuementTypeNames = {
 	{ "increase capacity", IMBUEMENT_INCREASE_CAPACITY }
 };
 
-/**
- * @Deprecated
- * It will be dropped with monsters. Use RespawnPeriod_t instead.
- */
-SpawnTypeNames spawnTypeNames = {
-	{ "all", RESPAWN_IN_ALL },
-	{ "day", RESPAWN_IN_DAY },
-	{ "dayandcave", RESPAWN_IN_DAY_CAVE },
-	{ "night", RESPAWN_IN_NIGHT },
-	{ "nightandcave", RESPAWN_IN_NIGHT_CAVE },
-};
-
 MagicEffectClasses getMagicEffect(const std::string &strValue) {
 	auto magicEffect = magicEffectNames.find(strValue);
 	if (magicEffect != magicEffectNames.end()) {
@@ -938,18 +920,6 @@ ImbuementTypes_t getImbuementType(const std::string &strValue) {
 		return imbuementType->second;
 	}
 	return IMBUEMENT_NONE;
-}
-
-/**
- * @Deprecated
- * It will be dropped with monsters. Use RespawnPeriod_t instead.
- */
-SpawnType_t getSpawnType(const std::string &strValue) {
-	auto spawnType = spawnTypeNames.find(strValue);
-	if (spawnType != spawnTypeNames.end()) {
-		return spawnType->second;
-	}
-	return RESPAWN_IN_ALL;
 }
 
 std::string getSkillName(uint8_t skillid) {

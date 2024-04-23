@@ -101,11 +101,6 @@ Ammo_t getAmmoType(const std::string &strValue);
 WeaponAction_t getWeaponAction(const std::string &strValue);
 Skulls_t getSkullType(const std::string &strValue);
 ImbuementTypes_t getImbuementType(const std::string &strValue);
-/**
- * @Deprecated
- * It will be dropped with monsters. Use RespawnPeriod_t instead.
- */
-SpawnType_t getSpawnType(const std::string &strValue);
 
 std::string getSkillName(uint8_t skillid);
 

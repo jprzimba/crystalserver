@@ -56,14 +56,6 @@ enum WieldInfo_t {
 	WIELDINFO_PREMIUM = 1 << 3,
 };
 
-enum SpawnType_t {
-	RESPAWN_IN_ALL = 0,
-	RESPAWN_IN_DAY = 1,
-	RESPAWN_IN_NIGHT = 2,
-	RESPAWN_IN_DAY_CAVE = 3,
-	RESPAWN_IN_NIGHT_CAVE = 4,
-};
-
 enum Cipbia_Elementals_t : uint8_t {
 	CIPBIA_ELEMENTAL_PHYSICAL = 0,
 	CIPBIA_ELEMENTAL_FIRE = 1,
