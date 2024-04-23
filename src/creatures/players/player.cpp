@@ -1769,10 +1769,6 @@ void Player::onCreatureAppear(std::shared_ptr<Creature> creature, bool isLogin) 
 			sendBlessStatus();
 		}
 
-		if (getCurrentMount() != 0) {
-			toggleMount(true);
-		}
-
 		g_game().changePlayerSpeed(static_self_cast<Player>(), 0);
 	}
 }
