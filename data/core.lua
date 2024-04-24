@@ -1,5 +1,6 @@
-dofile("data/global.lua")
-dofile("data/lib/lib.lua")
-dofile("data/libs/libs.lua")
-dofile("data/stages.lua")
-dofile("data/startup/startup.lua")
+DATA_DIRECTORY = configManager.getString(configKeys.DATA_DIRECTORY)
+CORE_DIRECTORY = configManager.getString(configKeys.CORE_DIRECTORY)
+
+dofile(CORE_DIRECTORY .. "/global.lua")
+dofile(CORE_DIRECTORY .. "/libs/libs.lua")
+dofile(CORE_DIRECTORY .. "/stages.lua")

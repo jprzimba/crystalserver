@@ -8,7 +8,7 @@
   - Updated npc data-global/npc/hireling.lua, now it sell imbuement packages and also buy all loots inside Gold Pouch (Tryller).
 
 ### Bug Fixes
-  - Fixed chain system. Now works properly for Mages and distance weapowns (Tryller).
+  - Fixed chain system. Now works properly for Mages and Paladins (Tryller).
   - Fixed V.I.P List (Tryller).
   - Fixed damage reflection not working properly (Tryller).
   - Fixed imbuement system when the player adds imbuement or cancels imbuement and the imbuement window is open (Tryller).
@@ -20,12 +20,11 @@
   - Fixed diamond arrow static attack points (svetrey).
   - Fixed stamina not recovering when dead (carlospess0a).
   - Fixed alana sio only to "aleta som" users (carlospess0a).
+  - Fixed Player always logging with mount (Tryller).
 
 ### Changed Features
   - Removed old "removeBeginningWeaponAmmunition" and implemented "removeBreakWeaponsCharges" at config.lua (Tryller).
   - Removed "useAnyDatapackFolder" at config.lua, now it's enable by default (Tryller).
-  - Removed "dataPackDirectory" and "coreDirectory" at config.lua, now server use only one data pack (Tryller).
-  - Move  all files from old "coreDirectory" to data pack (Tryller).
 
 ### Map and Datapack updates
 - **Rotten Blood Quest**

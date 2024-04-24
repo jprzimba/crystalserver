@@ -3,7 +3,7 @@ GameStore = {
 	ModuleName = "GameStore",
 	Developers = { "Cjaker", "metabob", "Rick" },
 	Version = "1.1",
-	LastUpdated = "25-07-2020 11:52AM",
+	LastUpdated = "23-04-2024 11:52AM",
 }
 
 --== Enums ==--

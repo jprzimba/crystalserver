@@ -362,39 +362,41 @@ function Player:onMoveItem(item, count, fromPosition, toPosition, fromCylinder, 
 end
 
 function Player:onItemMoved(item, count, fromPosition, toPosition, fromCylinder, toCylinder)
-	-- Cults of Tibia begin
-	local frompos = Position(33023, 31904, 14) -- Checagem
-	local topos = Position(33052, 31932, 15) -- Checagem
-	local removeItem = false
-	if self:getPosition():isInRange(frompos, topos) and item:getId() == 23729 then
-		local tile = Tile(toPosition)
-		if tile then
-			local tileBoss = tile:getTopCreature()
-			if tileBoss and tileBoss:isMonster() then
-				if tileBoss:getName():lower() == "the remorseless corruptor" then
-					tileBoss:addHealth(-17000)
-					tileBoss:remove()
-					local monster = Game.createMonster("The Corruptor of Souls", toPosition)
-					if not monster then
-						return false
+	if IsRunningGlobalDatapack() then
+		-- Cults of Tibia begin
+		local frompos = Position(33023, 31904, 14) -- Checagem
+		local topos = Position(33052, 31932, 15) -- Checagem
+		local removeItem = false
+		if self:getPosition():isInRange(frompos, topos) and item:getId() == 23729 then
+			local tile = Tile(toPosition)
+			if tile then
+				local tileBoss = tile:getTopCreature()
+				if tileBoss and tileBoss:isMonster() then
+					if tileBoss:getName():lower() == "the remorseless corruptor" then
+						tileBoss:addHealth(-17000)
+						tileBoss:remove()
+						local monster = Game.createMonster("The Corruptor of Souls", toPosition)
+						if not monster then
+							return false
+						end
+						removeItem = true
+						monster:registerEvent("CheckTile")
+						if Game.getStorageValue("healthSoul") > 0 then
+							monster:addHealth(-(monster:getHealth() - Game.getStorageValue("healthSoul")))
+						end
+						Game.setStorageValue("CheckTile", os.time() + 30)
+					elseif tileBoss:getName():lower() == "the corruptor of souls" then
+						Game.setStorageValue("CheckTile", os.time() + 30)
+						removeItem = true
 					end
-					removeItem = true
-					monster:registerEvent("CheckTile")
-					if Game.getStorageValue("healthSoul") > 0 then
-						monster:addHealth(-(monster:getHealth() - Game.getStorageValue("healthSoul")))
-					end
-					Game.setStorageValue("CheckTile", os.time() + 30)
-				elseif tileBoss:getName():lower() == "the corruptor of souls" then
-					Game.setStorageValue("CheckTile", os.time() + 30)
-					removeItem = true
 				end
 			end
+			if removeItem then
+				item:remove(1)
+			end
 		end
-		if removeItem then
-			item:remove(1)
-		end
+		-- Cults of Tibia end
 	end
-	-- Cults of Tibia end
 	return true
 end
 
@@ -413,8 +415,8 @@ local function hasPendingReport(playerGuid, targetName, reportType)
 		return false
 	end
 	local name = player:getName():gsub("%s+", "_")
-	FS.mkdir_p(string.format("data/reports/players/%s", name))
-	local file = io.open(string.format("data/reports/players/%s-%s-%d.txt", name, targetName, reportType), "r")
+	FS.mkdir_p(string.format("%s/reports/players/%s", CORE_DIRECTORY, name))
+	local file = io.open(string.format("%s/reports/players/%s-%s-%d.txt", CORE_DIRECTORY, name, targetName, reportType), "r")
 	if file then
 		io.close(file)
 		return true
@@ -429,7 +431,7 @@ function Player:onReportRuleViolation(targetName, reportType, reportReason, comm
 		return
 	end
 
-	local file = io.open(string.format("data/reports/players/%s-%s-%d.txt", name, targetName, reportType), "a")
+	local file = io.open(string.format("%s/reports/players/%s-%s-%d.txt", CORE_DIRECTORY, name, targetName, reportType), "a")
 	if not file then
 		self:sendTextMessage(MESSAGE_EVENT_ADVANCE, "There was an error when processing your report, please contact a gamemaster.")
 		return
@@ -461,8 +463,8 @@ end
 
 function Player:onReportBug(message, position, category)
 	local name = self:getName():gsub("%s+", "_")
-	FS.mkdir_p(string.format("data/reports/bugs/%s", name))
-	local file = io.open(string.format("data/reports/bugs/%s/report.txt", name), "a")
+	FS.mkdir_p(string.format("%s/reports/bugs/%s", CORE_DIRECTORY, name))
+	local file = io.open(string.format("%s/reports/bugs/%s/report.txt", CORE_DIRECTORY, name), "a")
 
 	if not file then
 		self:sendTextMessage(MESSAGE_EVENT_ADVANCE, "There was an error when processing your report, please contact a gamemaster.")
@@ -571,7 +573,7 @@ end
 
 function Player:onGainSkillTries(skill, tries)
 	-- Dawnport skills limit
-	if isSkillGrowthLimited(self, skill) then
+	if IsRunningGlobalDatapack() and isSkillGrowthLimited(self, skill) then
 		return 0
 	end
 	if not APPLY_SKILL_MULTIPLIER then

@@ -23,7 +23,7 @@
 
 bool Storages::loadFromXML() {
 	pugi::xml_document doc;
-	std::string folder = "data/XML/storages.xml";
+	auto folder = g_configManager().getString(CORE_DIRECTORY, __FUNCTION__) + "/XML/storages.xml";
 	pugi::xml_parse_result result = doc.load_file(folder.c_str());
 
 	if (!result) {

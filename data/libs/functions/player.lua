@@ -90,6 +90,10 @@ function Player.addManaSpent(...)
 end
 
 function Player.getCookiesDelivered(self)
+	if not IsRunningGlobalDatapack() then
+		return true
+	end
+
 	local storage, amount =
 		{
 			Storage.WhatAFoolish.CookieDelivery.SimonTheBeggar,
@@ -112,6 +116,10 @@ function Player.getCookiesDelivered(self)
 end
 
 function Player.checkGnomeRank(self)
+	if not IsRunningGlobalDatapack() then
+		return true
+	end
+
 	local points = self:getStorageValue(Storage.BigfootBurden.Rank)
 	local questProgress = self:getStorageValue(Storage.BigfootBurden.QuestLine)
 	if points >= 30 and points < 120 then

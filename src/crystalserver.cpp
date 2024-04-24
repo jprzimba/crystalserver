@@ -176,7 +176,7 @@ void CrystalServer::loadMaps() const {
 
 		// If "mapCustomEnabled" is true on config.lua, then load the custom map
 		if (g_configManager().getBoolean(TOGGLE_MAP_CUSTOM, __FUNCTION__)) {
-			g_game().loadCustomMaps("data/world/custom/");
+			g_game().loadCustomMaps(g_configManager().getString(DATA_DIRECTORY, __FUNCTION__) + "/world/custom/");
 		}
 		Zone::refreshAll();
 	} catch (const std::exception &err) {
@@ -336,8 +336,9 @@ void CrystalServer::loadModules() {
 		g_luaEnvironment().initState();
 	}
 
+	auto coreFolder = g_configManager().getString(CORE_DIRECTORY, __FUNCTION__);
 	// Load appearances.dat first
-	modulesLoadHelper((g_game().loadAppearanceProtobuf("data/items/appearances.dat") == ERROR_NONE), "appearances.dat");
+	modulesLoadHelper((g_game().loadAppearanceProtobuf(coreFolder + "/items/appearances.dat") == ERROR_NONE), "appearances.dat");
 
 	// Load XML folder dependencies (order matters)
 	modulesLoadHelper(g_vocations().loadFromXml(), "XML/vocations.xml");
@@ -349,18 +350,22 @@ void CrystalServer::loadModules() {
 
 	modulesLoadHelper(Item::items.loadFromXml(), "items.xml");
 
+	const auto datapackFolder = g_configManager().getString(DATA_DIRECTORY, __FUNCTION__);
+	logger.debug("Loading core scripts on folder: {}/", coreFolder);
 	// Load first core Lua libs
-	modulesLoadHelper((g_luaEnvironment().loadFile("data/core.lua", "core.lua") == 0), "core.lua");
-	modulesLoadHelper(g_scripts().loadScripts("data/scripts/lib", true, false), "data/scripts/libs");
-	modulesLoadHelper(g_scripts().loadScripts("data/scripts", false, false), "data/scripts");
+	modulesLoadHelper((g_luaEnvironment().loadFile(coreFolder + "/core.lua", "core.lua") == 0), "core.lua");
+	modulesLoadHelper(g_scripts().loadScripts(coreFolder + "/scripts/lib", true, false), coreFolder + "/scripts/libs");
+	modulesLoadHelper(g_scripts().loadScripts(coreFolder + "/scripts", false, false), coreFolder + "/scripts");
 	modulesLoadHelper((g_npcs().load(true, false)), "npclib");
 
 	modulesLoadHelper(g_events().loadFromXml(), "events/events.xml");
 	modulesLoadHelper(g_modules().loadFromXml(), "modules/modules.xml");
 
+	logger.info("Using datapack folder in: {}/", datapackFolder);
 	// Load scripts
+	modulesLoadHelper(g_scripts().loadScripts(datapackFolder + "/scripts", false, false), datapackFolder + "/scripts");
 	// Load monsters
-	modulesLoadHelper(g_scripts().loadScripts("data/monster", false, false), "data/monster");
+	modulesLoadHelper(g_scripts().loadScripts(datapackFolder + "/monster", false, false), datapackFolder + "/monster");
 	modulesLoadHelper((g_npcs().load(false, true)), "npc");
 
 	g_game().loadBoostedCreature();

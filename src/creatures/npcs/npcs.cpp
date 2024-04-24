@@ -113,13 +113,13 @@ void NpcType::loadShop(const std::shared_ptr<NpcType> &npcType, ShopBlock shopBl
 
 bool Npcs::load(bool loadLibs /* = true*/, bool loadNpcs /* = true*/, bool reloading /* = false*/) const {
 	if (loadLibs) {
-		return g_luaEnvironment().loadFile("data/npc/npclib/load.lua", "load.lua") == 0;
+		auto coreFolder = g_configManager().getString(CORE_DIRECTORY, __FUNCTION__);
+		return g_luaEnvironment().loadFile(coreFolder + "/npclib/load.lua", "load.lua") == 0;
 	}
-
 	if (loadNpcs) {
-		return g_scripts().loadScripts("data/npc", false, reloading);
+		auto datapackFolder = g_configManager().getString(DATA_DIRECTORY, __FUNCTION__);
+		return g_scripts().loadScripts(datapackFolder + "/npc", false, reloading);
 	}
-
 	return false;
 }
 
@@ -136,7 +136,6 @@ bool Npcs::reload() {
 		g_game().resetNpcs();
 		return true;
 	}
-
 	return false;
 }
 

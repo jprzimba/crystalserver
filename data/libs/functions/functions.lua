@@ -111,6 +111,10 @@ debug.sethook(function(event, line)
 end, "l")
 
 function getJackLastMissionState(player)
+	if not IsRunningGlobalDatapack() then
+		return true
+	end
+
 	if player:getStorageValue(Storage.TibiaTales.JackFutureQuest.LastMissionState) == 1 then
 		return "You told Jack the truth about his personality. You also explained that you and Spectulus \z
 		made a mistake by assuming him as the real Jack."
@@ -394,7 +398,7 @@ function resetFerumbrasAscendantHabitats()
 		end
 	end
 
-	Game.loadMap("data/world/quest/ferumbras_ascendant/habitats.otbm")
+	Game.loadMap(DATA_DIRECTORY .. "/world/quest/ferumbras_ascendant/habitats.otbm")
 	return true
 end
 
@@ -738,7 +742,7 @@ end
 local logFormat = "[%s] %s (params: %s)"
 
 function logCommand(player, words, param)
-	local file = io.open("data/logs/" .. player:getName() .. " commands.log", "a")
+	local file = io.open(CORE_DIRECTORY .. "/logs/" .. player:getName() .. " commands.log", "a")
 	if not file then
 		return
 	end

@@ -1,3 +1,9 @@
+-- Core settings
+-- If you want to use the global datapack folder, put "data-global"
+dataPackDirectory = "data-global"
+-- Don't change this unless you know what you're doing
+coreDirectory = "data"
+
 -- Set log level
 -- It can be trace, debug, info, warning, error, critical, off (default: info).
 -- NOTE: Will only display logs with level higher or equal the one set.

@@ -1,10 +1,18 @@
 math.randomseed(os.time())
 
-dofile("data/lib/lib.lua")
-local startupFile = io.open("data/startup/startup.lua", "r")
+dofile(DATA_DIRECTORY .. "/lib/lib.lua")
+local startupFile = io.open(DATA_DIRECTORY .. "/startup/startup.lua", "r")
 if startupFile ~= nil then
 	io.close(startupFile)
-	dofile("data/startup/startup.lua")
+	dofile(DATA_DIRECTORY .. "/startup/startup.lua")
+end
+
+function IsRunningGlobalDatapack()
+	if DATA_DIRECTORY == "data-global" then
+		return true
+	else
+		return false
+	end
 end
 
 function IsRetroPVP()
