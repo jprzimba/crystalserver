@@ -29,8 +29,9 @@
 
 ### Map and Datapack updates and Fixes
 - **Fixed Quesst**
-  - Combat knife Quest (Tryller).
-  - Bear Room Quest (Tryller).
+  - Combat knife Quest, getting infinite reward (Tryller).
+  - Bear Room Quest, changed stair to hidden hole like Tibia RL (Tryller).
+  - Katana Quest getting infinite keys (Tryller).
 
 - **Rotten Blood Quest**
   - Add Rotten Blood Quest Scripts (dgprado).

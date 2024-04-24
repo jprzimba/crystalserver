@@ -21,10 +21,10 @@ Você pode adicionar os links da seguinte maneira:
 - [x] Bear Room Quest
 - [x] Captain Iglues Treasure Quest
 - [x] Combat Knife Quest
-- [ ] Doublet Quest
+- [x] Doublet Quest
 - [ ] Dragon Corpse Quest
-- [ ] Goblin Temple Quest
-- [ ] Katana Quest
+- [x] Goblin Temple Quest
+- [x] Katana Quest
 - [ ] Minotaur Hell Quest
 - [ ] Rapier Quest
 - [ ] The Rookie Guard Quest

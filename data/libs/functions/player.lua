@@ -999,3 +999,34 @@ function Player:canGetReward(rewardId, questName)
 
 	return true
 end
+
+function Player:canGetRewardFromCorpse(rewardId, questName)
+	if self:questKV(questName):get("completed") then
+		self:sendTextMessage(MESSAGE_EVENT_ADVANCE, "The corpse is empty.")
+		return false
+	end
+
+	local rewardItem = ItemType(rewardId)
+	if not rewardItem then
+		self:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Reward item is wrong, please contact an administrator.")
+		return false
+	end
+
+	local itemWeight = rewardItem:getWeight() / 100
+	local baseMessage = "You have found a " .. rewardItem:getName()
+	local backpack = self:getSlotItem(CONST_SLOT_BACKPACK)
+	if not backpack or backpack:getEmptySlots(true) < 1 then
+		baseMessage = baseMessage .. ", but you have no room to take it."
+		self:sendTextMessage(MESSAGE_EVENT_ADVANCE, baseMessage)
+		return false
+	end
+
+	if (self:getFreeCapacity() / 100) < itemWeight then
+		baseMessage = baseMessage .. ". Weighing " .. itemWeight .. " oz, it is too heavy for you to carry."
+		self:sendTextMessage(MESSAGE_EVENT_ADVANCE, baseMessage)
+		return false
+	end
+
+	self:sendTextMessage(MESSAGE_EVENT_ADVANCE, baseMessage)
+	return true
+end
