@@ -1030,3 +1030,7 @@ function Player:canGetRewardFromCorpse(rewardId, questName)
 	self:sendTextMessage(MESSAGE_EVENT_ADVANCE, baseMessage)
 	return true
 end
+
+function Player.getTotalMoney(self)
+	return self:getMoney() + self:getBankBalance()
+end
