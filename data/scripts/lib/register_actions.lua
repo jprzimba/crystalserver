@@ -610,6 +610,20 @@ function onUsePick(player, item, fromPosition, target, toPosition, isHotkey)
 		end
 	end
 
+	--Bear Room Quest on Rookgaard
+	local bearRoomTile = Position(32149, 32110, 11)
+	if toPosition == bearRoomTile then
+		local tile = Tile(bearRoomTile)
+		local bearRoomTileId = tile:getItemById(355)
+		if bearRoomTileId then
+			bearRoomTileId:transform(394)
+			bearRoomTileId:decay()
+			player:teleportTo({x = 32149, y = 32110, z = 12})
+			player:getPosition():sendMagicEffect(CONST_ME_TELEPORT)
+			return true
+		end
+	end
+
 	if table.contains({ 354, 355 }, target.itemid) and target.actionid == 101 then
 		target:transform(394)
 		target:decay()

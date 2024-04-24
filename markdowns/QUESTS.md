@@ -15,7 +15,7 @@ Você pode adicionar os links da seguinte maneira:
 - [ ] Sanctuary of the Lizard God Quest
 
 ### Rookgaard Quests:
-- [ ] Bear Room Quest
+- [x] Bear Room Quest
 - [ ] Captain Iglues Treasure Quest
 - [ ] Child of Destiny Quest
 - [ ] Combat Knife Quest
@@ -224,7 +224,7 @@ Você pode adicionar os links da seguinte maneira:
 - [ ] [10.50] Oramond Quest
 - [ ] [10.50] Rathleton Quest
 - [ ] [10.70] Hero of Rathleton Quest
-- [ ] [10.70] Lion's Rock Quest
+- [x] [10.70] Lion's Rock Quest
 - [ ] [10.70] The Cursed Crystal Quest
 - [ ] [10.70] Twenty Miles Beneath the Sea Quest
 - [ ] [10.80] Asura Palace Quest
@@ -248,7 +248,7 @@ Você pode adicionar os links da seguinte maneira:
 - [ ] [12.20.8834] Grave Danger Quest
 - [ ] [12.20.8834] Kilmaresh Quest
 - [ ] [12.30.9287] Feaster of Souls Quest
-- [ ] [12.40.9997] Soul War Quest
+- [ ] [12.40.9997] Soul War Quest   
 - [ ] [12.40.9997] The Order of the Lion Quest
 - [ ] [12.60.10463] A Pirate's Tail Quest
 - [ ] [12.70.10953] Adventures of Galthen Quest
@@ -256,6 +256,7 @@ Você pode adicionar os links da seguinte maneira:
 - [ ] [12.85.11485] 25 Years of Tibia Quest
 - [ ] [12.90.12182] Primal Ordeal Quest
 - [ ] [12.90.12182] Within the Tides Quest
+- [x] [13.20.13560] Rotten Blood Quest
 
 ### Mainland Exchange Quests:
 - [ ] Exchange Quests

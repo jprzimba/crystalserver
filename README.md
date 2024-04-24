@@ -18,6 +18,9 @@ If you want edit the map, use the [Remere's Map Editor](https://www.mediafire.co
 You are subject to our code of conduct, read
 at [this link](https://github.com/jprzimba/crystalserver/blob/main/markdowns/CODE_OF_CONDUCT.md).
 
+### Quests
+You can see the complete quests lists (we are checking all quests) in [this link](https://github.com/jprzimba/crystalserver/blob/main/markdowns/QUESTS.md).
+
 ### Issues
 
 We use the [issue tracker on GitHub](https://github.com/jprzimba/crystalserver/issues). Keep in mind that everyone who is
