@@ -43,23 +43,9 @@ void Map::load(const std::string &identifier, const Position &pos) {
 
 void Map::loadMap(const std::string &identifier, bool mainMap /*= false*/, bool loadHouses /*= false*/, bool loadMonsters /*= false*/, bool loadNpcs /*= false*/, bool loadZones /*= false*/, const Position &pos /*= Position()*/) {
 	// Only download map if is loading the main map and it is not already downloaded
-	if (mainMap && g_configManager().getBoolean(TOGGLE_DOWNLOAD_MAP, __FUNCTION__) && !std::filesystem::exists(identifier)) {
-		const auto mapDownloadUrl = g_configManager().getString(MAP_DOWNLOAD_URL, __FUNCTION__);
-		if (mapDownloadUrl.empty()) {
-			g_logger().warn("Map download URL in config.lua is empty, download disabled");
-		}
-
-		if (CURL* curl = curl_easy_init(); curl && !mapDownloadUrl.empty()) {
-			g_logger().info("Downloading " + g_configManager().getString(MAP_NAME, __FUNCTION__) + ".otbm to world folder");
-			FILE* otbm = fopen(identifier.c_str(), "wb");
-			curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
-			curl_easy_setopt(curl, CURLOPT_URL, mapDownloadUrl.c_str());
-			curl_easy_setopt(curl, CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1_2);
-			curl_easy_setopt(curl, CURLOPT_WRITEDATA, otbm);
-			curl_easy_perform(curl);
-			curl_easy_cleanup(curl);
-			fclose(otbm);
-		}
+	if (mainMap && !std::filesystem::exists(identifier)) {
+		g_logger().warn("The map with identifier " + identifier + " does not exist.");
+		g_logger().error("Please extract the map from the world folder.");
 	}
 
 	// Load the map

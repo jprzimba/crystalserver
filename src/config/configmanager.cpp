@@ -82,7 +82,6 @@ bool ConfigManager::load() {
 		loadStringConfig(L, MAP_AUTHOR, "mapAuthor", "Eduardo Dantas");
 		loadStringConfig(L, MAP_CUSTOM_AUTHOR, "mapCustomAuthor", "Unknow");
 		loadStringConfig(L, MAP_CUSTOM_NAME, "mapCustomName", "");
-		loadStringConfig(L, MAP_DOWNLOAD_URL, "mapDownloadUrl", "");
 		loadStringConfig(L, MAP_NAME, "mapName", "world");
 		loadStringConfig(L, MYSQL_DB, "mysqlDatabase", "crystalserver");
 		loadStringConfig(L, MYSQL_HOST, "mysqlHost", "127.0.0.1");
@@ -149,7 +148,6 @@ bool ConfigManager::load() {
 	loadBoolConfig(L, TELEPORT_SUMMONS, "teleportSummons", false);
 	loadBoolConfig(L, TOGGLE_ATTACK_SPEED_ONFIST, "toggleAttackSpeedOnFist", false);
 	loadBoolConfig(L, TOGGLE_CHAIN_SYSTEM, "toggleChainSystem", true);
-	loadBoolConfig(L, TOGGLE_DOWNLOAD_MAP, "toggleDownloadMap", false);
 	loadBoolConfig(L, TOGGLE_FREE_QUEST, "toggleFreeQuest", true);
 	loadBoolConfig(L, TOGGLE_GOLD_POUCH_ALLOW_ANYTHING, "toggleGoldPouchAllowAnything", false);
 	loadBoolConfig(L, TOGGLE_GOLD_POUCH_QUICKLOOT_ONLY, "toggleGoldPouchQuickLootOnly", false);

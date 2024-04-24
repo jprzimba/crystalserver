@@ -25,6 +25,7 @@
 ### Changed Features
   - Removed old "removeBeginningWeaponAmmunition" and implemented "removeBreakWeaponsCharges" at config.lua (Tryller).
   - Removed "useAnyDatapackFolder" at config.lua, now it's enable by default (Tryller).
+  - Remove map download, since we share compressed .7z map (Tryller).
 
 ### Map and Datapack updates and Fixes
 - **Fixed Quesst**
