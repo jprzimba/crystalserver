@@ -11,12 +11,12 @@ This project was created a long time ago to distribute a stable and safe distro 
 To connect to the server and to take a stable experience, you can
 use [mehah's otclient](https://github.com/mehah/otclient).
 
-You can see the complete change log for Crystal Server at [this link](https://github.com/jprzimba/crystalserver/blob/main/CHANGELOG.md).
+You can see the complete change log for Crystal Server at [this link](https://github.com/jprzimba/crystalserver/blob/main/markdowns/CHANGELOG.md).
 
 If you want edit the map, use the [Remere's Map Editor](https://www.mediafire.com/file/o2e06j8j2lsxmh8/RME.rar/file).
 
 You are subject to our code of conduct, read
-at [this link](https://github.com/jprzimba/crystalserver/blob/main/CODE_OF_CONDUCT.md).
+at [this link](https://github.com/jprzimba/crystalserver/blob/main/markdowns/CODE_OF_CONDUCT.md).
 
 ### Issues
 
