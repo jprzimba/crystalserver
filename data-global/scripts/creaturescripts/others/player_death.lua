@@ -46,7 +46,7 @@ function playerDeath.onDeath(player, corpse, killer, mostDamageKiller, unjustifi
 		mostDamageName = "field item"
 	end
 
-	if byPlayer then
+	if byPlayer == 1 then
 		killer:takeScreenshot(SCREENSHOT_TYPE_PLAYERKILL)
 	end
 

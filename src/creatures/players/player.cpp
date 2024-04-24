@@ -2930,6 +2930,12 @@ bool Player::spawn() {
 	g_game().addCreatureCheck(static_self_cast<Player>());
 	g_game().addPlayer(static_self_cast<Player>());
 	static_self_cast<Player>()->onChangeZone(static_self_cast<Player>()->getZoneType());
+
+	VipStatus_t newStatus = isExerciseTraining() ? VIPSTATUS_TRAINING : VIPSTATUS_ONLINE;
+	for (const auto &[key, player] : g_game().getPlayers()) {
+		player->notifyStatusChange(static_self_cast<Player>(), newStatus);
+	}
+
 	return true;
 }
 
@@ -2974,6 +2980,10 @@ void Player::despawn() {
 	getParent()->postRemoveNotification(static_self_cast<Player>(), nullptr, 0);
 
 	g_game().removePlayer(static_self_cast<Player>());
+
+	for (const auto &[key, player] : g_game().getPlayers()) {
+		player->notifyStatusChange(static_self_cast<Player>(), VIPSTATUS_PENDING);
+	}
 
 	setDead(true);
 }
@@ -3031,8 +3041,9 @@ void Player::removeList() {
 }
 
 void Player::addList() {
+	VipStatus_t newStatus = isExerciseTraining() ? VIPSTATUS_TRAINING : VIPSTATUS_ONLINE;	
 	for (const auto &[key, player] : g_game().getPlayers()) {
-		player->notifyStatusChange(static_self_cast<Player>(), VIPSTATUS_ONLINE);
+		player->notifyStatusChange(static_self_cast<Player>(), newStatus);
 	}
 
 	g_game().addPlayer(static_self_cast<Player>());
