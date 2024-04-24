@@ -27,7 +27,7 @@
 #include "server/network/message/outputmessage.hpp"
 
 std::string ProtocolStatus::SERVER_NAME = "Crystal Server";
-std::string ProtocolStatus::SERVER_VERSION = "4.0";
+std::string ProtocolStatus::SERVER_VERSION = "4.0.0";
 std::string ProtocolStatus::SERVER_DEVELOPERS = "Tryller";
 
 std::map<uint32_t, int64_t> ProtocolStatus::ipConnectMap;
