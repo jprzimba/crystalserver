@@ -14,11 +14,13 @@ Você pode adicionar os links da seguinte maneira:
 - [ ] Dawnport Quest
 - [ ] Sanctuary of the Lizard God Quest
 
+### Island of Destiny Quests:
+- [ ] Child of Destiny Quest
+
 ### Rookgaard Quests:
 - [x] Bear Room Quest
-- [ ] Captain Iglues Treasure Quest
-- [ ] Child of Destiny Quest
-- [ ] Combat Knife Quest
+- [x] Captain Iglues Treasure Quest
+- [x] Combat Knife Quest
 - [ ] Doublet Quest
 - [ ] Dragon Corpse Quest
 - [ ] Goblin Temple Quest

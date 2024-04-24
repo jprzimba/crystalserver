@@ -26,7 +26,11 @@
   - Removed old "removeBeginningWeaponAmmunition" and implemented "removeBreakWeaponsCharges" at config.lua (Tryller).
   - Removed "useAnyDatapackFolder" at config.lua, now it's enable by default (Tryller).
 
-### Map and Datapack updates
+### Map and Datapack updates and Fixes
+- **Fixed Quesst**
+  - Combat knife Quest (Tryller).
+  - Bear Room Quest (Tryller).
+
 - **Rotten Blood Quest**
   - Add Rotten Blood Quest Scripts (dgprado).
   - Add Rotten Blood Creatures and Bosses (dgprado, Tryller).
