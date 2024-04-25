@@ -25,7 +25,7 @@ Você pode adicionar os links da seguinte maneira:
 - [ ] Dragon Corpse Quest
 - [x] Goblin Temple Quest
 - [x] Katana Quest
-- [ ] Minotaur Hell Quest
+- [x] Minotaur Hell Quest
 - [ ] Rapier Quest
 - [ ] The Rookie Guard Quest
 
@@ -275,9 +275,7 @@ Você pode adicionar os links da seguinte maneira:
 - [ ] Knight Outfits Quest
 - [ ] Mage Outfits Quest
 - [ ] Nobleman Outfits Quest
--
-
- [ ] Oriental Outfits Quest
+- [ ] Oriental Outfits Quest
 - [ ] Summoner Outfits Quest
 - [ ] Warrior Outfits Quest
 - [ ] Wizard Outfits Quest
