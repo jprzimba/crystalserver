@@ -6282,6 +6282,7 @@ void ProtocolGame::sendAddCreature(std::shared_ptr<Creature> creature, const Pos
 	if (isLogin) {
 		sendMagicEffect(pos, CONST_ME_TELEPORT);
 		sendDisableLoginMusic();
+		sendHotkeyPreset();
 	}
 
 	for (int i = CONST_SLOT_FIRST; i <= CONST_SLOT_LAST; ++i) {
@@ -8740,5 +8741,16 @@ void ProtocolGame::sendDisableLoginMusic() {
 	msg.addByte(0x01);
 	msg.addByte(0x00);
 	msg.addByte(0x00);
+	writeToOutputBuffer(msg);
+}
+
+void ProtocolGame::sendHotkeyPreset() {
+	if (!player || oldProtocol) {
+		return;
+	}
+
+	NetworkMessage msg;
+	msg.addByte(0x9D);
+	msg.add<uint32_t>(player->getVocation()->getClientId());
 	writeToOutputBuffer(msg);
 }

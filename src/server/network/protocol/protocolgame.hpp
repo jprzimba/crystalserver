@@ -244,6 +244,7 @@ private:
 	void sendIcons(uint32_t icons);
 	void sendFYIBox(const std::string &message);
 	void takeScreenshot(Screenshot_t screenshotType);
+	void sendHotkeyPreset();
 
 	void openImbuementWindow(std::shared_ptr<Item> item);
 	void sendImbuementResult(const std::string message);
