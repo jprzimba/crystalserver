@@ -4254,11 +4254,9 @@ void Player::postRemoveNotification(std::shared_ptr<Thing> thing, std::shared_pt
 	}
 }
 
-// i will keep this function so it can be reviewed
 bool Player::updateSaleShopList(std::shared_ptr<Item> item) {
-	uint16_t itemId = item->getID();
-	if (!itemId || !item) {
-		return true;
+	if (!item) {
+		return false;
 	}
 
 	g_dispatcher().addEvent([creatureId = getID()] { g_game().updatePlayerSaleItems(creatureId); }, "Game::updatePlayerSaleItems");
