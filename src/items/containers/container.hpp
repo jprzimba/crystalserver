@@ -187,7 +187,7 @@ public:
 	bool isInsideContainerWithId(const uint16_t id);
 
 protected:
-	std::ostringstream &getContentDescription(std::ostringstream &os, bool oldProtocol);
+	std::ostringstream &getContentDescription(std::ostringstream &os, bool sendColoredMessage);
 
 	uint32_t m_maxItems;
 	uint32_t maxSize;
