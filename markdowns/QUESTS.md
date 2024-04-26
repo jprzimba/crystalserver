@@ -234,7 +234,7 @@ Você pode adicionar os links da seguinte maneira:
 - [ ] [10.80] Grimvale Quest
 - [ ] [10.80] Nightmare Teddy Quest
 - [ ] [10.80] The Great Dragon Hunt Quest
-- [ ] [10.80] The Lost Brother Quest
+- [x] [10.80] The Lost Brother Quest
 - [ ] [10.80] The Tainted Souls Quest
 - [ ] [10.90] Ferumbras' Ascension Quest
 - [ ] [10.90] Krailos Quest
