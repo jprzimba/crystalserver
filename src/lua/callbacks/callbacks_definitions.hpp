@@ -64,6 +64,7 @@ enum class EventCallback_t : uint16_t {
 	playerOnCombat,
 	playerOnInventoryUpdate,
 	playerOnRotateItem,
+	playerOnWalk,
 	// Monster
 	monsterOnDropLoot,
 	monsterPostDropLoot,
