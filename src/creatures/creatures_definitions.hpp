@@ -1423,20 +1423,6 @@ struct VIPEntry {
 	bool notify;
 };
 
-struct OutfitEntry {
-	constexpr OutfitEntry(uint16_t initLookType, uint8_t initAddons) :
-		lookType(initLookType), addons(initAddons) { }
-
-	uint16_t lookType;
-	uint8_t addons;
-};
-
-struct FamiliarEntry {
-	constexpr explicit FamiliarEntry(uint16_t initLookType) :
-		lookType(initLookType) { }
-	uint16_t lookType;
-};
-
 struct Skill {
 	uint64_t tries = 0;
 	uint16_t level = 10;
@@ -1546,19 +1532,6 @@ using ItemsTierCountList = std::map<uint16_t, std::map<uint8_t, uint32_t>>;
 		| ...
 	| ...
 */
-
-struct Familiar {
-	Familiar(std::string initName, uint16_t initLookType, bool initPremium, bool initUnlocked, std::string initType) :
-		name(initName), lookType(initLookType),
-		premium(initPremium), unlocked(initUnlocked),
-		type(initType) { }
-
-	std::string name;
-	uint16_t lookType;
-	bool premium;
-	bool unlocked;
-	std::string type;
-};
 
 struct ProtocolFamiliars {
 	ProtocolFamiliars(const std::string &initName, uint16_t initLookType) :

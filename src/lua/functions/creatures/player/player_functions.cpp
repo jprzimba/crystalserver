@@ -1405,13 +1405,13 @@ int PlayerFunctions::luaPlayerSetVocation(lua_State* L) {
 		return 1;
 	}
 
-	Vocation* vocation;
+	std::shared_ptr<Vocation> vocation;
 	if (isNumber(L, 2)) {
 		vocation = g_vocations().getVocation(getNumber<uint16_t>(L, 2));
 	} else if (isString(L, 2)) {
 		vocation = g_vocations().getVocation(g_vocations().getVocationId(getString(L, 2)));
 	} else if (isUserdata(L, 2)) {
-		vocation = getUserdata<Vocation>(L, 2);
+		vocation = getUserdataShared<Vocation>(L, 2);
 	} else {
 		vocation = nullptr;
 	}
@@ -1623,7 +1623,7 @@ int PlayerFunctions::luaPlayerGetGroup(lua_State* L) {
 
 int PlayerFunctions::luaPlayerSetGroup(lua_State* L) {
 	// player:setGroup(group)
-	Group* group = getUserdata<Group>(L, 2);
+	std::shared_ptr<Group> group = getUserdataShared<Group>(L, 2);
 	if (!group) {
 		pushBoolean(L, false);
 		return 1;

@@ -586,7 +586,9 @@ public:
 	bool hasDistanceEffect(uint16_t effectId);
 
 	Groups groups;
+	Familiars familiars;
 	Map map;
+	Outfits outfits;
 	Mounts mounts;
 	Raids raids;
 	std::unique_ptr<Crystal::protobuf::appearances::Appearances> m_appearancesPtr;

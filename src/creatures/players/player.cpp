@@ -80,7 +80,7 @@ Player::~Player() {
 }
 
 bool Player::setVocation(uint16_t vocId) {
-	Vocation* voc = g_vocations().getVocation(vocId);
+	const auto &voc = g_vocations().getVocation(vocId);
 	if (!voc) {
 		return false;
 	}
@@ -2404,7 +2404,7 @@ void Player::addExperience(std::shared_ptr<Creature> target, uint64_t exp, bool 
 		++level;
 		// Player stats gain for vocations level <= 8
 		if (vocation->getId() != VOCATION_NONE && level <= 8) {
-			const Vocation* noneVocation = g_vocations().getVocation(VOCATION_NONE);
+			const auto &noneVocation = g_vocations().getVocation(VOCATION_NONE);
 			healthMax += noneVocation->getHPGain();
 			health += noneVocation->getHPGain();
 			manaMax += noneVocation->getManaGain();
@@ -2500,7 +2500,7 @@ void Player::removeExperience(uint64_t exp, bool sendText /* = false*/) {
 		--level;
 		// Player stats loss for vocations level <= 8
 		if (vocation->getId() != VOCATION_NONE && level <= 8) {
-			const Vocation* noneVocation = g_vocations().getVocation(VOCATION_NONE);
+			const auto &noneVocation = g_vocations().getVocation(VOCATION_NONE);
 			healthMax = std::max<int32_t>(0, healthMax - noneVocation->getHPGain());
 			manaMax = std::max<int32_t>(0, manaMax - noneVocation->getManaGain());
 			capacity = std::max<int32_t>(0, capacity - noneVocation->getCapGain());
@@ -5016,7 +5016,7 @@ bool Player::canFamiliar(uint16_t lookType) const {
 		return true;
 	}
 
-	const Familiar* familiar = Familiars::getInstance().getFamiliarByLookType(getVocationId(), lookType);
+	const auto &familiar = Familiars::getInstance().getFamiliarByLookType(getVocationId(), lookType);
 	if (!familiar) {
 		return false;
 	}
@@ -5057,24 +5057,24 @@ bool Player::removeFamiliar(uint16_t lookType) {
 	return false;
 }
 
-bool Player::getFamiliar(const Familiar &familiar) const {
+bool Player::getFamiliar(const std::shared_ptr<Familiar> &familiar) const {
 	if (group->access) {
 		return true;
 	}
 
-	if (familiar.premium && !isPremium()) {
+	if (familiar->premium && !isPremium()) {
 		return false;
 	}
 
 	for (const FamiliarEntry &familiarEntry : familiars) {
-		if (familiarEntry.lookType != familiar.lookType) {
+		if (familiarEntry.lookType != familiar->lookType) {
 			continue;
 		}
 
 		return true;
 	}
 
-	if (!familiar.unlocked) {
+	if (!familiar->unlocked) {
 		return false;
 	}
 

@@ -33,10 +33,13 @@ enum class Reload_t : uint8_t {
 	RELOAD_TYPE_MODULES,
 	RELOAD_TYPE_MONSTERS,
 	RELOAD_TYPE_MOUNTS,
+	RELOAD_TYPE_OUTFITS,
 	RELOAD_TYPE_NPCS,
 	RELOAD_TYPE_RAIDS,
 	RELOAD_TYPE_SCRIPTS,
 	RELOAD_TYPE_GROUPS,
+	RELOAD_TYPE_VOCATIONS,
+	RELOAD_TYPE_FAMILIARS,
 
 	// Every is last
 	RELOAD_TYPE_LAST
@@ -56,23 +59,26 @@ public:
 	}
 
 	bool init(Reload_t reloadType) const;
-	uint8_t getReloadNumber(Reload_t reloadTypes) const;
+	static uint8_t getReloadNumber(Reload_t reloadTypes);
 
 private:
 	bool reloadAll() const;
-	bool reloadChat() const;
-	bool reloadConfig() const;
-	bool reloadEvents() const;
-	bool reloadCore() const;
-	bool reloadImbuements() const;
-	bool reloadItems() const;
-	bool reloadModules() const;
-	bool reloadMonsters() const;
-	bool reloadMounts() const;
-	bool reloadNpcs() const;
-	bool reloadRaids() const;
-	bool reloadScripts() const;
-	bool reloadGroups() const;
+	static bool reloadChat();
+	static bool reloadConfig();
+	static bool reloadEvents();
+	static bool reloadCore();
+	static bool reloadImbuements();
+	static bool reloadItems();
+	static bool reloadModules();
+	static bool reloadMonsters();
+	static bool reloadMounts();
+	static bool reloadNpcs();
+	static bool reloadRaids();
+	static bool reloadScripts();
+	static bool reloadGroups();
+	static bool reloadVocations();
+	static bool reloadFamiliars();
+	static bool reloadOutfits();
 };
 
 constexpr auto g_gameReload = GameReload::getInstance;

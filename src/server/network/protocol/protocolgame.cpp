@@ -2152,12 +2152,12 @@ void ProtocolGame::sendHighscores(const std::vector<HighscoreCharacter> &charact
 	uint32_t selectedVocation = 0xFFFFFFFF;
 	const auto vocationsMap = g_vocations().getVocations();
 	for (const auto &it : vocationsMap) {
-		const Vocation &vocation = it.second;
-		if (vocation.getFromVocation() == static_cast<uint32_t>(vocation.getId())) {
-			msg.add<uint32_t>(vocation.getFromVocation()); // Vocation Id
-			msg.addString(vocation.getVocName(), "ProtocolGame::sendHighscores - vocation.getVocName()"); // Vocation Name
+		const auto &vocation = it.second;
+		if (vocation->getFromVocation() == static_cast<uint32_t>(vocation->getId())) {
+			msg.add<uint32_t>(vocation->getFromVocation()); // Vocation Id
+			msg.addString(vocation->getVocName(), "ProtocolGame::sendHighscores - vocation.getVocName()"); // Vocation Name
 			++vocations;
-			if (vocation.getFromVocation() == vocationId) {
+			if (vocation->getFromVocation() == vocationId) {
 				selectedVocation = vocationId;
 			}
 		}
@@ -3775,14 +3775,14 @@ void ProtocolGame::sendCyclopediaCharacterOutfitsMounts() {
 	auto startFamiliars = msg.getBufferPosition();
 	msg.skipBytes(2);
 	const auto familiars = Familiars::getInstance().getFamiliars(player->getVocationId());
-	for (const Familiar &familiar : familiars) {
-		const std::string type = familiar.type;
+	for (const auto &familiar : familiars) {
+		const std::string type = familiar->type;
 		if (!player->getFamiliar(familiar)) {
 			continue;
 		}
 		++familiarsSize;
-		msg.add<uint16_t>(familiar.lookType);
-		msg.addString(familiar.name, "ProtocolGame::sendCyclopediaCharacterOutfitsMounts - familiar.name");
+		msg.add<uint16_t>(familiar->lookType);
+		msg.addString(familiar->name, "ProtocolGame::sendCyclopediaCharacterOutfitsMounts - familiar.name");
 		if (type == "quest") {
 			msg.addByte(CYCLOPEDIA_CHARACTERINFO_OUTFITTYPE_QUEST);
 		} else {
@@ -6705,13 +6705,13 @@ void ProtocolGame::sendOutfitWindow() {
 
 	const auto familiars = Familiars::getInstance().getFamiliars(player->getVocationId());
 
-	for (const Familiar &familiar : familiars) {
+	for (const auto &familiar : familiars) {
 		if (!player->getFamiliar(familiar)) {
 			continue;
 		}
 
-		msg.add<uint16_t>(familiar.lookType);
-		msg.addString(familiar.name, "ProtocolGame::sendOutfitWindow - familiar.name");
+		msg.add<uint16_t>(familiar->lookType);
+		msg.addString(familiar->name, "ProtocolGame::sendOutfitWindow - familiar.name");
 		msg.addByte(0x00);
 		if (++familiarSize == limitFamiliars) {
 			break;
