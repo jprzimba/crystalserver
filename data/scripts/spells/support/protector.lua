@@ -4,7 +4,7 @@ combat:setParameter(COMBAT_PARAM_AGGRESSIVE, false)
 
 local skill = Condition(CONDITION_ATTRIBUTES)
 skill:setParameter(CONDITION_PARAM_SUBID, AttrSubId_BloodRageProtector)
-skill:setParameter(CONDITION_PARAM_TICKS, 13000)
+skill:setParameter(CONDITION_PARAM_TICKS, 12000)
 skill:setParameter(CONDITION_PARAM_SKILL_SHIELDPERCENT, 220)
 skill:setParameter(CONDITION_PARAM_BUFF_DAMAGEDEALT, 65)
 skill:setParameter(CONDITION_PARAM_BUFF_DAMAGERECEIVED, 85)
