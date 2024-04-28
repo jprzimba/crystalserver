@@ -1563,6 +1563,10 @@ public:
 			client->sendOutfitWindow();
 		}
 	}
+	bool isWearingSupportOutfit(uint16_t outfitType) {
+		return (outfitType == 75 || outfitType == 266 || outfitType == 302);
+	}
+
 	// Imbuements
 	void onApplyImbuement(Imbuement* imbuement, std::shared_ptr<Item> item, uint8_t slot, bool protectionCharm);
 	void onClearImbuement(std::shared_ptr<Item> item, uint8_t slot);

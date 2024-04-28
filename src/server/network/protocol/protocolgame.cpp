@@ -6604,12 +6604,6 @@ void ProtocolGame::sendOutfitWindow() {
 	msg.skipBytes(2);
 
 	if (player->isAccessPlayer()) {
-		msg.add<uint16_t>(75);
-		msg.addString("Gamemaster", "ProtocolGame::sendOutfitWindow - Gamemaster");
-		msg.addByte(0);
-		msg.addByte(0x00);
-		++outfitSize;
-
 		msg.add<uint16_t>(266);
 		msg.addString("Customer Support", "ProtocolGame::sendOutfitWindow - Customer Support");
 		msg.addByte(0);
@@ -6675,12 +6669,12 @@ void ProtocolGame::sendOutfitWindow() {
 
 	const auto mounts = g_game().mounts.getMounts();
 	for (const auto mount : mounts) {
-		if (player->hasMount(mount)) {
+		if (player->hasMount(mount) && !player->isWearingSupportOutfit(currentOutfit.lookType)) {
 			msg.add<uint16_t>(mount->clientId);
 			msg.addString(mount->name, "ProtocolGame::sendOutfitWindow - mount->name");
 			msg.addByte(0x00);
 			++mountSize;
-		} else if (mount->type == "store") {
+		} else if (mount->type == "store" && !player->isWearingSupportOutfit(currentOutfit.lookType)) {
 			msg.add<uint16_t>(mount->clientId);
 			msg.addString(mount->name, "ProtocolGame::sendOutfitWindow - mount->name");
 			msg.addByte(0x01);
