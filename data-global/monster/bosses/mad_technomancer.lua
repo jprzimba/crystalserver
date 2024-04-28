@@ -1,7 +1,7 @@
 local mType = Game.createMonsterType("Mad Technomancer")
 local monster = {}
 
-monster.description = "mad technomancer"
+monster.description = "a mad technomancer"
 monster.experience = 55
 monster.outfit = {
 	lookType = 66,

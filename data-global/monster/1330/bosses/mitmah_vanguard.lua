@@ -1,7 +1,7 @@
 local mType = Game.createMonsterType("Mitmah Vanguard")
 local monster = {}
 
-monster.description = "a mitmah vanguard"
+monster.description = "Mitmah Vanguard"
 monster.experience = 300000
 monster.outfit = {
 	lookType = 1716,

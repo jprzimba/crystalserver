@@ -1,7 +1,7 @@
 local mType = Game.createMonsterType("Pythius The Rotten")
 local monster = {}
 
-monster.description = "Pythius The Rotten"
+monster.description = "Pythius the Rotten"
 monster.experience = 7000
 monster.outfit = {
 	lookType = 231,

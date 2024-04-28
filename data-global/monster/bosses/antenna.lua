@@ -1,7 +1,7 @@
 local mType = Game.createMonsterType("Antenna")
 local monster = {}
 
-monster.description = "Antenna"
+monster.description = "an antenna"
 monster.experience = 0
 monster.outfit = {
 	lookTypeEx = 850,

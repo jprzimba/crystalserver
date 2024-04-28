@@ -1,7 +1,7 @@
 local mType = Game.createMonsterType("Many Faces")
 local monster = {}
 
-monster.description = "a many faces"
+monster.description = "many faces"
 monster.experience = 18870
 monster.outfit = {
 	lookType = 1296,

@@ -1,7 +1,7 @@
 local mType = Game.createMonsterType("Rage of Mazoran")
 local monster = {}
 
-monster.description = "a Rage of Mazoran"
+monster.description = "Rage of Mazoran"
 monster.experience = 0
 monster.outfit = {
 	lookType = 243,

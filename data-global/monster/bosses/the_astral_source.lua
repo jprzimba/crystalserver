@@ -1,7 +1,7 @@
 local mType = Game.createMonsterType("The Astral Source")
 local monster = {}
 
-monster.description = "the astral source"
+monster.description = "The Astral Source"
 monster.experience = 3000
 monster.outfit = {
 	lookTypeEx = 24228,

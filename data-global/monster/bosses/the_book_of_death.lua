@@ -1,7 +1,7 @@
 local mType = Game.createMonsterType("The Book of Death")
 local monster = {}
 
-monster.description = "a The Book of Death"
+monster.description = "The Book of Death"
 monster.experience = 0
 monster.outfit = {
 	lookType = 1061,
