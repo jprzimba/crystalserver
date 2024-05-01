@@ -26,8 +26,8 @@ local targetIdList = {
 local flasks = Action()
 
 function flasks.onUse(player, item, fromPosition, target, toPosition, isHotkey)
-	if not target or not target:getItem() then
-		return false
+	if not target or type(target) == 'table' or not target:getItem() then
+		return true
 	end
 
 	local charges = target:getCharges()
