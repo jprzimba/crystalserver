@@ -4076,10 +4076,69 @@ void ProtocolGame::sendTextMessage(const TextMessage &message) {
 		return;
 	}
 
+	MessageClasses internalType = message.type;
+	if (oldProtocol && message.type > MESSAGE_LAST_OLDPROTOCOL) {
+		switch (internalType) {
+			case MESSAGE_REPORT: {
+				internalType = MESSAGE_LOOT;
+				break;
+			}
+			case MESSAGE_HOTKEY_PRESSED: {
+				internalType = MESSAGE_LOOK;
+				break;
+			}
+			case MESSAGE_TUTORIAL_HINT: {
+				internalType = MESSAGE_LOGIN;
+				break;
+			}
+			case MESSAGE_THANK_YOU: {
+				internalType = MESSAGE_LOGIN;
+				break;
+			}
+			case MESSAGE_MARKET: {
+				internalType = MESSAGE_EVENT_ADVANCE;
+				break;
+			}
+			case MESSAGE_MANA: {
+				internalType = MESSAGE_HEALED;
+				break;
+			}
+			case MESSAGE_BEYOND_LAST: {
+				internalType = MESSAGE_LOOT;
+				break;
+			}
+			case MESSAGE_ATTENTION: {
+				internalType = MESSAGE_EVENT_ADVANCE;
+				break;
+			}
+			case MESSAGE_BOOSTED_CREATURE: {
+				internalType = MESSAGE_LOOT;
+				break;
+			}
+			case MESSAGE_OFFLINE_TRAINING: {
+				internalType = MESSAGE_LOOT;
+				break;
+			}
+			case MESSAGE_TRANSACTION: {
+				internalType = MESSAGE_LOOT;
+				break;
+			}
+			case MESSAGE_POTION: {
+				internalType = MESSAGE_FAILURE;
+				break;
+			}
+
+			default: {
+				internalType = MESSAGE_EVENT_ADVANCE;
+				break;
+			}
+		}
+	}
+
 	NetworkMessage msg;
 	msg.addByte(0xB4);
-	msg.addByte(message.type);
-	switch (message.type) {
+	msg.addByte(internalType);
+	switch (internalType) {
 		case MESSAGE_DAMAGE_DEALT:
 		case MESSAGE_DAMAGE_RECEIVED:
 		case MESSAGE_DAMAGE_OTHERS: {
@@ -4092,10 +4151,6 @@ void ProtocolGame::sendTextMessage(const TextMessage &message) {
 		}
 		case MESSAGE_HEALED:
 		case MESSAGE_HEALED_OTHERS: {
-			if (oldProtocol) {
-				return;
-			}
-
 			msg.addPosition(message.position);
 			msg.add<uint32_t>(message.primary.value);
 			msg.addByte(message.primary.color);
@@ -4117,11 +4172,9 @@ void ProtocolGame::sendTextMessage(const TextMessage &message) {
 		case MESSAGE_PARTY:
 			msg.add<uint16_t>(message.channelId);
 			break;
-		default: {
+		default:
 			break;
-		}
 	}
-
 	msg.addString(message.text, "ProtocolGame::sendTextMessage - message.text");
 	writeToOutputBuffer(msg);
 }
