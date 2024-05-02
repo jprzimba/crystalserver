@@ -6,9 +6,9 @@ function RegisterPrimalPackBeast(template)
 	primalMonster.loot = {}
 	primalMonster.name = "Primal Pack Beast"
 	primalMonster.description = "a primal pack beast"
+	primalMonster.maxHealth = primalMonster.maxHealth * 0.7
+	primalMonster.health = primalMonster.maxHealth
 
-	primalMonster.health = primalMonster.health
-	primalMonster.maxHealth = primalMonster.maxHealth
 	primalMonster.raceId = nil
 	primalMonster.Bestiary = nil
 	primalMonster.corpse = 0

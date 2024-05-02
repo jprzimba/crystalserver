@@ -6710,7 +6710,7 @@ void Player::triggerTranscendance() {
 		sendStats();
 		sendBasicData();
 		wheel()->sendGiftOfLifeCooldown();
-		g_game().reloadCreature(getPlayer())
+		g_game().reloadCreature(getPlayer());
 		updateStatsAfterTranscendance = true;
 	}
 
