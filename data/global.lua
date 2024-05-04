@@ -8,7 +8,7 @@ if startupFile ~= nil then
 end
 
 function IsRunningGlobalDatapack()
-	if DATA_DIRECTORY == "data-global" then
+	if DATA_DIRECTORY == "data-global" or DATA_DIRECTORY == "data-otservbr-global" then
 		return true
 	else
 		return false
