@@ -897,6 +897,7 @@ void IOLoginDataLoad::loadPlayerInitializeSystem(std::shared_ptr<Player> player)
 	player->wheel()->initializePlayerData();
 
 	player->achiev()->loadUnlockedAchievements();
+	player->badge()->checkAndUpdateNewBadges();
 
 	player->initializePrey();
 	player->initializeTaskHunting();

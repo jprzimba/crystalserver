@@ -8,6 +8,8 @@
   - Updated npc data-global/npc/hireling.lua, now it sell imbuement packages and also buy all loots inside Gold Pouch ([Tryller](https://github.com/jprzimba)).
   - Cyclopedia item summary ([phacUFPE](https://github.com/phacUFPE))
   - Add Vibrancy imbuement ([pennaor](https://github.com/pennaor))
+  - Badge system ([elsongabriel](https://github.com/elsongabriel))
+  - Screenshots configurable in config.lua enableScreenshots ([Tryller](https://github.com/jprzimba)).
 
 ### Bug Fixes
   - Fixed chain system. Now works properly for Mages and Paladins ([Tryller](https://github.com/jprzimba)).

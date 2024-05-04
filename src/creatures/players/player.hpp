@@ -42,6 +42,7 @@
 #include "creatures/npcs/npc.hpp"
 #include "game/bank/bank.hpp"
 #include "enums/object_category.hpp"
+#include "creatures/players/cyclopedia/player_badge.hpp"
 
 class House;
 class NetworkMessage;
@@ -62,6 +63,7 @@ class Account;
 
 struct ModalWindow;
 struct Achievement;
+struct Badge;
 
 struct ForgeHistory {
 	ForgeAction_t actionType = ForgeAction_t::FUSION;
@@ -741,6 +743,13 @@ public:
 	}
 
 	uint32_t getCapacity() const;
+
+	uint32_t getBonusCapacity() const {
+		if (hasFlag(PlayerFlags_t::CannotPickupItem) || hasFlag(PlayerFlags_t::HasInfiniteCapacity)) {
+			return std::numeric_limits<uint32_t>::max();
+		}
+		return bonusCapacity;
+	}
 
 	uint32_t getFreeCapacity() const {
 		if (hasFlag(PlayerFlags_t::CannotPickupItem)) {
@@ -2619,6 +2628,9 @@ public:
 	// This get all players slot items
 	phmap::flat_hash_map<uint8_t, std::shared_ptr<Item>> getAllSlotItems() const;
 
+	// This get all blessings
+	phmap::flat_hash_map<Blessings_t, std::string> getBlessingNames() const;
+
 	/**
 	 * @brief Get the equipped items of the player->
 	 * @details This function returns a vector containing the items currently equipped by the player
@@ -2634,6 +2646,10 @@ public:
 	std::unique_ptr<PlayerAchievement> &achiev();
 	const std::unique_ptr<PlayerAchievement> &achiev() const;
 
+	// Player badge interface
+	std::unique_ptr<PlayerBadge> &badge();
+	const std::unique_ptr<PlayerBadge> &badge() const;
+
 	void sendLootMessage(const std::string &message) const;
 
 	std::shared_ptr<Container> getLootPouch();
@@ -2643,6 +2659,8 @@ public:
 	std::shared_ptr<Container> getStoreInbox() const;
 
 	bool canSpeakWithHireling(uint8_t speechbubble);
+
+	uint16_t getPlayerVocationEnum() const;
 
 	/*******************************************************************************
 	 * Deflect Condition
@@ -3073,6 +3091,7 @@ private:
 
 	std::unique_ptr<PlayerWheel> m_wheelPlayer;
 	std::unique_ptr<PlayerAchievement> m_playerAchievement;
+	std::unique_ptr<PlayerBadge> m_playerBadge;
 
 	std::mutex quickLootMutex;
 

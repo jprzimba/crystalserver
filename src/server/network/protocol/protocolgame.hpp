@@ -21,6 +21,7 @@
 #include "creatures/interactions/chat.hpp"
 #include "creatures/creature.hpp"
 #include "enums/forge_conversion.hpp"
+#include "creatures/players/cyclopedia/player_badge.hpp"
 
 class NetworkMessage;
 class Player;
@@ -37,6 +38,7 @@ class TaskHuntingOption;
 
 struct ModalWindow;
 struct Achievement;
+struct Badge;
 
 using ProtocolGame_ptr = std::shared_ptr<ProtocolGame>;
 
@@ -133,6 +135,8 @@ private:
 
 	void sendItemInspection(uint16_t itemId, uint8_t itemCount, std::shared_ptr<Item> item, bool cyclopedia);
 	void parseInspectionObject(NetworkMessage &msg);
+
+	void parseFriendSystemAction(NetworkMessage &msg);
 
 	void parseCyclopediaCharacterInfo(NetworkMessage &msg);
 
