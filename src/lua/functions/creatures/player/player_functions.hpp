@@ -372,6 +372,9 @@ private:
 		registerMethod(L, "Player", "addAchievementPoints", PlayerFunctions::luaPlayerAddAchievementPoints);
 		registerMethod(L, "Player", "removeAchievementPoints", PlayerFunctions::luaPlayerRemoveAchievementPoints);
 
+		registerMethod(L, "Player", "addDeflectCondition", PlayerFunctions::luaPlayerAddDeflectCondition);
+		registerMethod(L, "Player", "removeDeflectCondition", PlayerFunctions::luaPlayerRemoveDeflectCondition);
+
 		registerMethod(L, "Player", "takeScreenshot", PlayerFunctions::luaPlayerTakeScreenshot);
 
 		GroupFunctions::init(L);
@@ -727,6 +730,9 @@ private:
 	static int luaPlayerGetAchievementPoints(lua_State* L);
 	static int luaPlayerAddAchievementPoints(lua_State* L);
 	static int luaPlayerRemoveAchievementPoints(lua_State* L);
+
+	static int luaPlayerAddDeflectCondition(lua_State* L);
+	static int luaPlayerRemoveDeflectCondition(lua_State* L);
 
 	static int luaPlayerTakeScreenshot(lua_State* L);
 

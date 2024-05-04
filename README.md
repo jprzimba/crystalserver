@@ -21,6 +21,12 @@ at [this link](https://github.com/jprzimba/crystalserver/blob/main/markdowns/COD
 ### Quests
 You can see the complete quests lists (we are checking all quests) in [this link](https://github.com/jprzimba/crystalserver/blob/main/markdowns/QUESTS.md).
 
+### Thanks
+- [Open Tibia](https://github.com/opentibia/server) and they [contributors](https://github.com/opentibia/server/graphs/contributors).
+- [The Forgotten Server](https://github.com/otland/forgottenserver) and they [contributors](https://github.com/otland/forgottenserver/graphs/contributors).
+- [Canary Project](https://github.com/opentibiabr/canary) and they [contributors](https://github.com/opentibiabr/canary/graphs/contributors).
+
+
 ### Issues
 
 We use the [issue tracker on GitHub](https://github.com/jprzimba/crystalserver/issues). Keep in mind that everyone who is
@@ -39,4 +45,4 @@ Before [creating a pull request](https://github.com/jprzimba/crystalserver/pulls
   automatic configure the indentation.
 * There are people that doesn't play the game on the official server, so explain your changes to help understand what
   are you changing and why.
-* Avoid opening a Pull Request to just update one line of an XML file.
+* Avoid opening a Pull Request to just update one line of a XML file.
