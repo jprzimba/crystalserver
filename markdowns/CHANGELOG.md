@@ -6,12 +6,13 @@
   - Implemented Surprise Bags System: data/items/bags.xml (Tryller, dgprado).
   - New configs to chain system at config.lua "combatChainSkillFormulaMissile" is used for weapons like assassin star/viper star and others, "combatChainSkillFormulaDistance" used for weapons like arrows/bols and "combatChainSkillFormulaWandsAndRods" used for weapons like wands/rods (Tryller).
   - Updated npc data-global/npc/hireling.lua, now it sell imbuement packages and also buy all loots inside Gold Pouch (Tryller).
+  - Cyclopedia item summary (phacUFPE)
 
 ### Bug Fixes
   - Fixed chain system. Now works properly for Mages and Paladins (Tryller).
   - Fixed V.I.P List (Tryller).
   - Fixed damage reflection not working properly (Tryller).
-  - Fixed imbuement system when the player adds imbuement or cancels imbuement and the imbuement window is open (Tryller).
+  - Fixed imbuement system when the player adds imbuement or cancels imbuement and the imbuement window is open not updating (Tryller).
   - Fixed when the player dies without blessing and the bag goes to the gold puch (Tryller)
   - Optimized onPlayerSellAllLoot in npc code to avoid long freeze (Tryller).
   - Fixed data/scripts/talkactions/player/refill.lua, now check if player has capacity to receive items. (Tryller).
