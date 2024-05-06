@@ -26,6 +26,7 @@
   - Fixed alana sio only to "aleta som" users ([carlospess0a](https://github.com/carlospess0a)).
   - Fixed Player always logging with mount ([Tryller](https://github.com/jprzimba)).
   - Fixed quiver bugs ([phacUFPE](https://github.com/phacUFPE)).
+  - Fixed avatar cooldown reduction ([phacUFPE](https://github.com/phacUFPE)).
 
 ### Changed Features
   - Removed old "removeBeginningWeaponAmmunition" and implemented "removeBreakWeaponsCharges" at config.lua ([Tryller](https://github.com/jprzimba)).
