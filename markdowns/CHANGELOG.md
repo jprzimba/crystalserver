@@ -28,6 +28,7 @@
   - Fixed quiver bugs ([phacUFPE](https://github.com/phacUFPE)).
   - Fixed avatar cooldown reduction ([phacUFPE](https://github.com/phacUFPE)).
   - Fixed imbuement elemental damage only to physical damag ([carlospess0a](https://github.com/carlospess0a)).
+  - Fixed bed issues ([phacUFPE](https://github.com/phacUFPE)).
 
 ### Changed Features
   - Removed old "removeBeginningWeaponAmmunition" and implemented "removeBreakWeaponsCharges" at config.lua ([Tryller](https://github.com/jprzimba)).
