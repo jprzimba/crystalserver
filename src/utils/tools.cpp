@@ -875,6 +875,16 @@ const ImbuementTypeNames imbuementTypeNames = {
 	{ "paralysis removal", IMBUEMENT_PARALYSIS_REMOVAL },
 };
 
+const phmap::flat_hash_map<std::string, Augment_t> augmentTypeNames = {
+	{ "powerful impact", Augment_t::Powerful_Impact },
+	{ "strong impact", Augment_t::Strong_Impact },
+	{ "increased damage", Augment_t::Increased_Damage },
+	{ "cooldown", Augment_t::Cooldown },
+	{ "critical extra damage", Augment_t::Critical_Extra_Damage },
+	{ "life leech", Augment_t::Life_Leech },
+	{ "mana leech", Augment_t::Mana_Leech }
+};
+
 MagicEffectClasses getMagicEffect(const std::string &strValue) {
 	auto magicEffect = magicEffectNames.find(strValue);
 	if (magicEffect != magicEffectNames.end()) {
@@ -913,6 +923,14 @@ Skulls_t getSkullType(const std::string &strValue) {
 		return skullType->second;
 	}
 	return SKULL_NONE;
+}
+
+Augment_t getAugmentType(const std::string &strValue) {
+	auto augmentType = augmentTypeNames.find(strValue);
+	if (augmentType != augmentTypeNames.end()) {
+		return augmentType->second;
+	}
+	return Augment_t::None;
 }
 
 ImbuementTypes_t getImbuementType(const std::string &strValue) {
@@ -1529,6 +1547,22 @@ void capitalizeWords(std::string &source) {
 	toLowerCaseString(source);
 	uint8_t size = (uint8_t)source.size();
 	for (uint8_t i = 0; i < size; i++) {
+		if (i == 0) {
+			source[i] = (char)toupper(source[i]);
+		} else if (source[i - 1] == ' ' || source[i - 1] == '\'') {
+			source[i] = (char)toupper(source[i]);
+		}
+	}
+}
+
+void capitalizeWordsIgnoringString(std::string &source, const std::string stringToIgnore) {
+	toLowerCaseString(source);
+	uint8_t size = (uint8_t)source.size();
+	uint8_t indexFound = source.find(stringToIgnore);
+	for (uint8_t i = 0; i < size; i++) {
+		if (indexFound != std::string::npos && (i > indexFound - 1) && i < (indexFound + stringToIgnore.size())) {
+			continue;
+		}
 		if (i == 0) {
 			source[i] = (char)toupper(source[i]);
 		} else if (source[i - 1] == ' ' || source[i - 1] == '\'') {

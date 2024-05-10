@@ -10,6 +10,7 @@
   - Add Vibrancy imbuement ([pennaor](https://github.com/pennaor))
   - Badge system ([elsongabriel](https://github.com/elsongabriel))
   - Screenshots configurable in config.lua enableScreenshots ([Tryller](https://github.com/jprzimba)).
+  - Augments system ([phacUFPE](https://github.com/phacUFPE)).
 
 ### Bug Fixes
   - Fixed chain system. Now works properly for Mages and Paladins ([Tryller](https://github.com/jprzimba)).

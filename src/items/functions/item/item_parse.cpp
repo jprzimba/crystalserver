@@ -76,6 +76,7 @@ void ItemParse::initParse(const std::string &tmpStrValue, pugi::xml_node attribu
 	ItemParse::parseWalk(tmpStrValue, valueAttribute, itemType);
 	ItemParse::parseAllowDistanceRead(tmpStrValue, valueAttribute, itemType);
 	ItemParse::parseImbuement(tmpStrValue, attributeNode, valueAttribute, itemType);
+	ItemParse::parseAugment(tmpStrValue, attributeNode, valueAttribute, itemType);
 	ItemParse::parseStackSize(tmpStrValue, valueAttribute, itemType);
 	ItemParse::parseSpecializedMagicLevelPoint(tmpStrValue, valueAttribute, itemType);
 	ItemParse::parseMagicShieldCapacity(tmpStrValue, valueAttribute, itemType);
@@ -887,6 +888,58 @@ void ItemParse::parseStackSize(const std::string &tmpStrValue, pugi::xml_attribu
 			g_logger().warn("[{}] Invalid stack size value: {}. Stack size must be between 1 and 255.", __FUNCTION__, stackSize);
 		}
 		itemType.stackSize = static_cast<uint8_t>(stackSize);
+	}
+}
+
+void ItemParse::parseAugment(const std::string &tmpStrValue, pugi::xml_node attributeNode, pugi::xml_attribute valueAttribute, ItemType &itemType) {
+	if (tmpStrValue != "augments") {
+		return;
+	}
+
+	// Check if the augments value is 1 or 0 (1 = enable - 0 = disable)
+	if (valueAttribute.as_bool()) {
+		for (const auto subAttributeNode : attributeNode.children()) {
+			const pugi::xml_attribute subKeyAttribute = subAttributeNode.attribute("key");
+			if (!subKeyAttribute) {
+				continue;
+			}
+
+			const pugi::xml_attribute subValueAttribute = subAttributeNode.attribute("value");
+			if (!subValueAttribute) {
+				continue;
+			}
+
+			const auto itemMap = AugmentTypeNames.find(asLowerCaseString(subValueAttribute.as_string()));
+			if (itemMap != AugmentTypeNames.end()) {
+				const Augment_t augmentType = getAugmentType(asLowerCaseString(subValueAttribute.as_string()));
+
+				int32_t augmentValue = 0;
+				const bool hasValueDescrition = isAugmentWithoutValueDescription(augmentType);
+
+				if (hasValueDescrition) {
+					const auto it = AugmentWithoutValueDescriptionDefaultKeys.find(augmentType);
+					if (it != AugmentWithoutValueDescriptionDefaultKeys.end()) {
+						augmentValue = g_configManager().getNumber(it->second, __FUNCTION__);
+					}
+				}
+
+				const pugi::xml_object_range<pugi::xml_node_iterator> augmentValueAttributeNode = subAttributeNode.children();
+				if (!augmentValueAttributeNode.empty()) {
+					const pugi::xml_node augmentValueNode = *augmentValueAttributeNode.begin();
+					const pugi::xml_attribute augmentValueAttribute = augmentValueNode.attribute("value");
+					augmentValue = augmentValueAttribute ? pugi::cast<int32_t>(augmentValueAttribute.value()) : augmentValue;
+				} else if (!hasValueDescrition) {
+					g_logger().warn("[ParseAugment::initParseAugment] - Item '{}' has an augment '{}' without a value", itemType.name, subValueAttribute.as_string());
+				}
+
+				if (augmentType != Augment_t::None) {
+					itemType.addAugment(asLowerCaseString(subKeyAttribute.as_string()), augmentType, augmentValue);
+					continue;
+				}
+			} else {
+				g_logger().warn("[ParseAugment::initParseAugment] - Unknown type: {}", valueAttribute.as_string());
+			}
+		}
 	}
 }
 

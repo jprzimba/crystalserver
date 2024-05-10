@@ -100,6 +100,7 @@ ShootType_t getShootType(const std::string &strValue);
 Ammo_t getAmmoType(const std::string &strValue);
 WeaponAction_t getWeaponAction(const std::string &strValue);
 Skulls_t getSkullType(const std::string &strValue);
+Augment_t getAugmentType(const std::string &strValue);
 ImbuementTypes_t getImbuementType(const std::string &strValue);
 
 std::string getSkillName(uint8_t skillid);
@@ -141,6 +142,7 @@ const char* getReturnMessage(ReturnValue value);
 
 void sleep_for(uint64_t ms);
 void capitalizeWords(std::string &source);
+void capitalizeWordsIgnoringString(std::string &source, const std::string stringToIgnore);
 void consoleHandlerExit();
 NameEval_t validateName(const std::string &name);
 

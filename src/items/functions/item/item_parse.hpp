@@ -166,6 +166,7 @@ const phmap::flat_hash_map<std::string, ItemParseAttributes_t> ItemParseAttribut
 	{ "primarytype", ITEM_PARSE_PRIMARYTYPE },
 	{ "usedbyhouseguests", ITEM_PARSE_USEDBYGUESTS },
 	{ "script", ITEM_PARSE_SCRIPT },
+	{ "augments", ITEM_PARSE_AUGMENT }
 };
 
 const phmap::flat_hash_map<std::string, ItemTypes_t> ItemTypesMap = {
@@ -256,6 +257,23 @@ const phmap::flat_hash_map<std::string, ImbuementTypes_t> ImbuementsTypeMap = {
 	{ "paralysis removal", IMBUEMENT_PARALYSIS_REMOVAL },
 };
 
+const phmap::flat_hash_map<std::string, Augment_t> AugmentTypeNames = {
+	{ "cooldown", Augment_t::Cooldown },
+	{ "critical extra damage", Augment_t::Critical_Extra_Damage },
+	{ "increased damage", Augment_t::Increased_Damage },
+	{ "life leech", Augment_t::Life_Leech },
+	{ "mana leech", Augment_t::Mana_Leech },
+	{ "powerful impact", Augment_t::Powerful_Impact },
+	{ "strong impact", Augment_t::Strong_Impact },
+};
+
+const phmap::flat_hash_map<Augment_t, ConfigKey_t> AugmentWithoutValueDescriptionDefaultKeys = {
+	{ Augment_t::Increased_Damage, AUGMENT_INCREASED_DAMAGE_PERCENT },
+	{ Augment_t::Powerful_Impact, AUGMENT_POWERFUL_IMPACT_PERCENT },
+	{ Augment_t::Strong_Impact, AUGMENT_STRONG_IMPACT_PERCENT },
+};
+
+
 class ItemParse : public Items {
 public:
 	static void initParse(const std::string &tmpStrValue, pugi::xml_node attributeNode, pugi::xml_attribute valueAttribute, ItemType &itemType);
@@ -313,6 +331,7 @@ private:
 	static void parseWalk(const std::string &tmpStrValue, pugi::xml_attribute valueAttribute, ItemType &itemType);
 	static void parseAllowDistanceRead(const std::string &tmpStrValue, pugi::xml_attribute valueAttribute, ItemType &itemType);
 	static void parseImbuement(const std::string &tmpStrValue, pugi::xml_node attributeNode, pugi::xml_attribute valueAttribute, ItemType &itemType);
+	static void parseAugment(const std::string &tmpStrValue, pugi::xml_node attributeNode, pugi::xml_attribute valueAttribute, ItemType &itemType);
 	static void parseStackSize(const std::string &tmpStrValue, pugi::xml_attribute valueAttribute, ItemType &itemType);
 	static void parseSpecializedMagicLevelPoint(const std::string &tmpStrValue, pugi::xml_attribute valueAttribute, ItemType &itemType);
 	static void parseMagicShieldCapacity(const std::string &tmpStrValue, pugi::xml_attribute valueAttribute, ItemType &itemType);
