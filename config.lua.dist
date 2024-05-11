@@ -77,7 +77,7 @@ freeDepotLimit = 2000
 premiumDepotLimit = 10000
 depotBoxes = 20
 
--- Augments System (Get more info in: https://github.com/opentibiabr/canary/pull/2602)
+-- Augments System
 -- NOTE: the following values are for all weapons and equipments that have type of "increase damage", "powerful impact" and "strong impact".
 -- To customize the percentage of a particular item with these augment types, please add to the item "augments" section on items.xml as the example above.
 -- NOTE: The values represent percentage.
@@ -86,7 +86,7 @@ depotBoxes = 20
 -- NOTE: augmentStrongImpactPercent = value between 1 and 100 (damage percent to increase. ex: 7 = 7%, 70 = 70%)
 augmentIncreasedDamagePercent = 5
 augmentPowerfulImpactPercent = 7
-augmentStrongImpactPercent = 100
+augmentStrongImpactPercent = 10
 
 -- Prey system
 -- NOTE: preyRerollPricePerLevel: Price multiplier in gold coin for rerolling prey list.
