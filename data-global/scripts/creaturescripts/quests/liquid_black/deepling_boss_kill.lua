@@ -5,7 +5,7 @@ local bosses = {
 }
 
 local deeplingBosses = CreatureEvent("DeeplingBossDeath")
-function deeplingBosses.onDeath(player, creature)
+function deeplingBosses.onDeath(creature)
 	local bossConfig = bosses[creature:getName():lower()]
 	if not bossConfig then
 		return true
