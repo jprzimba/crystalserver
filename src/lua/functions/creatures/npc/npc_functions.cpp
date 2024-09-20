@@ -408,7 +408,7 @@ int NpcFunctions::luaNpcOpenShopWindowTable(lua_State* L) {
 		if (itemName.empty()) {
 			itemName = Item::items[itemId].name;
 		}
-		items.emplace_back(itemId, subType, buyPrice, sellPrice, storageKey, storageValue, itemName);
+		items.emplace_back(itemId, itemName, subType, buyPrice, sellPrice, storageKey, storageValue);
 		lua_pop(L, 8);
 	}
 	lua_pop(L, 3);

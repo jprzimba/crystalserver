@@ -32,8 +32,6 @@ void MoveEvents::clear(bool isFromXML /*= false*/) {
 			for (int moveEventType = 0; moveEventType < MOVE_EVENT_LAST; ++moveEventType) {
 				auto &eventList = moveEventList.moveEvent[moveEventType];
 
-				int originalSize = eventList.size();
-
 				eventList.remove_if([&](const std::shared_ptr<MoveEvent> &moveEvent) {
 					bool removed = moveEvent && moveEvent->isFromXML();
 					if (removed) {

@@ -17,6 +17,8 @@
 
 #pragma once
 
+#include "lib/di/container.hpp"
+
 struct FamiliarEntry {
 	constexpr explicit FamiliarEntry(uint16_t initLookType) :
 		lookType(initLookType) { }
@@ -38,7 +40,9 @@ struct Familiar {
 
 class Familiars {
 public:
-	static Familiars &getInstance();
+	static Familiars &getInstance() {
+		return inject<Familiars>();
+	}
 
 	bool loadFromXml();
 	bool reload();

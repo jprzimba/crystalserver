@@ -341,7 +341,7 @@ static int32_t getHealthValue(Vocation_t vocation, WheelGemBasicModifier_t modif
 	return 0;
 }
 
-static int32_t getManaValue(Vocation_t vocation, WheelGemBasicModifier_t modifier) {
+[[maybe_unused]] static int32_t getManaValue(Vocation_t vocation, WheelGemBasicModifier_t modifier) {
 	static const std::unordered_map<WheelGemBasicModifier_t, std::unordered_map<Vocation_t, int32_t>> stats = {
 		{
 			WheelGemBasicModifier_t::Vocation_Mana_FireResistance,
@@ -417,7 +417,7 @@ static int32_t getManaValue(Vocation_t vocation, WheelGemBasicModifier_t modifie
 	return 0;
 }
 
-static int32_t getCapacityValue(Vocation_t vocation, WheelGemBasicModifier_t modifier) {
+[[maybe_unused]] static int32_t getCapacityValue(Vocation_t vocation, WheelGemBasicModifier_t modifier) {
 	static const std::unordered_map<WheelGemBasicModifier_t, std::unordered_map<Vocation_t, int32_t>> stats = {
 		{
 			WheelGemBasicModifier_t::Vocation_Capacity_FireResistance,

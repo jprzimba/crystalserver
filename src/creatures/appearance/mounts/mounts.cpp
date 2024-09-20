@@ -52,6 +52,7 @@ bool Mounts::loadFromXml() {
 			mountNode.attribute("type").as_string()
 		));
 	}
+
 	return true;
 }
 

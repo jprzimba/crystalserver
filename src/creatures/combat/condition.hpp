@@ -35,7 +35,7 @@ public:
 	virtual bool startCondition(std::shared_ptr<Creature> creature);
 	virtual bool executeCondition(std::shared_ptr<Creature> creature, int32_t interval);
 	virtual void endCondition(std::shared_ptr<Creature> creature) = 0;
-	virtual void addCondition(std::shared_ptr<Creature> creature, const std::shared_ptr<Condition> condition) = 0;
+	virtual void addCondition(std::shared_ptr<Creature> creature, std::shared_ptr<Condition> condition) = 0;
 	virtual uint32_t getIcons() const;
 	ConditionId_t getId() const {
 		return id;
@@ -71,18 +71,16 @@ public:
 	bool isPersistent() const;
 	bool isRemovableOnDeath() const;
 
-	bool creatureCanDeflect(std::shared_ptr<Creature> creature) const; 
-
 protected:
 	uint8_t drainBodyStage = 0;
-	int64_t endTime;
-	uint32_t subId;
-	int32_t ticks;
-	ConditionType_t conditionType;
-	ConditionId_t id;
-	bool isBuff;
+	int64_t endTime {};
+	uint32_t subId {};
+	int32_t ticks {};
+	ConditionType_t conditionType {};
+	ConditionId_t id {};
+	bool isBuff {};
 
-	virtual bool updateCondition(const std::shared_ptr<Condition> addCondition, std::shared_ptr<Creature> creature = nullptr);
+	virtual bool updateCondition(std::shared_ptr<Condition> addCondition);
 
 private:
 	SoundEffect_t tickSound = SoundEffect_t::SILENCE;
@@ -100,7 +98,7 @@ public:
 	bool startCondition(std::shared_ptr<Creature> creature) override;
 	bool executeCondition(std::shared_ptr<Creature> creature, int32_t interval) override;
 	void endCondition(std::shared_ptr<Creature> creature) override;
-	void addCondition(std::shared_ptr<Creature> creature, const std::shared_ptr<Condition> condition) override;
+	void addCondition(std::shared_ptr<Creature> creature, std::shared_ptr<Condition> condition) override;
 	uint32_t getIcons() const override;
 
 	std::shared_ptr<Condition> clone() const override {
@@ -116,7 +114,7 @@ public:
 	bool startCondition(std::shared_ptr<Creature> creature) final;
 	bool executeCondition(std::shared_ptr<Creature> creature, int32_t interval) final;
 	void endCondition(std::shared_ptr<Creature> creature) final;
-	void addCondition(std::shared_ptr<Creature> creature, const std::shared_ptr<Condition> condition) final;
+	void addCondition(std::shared_ptr<Creature> creature, std::shared_ptr<Condition> condition) final;
 
 	bool setParam(ConditionParam_t param, int32_t value) final;
 
@@ -182,7 +180,7 @@ public:
 
 	bool startCondition(std::shared_ptr<Creature> creature) override;
 	void endCondition(std::shared_ptr<Creature> creature) override;
-	void addCondition(std::shared_ptr<Creature> creature, const std::shared_ptr<Condition> addCondition) override;
+	void addCondition(std::shared_ptr<Creature> creature, std::shared_ptr<Condition> addCondition) override;
 	bool executeCondition(std::shared_ptr<Creature> creature, int32_t interval) override;
 
 	bool setParam(ConditionParam_t param, int32_t value) override;
@@ -215,7 +213,7 @@ public:
 
 	bool startCondition(std::shared_ptr<Creature> creature) override;
 	void endCondition(std::shared_ptr<Creature> creature) override;
-	void addCondition(std::shared_ptr<Creature> creature, const std::shared_ptr<Condition> addCondition) override;
+	void addCondition(std::shared_ptr<Creature> creature, std::shared_ptr<Condition> addCondition) override;
 	uint32_t getIcons() const override;
 
 	bool setParam(ConditionParam_t param, int32_t value) override;
@@ -237,7 +235,7 @@ public:
 	ConditionSoul(ConditionId_t initId, ConditionType_t initType, int32_t iniTicks, bool initBuff = false, uint32_t initSubId = 0) :
 		ConditionGeneric(initId, initType, iniTicks, initBuff, initSubId) { }
 
-	void addCondition(std::shared_ptr<Creature> creature, const std::shared_ptr<Condition> addCondition) override;
+	void addCondition(std::shared_ptr<Creature> creature, std::shared_ptr<Condition> addCondition) override;
 	bool executeCondition(std::shared_ptr<Creature> creature, int32_t interval) override;
 
 	bool setParam(ConditionParam_t param, int32_t value) override;
@@ -280,7 +278,7 @@ public:
 	bool startCondition(std::shared_ptr<Creature> creature) override;
 	bool executeCondition(std::shared_ptr<Creature> creature, int32_t interval) override;
 	void endCondition(std::shared_ptr<Creature> creature) override;
-	void addCondition(std::shared_ptr<Creature> creature, const std::shared_ptr<Condition> condition) override;
+	void addCondition(std::shared_ptr<Creature> creature, std::shared_ptr<Condition> condition) override;
 	uint32_t getIcons() const override;
 
 	std::shared_ptr<Condition> clone() const override {
@@ -319,7 +317,7 @@ private:
 	bool getNextDamage(int32_t &damage);
 	bool doDamage(std::shared_ptr<Creature> creature, int32_t healthChange);
 
-	bool updateCondition(const std::shared_ptr<Condition> addCondition, std::shared_ptr<Creature> creature = nullptr) override;
+	bool updateCondition(std::shared_ptr<Condition> addCondition) override;
 };
 
 class ConditionFeared final : public Condition {
@@ -331,7 +329,7 @@ public:
 	bool startCondition(std::shared_ptr<Creature> creature) override;
 	bool executeCondition(std::shared_ptr<Creature> creature, int32_t interval) override;
 	void endCondition(std::shared_ptr<Creature> creature) override;
-	void addCondition(std::shared_ptr<Creature> creature, const std::shared_ptr<Condition> condition) override;
+	void addCondition(std::shared_ptr<Creature> creature, std::shared_ptr<Condition> condition) override;
 	uint32_t getIcons() const override;
 
 	std::shared_ptr<Condition> clone() const override {
@@ -370,7 +368,7 @@ public:
 	bool startCondition(std::shared_ptr<Creature> creature) override;
 	bool executeCondition(std::shared_ptr<Creature> creature, int32_t interval) override;
 	void endCondition(std::shared_ptr<Creature> creature) override;
-	void addCondition(std::shared_ptr<Creature> creature, const std::shared_ptr<Condition> condition) override;
+	void addCondition(std::shared_ptr<Creature> creature, std::shared_ptr<Condition> condition) override;
 	uint32_t getIcons() const override;
 
 	std::shared_ptr<Condition> clone() const override {
@@ -405,7 +403,7 @@ public:
 	bool startCondition(std::shared_ptr<Creature> creature) override;
 	bool executeCondition(std::shared_ptr<Creature> creature, int32_t interval) override;
 	void endCondition(std::shared_ptr<Creature> creature) override;
-	void addCondition(std::shared_ptr<Creature> creature, const std::shared_ptr<Condition> condition) override;
+	void addCondition(std::shared_ptr<Creature> creature, std::shared_ptr<Condition> condition) override;
 
 	std::shared_ptr<Condition> clone() const override {
 		return std::make_shared<ConditionOutfit>(*this);
@@ -431,7 +429,7 @@ public:
 	bool startCondition(std::shared_ptr<Creature> creature) override;
 	bool executeCondition(std::shared_ptr<Creature> creature, int32_t interval) override;
 	void endCondition(std::shared_ptr<Creature> creature) override;
-	void addCondition(std::shared_ptr<Creature> creature, const std::shared_ptr<Condition> addCondition) override;
+	void addCondition(std::shared_ptr<Creature> creature, std::shared_ptr<Condition> addCondition) override;
 
 	std::shared_ptr<Condition> clone() const override {
 		return std::make_shared<ConditionLight>(*this);
@@ -455,7 +453,7 @@ public:
 		ConditionGeneric(initId, initType, initTicks, initBuff, initSubId) { }
 
 	bool startCondition(std::shared_ptr<Creature> creature) override;
-	void addCondition(std::shared_ptr<Creature> creature, const std::shared_ptr<Condition> condition) override;
+	void addCondition(std::shared_ptr<Creature> creature, std::shared_ptr<Condition> condition) override;
 
 	std::shared_ptr<Condition> clone() const override {
 		return std::make_shared<ConditionSpellCooldown>(*this);
@@ -468,7 +466,7 @@ public:
 		ConditionGeneric(initId, initType, initTicks, initBuff, initSubId) { }
 
 	bool startCondition(std::shared_ptr<Creature> creature) override;
-	void addCondition(std::shared_ptr<Creature> creature, const std::shared_ptr<Condition> condition) override;
+	void addCondition(std::shared_ptr<Creature> creature, std::shared_ptr<Condition> condition) override;
 
 	std::shared_ptr<Condition> clone() const override {
 		return std::make_shared<ConditionSpellGroupCooldown>(*this);

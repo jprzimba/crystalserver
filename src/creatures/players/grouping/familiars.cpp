@@ -18,14 +18,9 @@
 #include "pch.hpp"
 
 #include "creatures/players/grouping/familiars.hpp"
-#include "lib/di/container.hpp"
 #include "config/configmanager.hpp"
 #include "utils/pugicast.hpp"
 #include "utils/tools.hpp"
-
-Familiars &Familiars::getInstance() {
-	return inject<Familiars>();
-}
 
 bool Familiars::reload() {
 	for (auto &familiarsVector : familiars) {
@@ -55,7 +50,7 @@ bool Familiars::loadFromXml() {
 			continue;
 		}
 
-		auto vocation = pugi::cast<uint16_t>(attr.value());
+		uint16_t vocation = pugi::cast<uint16_t>(attr.value());
 		if (vocation > VOCATION_LAST) {
 			g_logger().warn("[Familiars::loadFromXml] - Invalid familiar vocation {}", vocation);
 			continue;
@@ -82,12 +77,10 @@ bool Familiars::loadFromXml() {
 }
 
 std::shared_ptr<Familiar> Familiars::getFamiliarByLookType(uint16_t vocation, uint16_t lookType) const {
-	const auto &familiarList = familiars[vocation];
-	auto it = std::find_if(familiarList.begin(), familiarList.end(), [lookType](const auto &familiar) {
-		return familiar->lookType == lookType;
-	});
-
-	if (it != familiarList.end()) {
+	if (auto it = std::find_if(familiars[vocation].begin(), familiars[vocation].end(), [lookType](auto familiar_it) {
+			return familiar_it->lookType == lookType;
+		});
+		it != familiars[vocation].end()) {
 		return *it;
 	}
 	return nullptr;

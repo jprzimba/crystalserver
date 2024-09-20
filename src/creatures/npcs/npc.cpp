@@ -60,9 +60,6 @@ Npc::Npc(const std::shared_ptr<NpcType> &npcType) :
 	}
 }
 
-Npc::~Npc() {
-}
-
 void Npc::addList() {
 	g_game().addNpc(static_self_cast<Npc>());
 }
@@ -256,7 +253,7 @@ void Npc::onPlayerBuyItem(std::shared_ptr<Player> player, uint16_t itemId, uint8
 	uint32_t shoppingBagSlots = 20;
 	const ItemType &itemType = Item::items[itemId];
 	if (std::shared_ptr<Tile> tile = ignore ? player->getTile() : nullptr; tile) {
-		double slotsNedeed = 0;
+		double slotsNedeed;
 		if (itemType.stackable) {
 			slotsNedeed = inBackpacks ? std::ceil(std::ceil(static_cast<double>(amount) / itemType.stackSize) / shoppingBagSlots) : std::ceil(static_cast<double>(amount) / itemType.stackSize);
 		} else {
@@ -271,7 +268,7 @@ void Npc::onPlayerBuyItem(std::shared_ptr<Player> player, uint16_t itemId, uint8
 
 	uint32_t buyPrice = 0;
 	const std::vector<ShopBlock> &shopVector = getShopItemVector(player->getGUID());
-	for (ShopBlock shopBlock : shopVector) {
+	for (const ShopBlock &shopBlock : shopVector) {
 		if (itemType.id == shopBlock.itemId && shopBlock.itemBuyPrice != 0) {
 			buyPrice = shopBlock.itemBuyPrice;
 		}
@@ -316,7 +313,7 @@ void Npc::onPlayerBuyItem(std::shared_ptr<Player> player, uint16_t itemId, uint8
 
 void Npc::onPlayerSellItem(std::shared_ptr<Player> player, uint16_t itemId, uint8_t subType, uint16_t amount, bool ignore) {
 	uint64_t totalPrice = 0;
-	onPlayerSellItem(player, itemId, subType, amount, ignore, totalPrice);
+	onPlayerSellItem(std::move(player), itemId, subType, amount, ignore, totalPrice);
 }
 
 void Npc::onPlayerSellAllLoot(uint32_t playerId, uint16_t itemId, bool ignore, uint64_t totalPrice) {
@@ -324,52 +321,49 @@ void Npc::onPlayerSellAllLoot(uint32_t playerId, uint16_t itemId, bool ignore, u
 	if (!player) {
 		return;
 	}
-
 	if (itemId == ITEM_GOLD_POUCH) {
 		auto container = player->getLootPouch();
 		if (!container) {
 			return;
 		}
-
+		bool hasMore = false;
 		uint64_t toSellCount = 0;
 		phmap::flat_hash_map<uint16_t, uint16_t> toSell;
-		ContainerIterator it = container->iterator();
-
-		while (it.hasNext()) {
+		for (ContainerIterator it = container->iterator(); it.hasNext(); it.advance()) {
+			if (toSellCount >= 500) {
+				hasMore = true;
+				break;
+			}
 			auto item = *it;
 			if (!item) {
 				continue;
 			}
-
 			toSell[item->getID()] += item->getItemAmount();
 			if (item->isStackable()) {
 				toSellCount++;
 			} else {
 				toSellCount += item->getItemAmount();
 			}
-
-			if (toSellCount >= 100) {
-				break;
-			}
-
-			it.advance();
 		}
-
-		if (!toSell.empty()) {
-			for (auto &[itemId, amount] : toSell) {
-				onPlayerSellItem(player, itemId, 0, amount, ignore, totalPrice, container);
-			}
+		for (auto &[m_itemId, amount] : toSell) {
+			onPlayerSellItem(player, m_itemId, 0, amount, ignore, totalPrice, container);
 		}
-
+		auto ss = std::stringstream();
+		if (totalPrice == 0) {
+			ss << "You have no items in your loot pouch.";
+			player->sendTextMessage(MESSAGE_TRANSACTION, ss.str());
+			return;
+		}
+		if (hasMore) {
+			g_dispatcher().scheduleEvent(
+				SCHEDULER_MINTICKS, [this, playerId = player->getID(), itemId, ignore, totalPrice] { onPlayerSellAllLoot(playerId, itemId, ignore, totalPrice); }, __FUNCTION__
+			);
+			return;
+		}
+		ss << "You sold all of the items from your loot pouch for ";
+		ss << totalPrice << " gold.";
+		player->sendTextMessage(MESSAGE_TRANSACTION, ss.str());
 		player->openPlayerContainers();
-
-		const auto &task = player->createPlayerTask(
-			100, [this, playerId, itemId, ignore, totalPrice]() {
-				onPlayerSellAllLoot(playerId, itemId, ignore, totalPrice);
-			},
-			"SellLootTask"
-		);
-		player->setNextActionPushTask(task);
 	}
 }
 
@@ -397,7 +391,7 @@ void Npc::onPlayerSellItem(std::shared_ptr<Player> player, uint16_t itemId, uint
 	}
 
 	auto toRemove = amount;
-	for (auto item : player->getInventoryItemsFromId(itemId, ignore)) {
+	for (const auto &item : player->getInventoryItemsFromId(itemId, ignore)) {
 		if (!item || item->getTier() > 0 || item->hasImbuements()) {
 			continue;
 		}
@@ -462,7 +456,6 @@ void Npc::onPlayerCheckItem(std::shared_ptr<Player> player, uint16_t itemId, uin
 		return;
 	}
 
-	const ItemType &itemType = Item::items[itemId];
 	// onPlayerCheckItem(self, player, itemId, subType)
 	CreatureCallback callback = CreatureCallback(npcType->info.scriptInterface, getNpc());
 	if (callback.startScriptInterface(npcType->info.playerLookEvent)) {
@@ -525,7 +518,7 @@ void Npc::onThinkWalk(uint32_t interval) {
 	}
 
 	// If talking, no walking
-	if (playerInteractions.size() > 0) {
+	if (!playerInteractions.empty()) {
 		walkTicks = 0;
 		eventWalk = 0;
 		return;

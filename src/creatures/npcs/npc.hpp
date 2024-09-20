@@ -35,7 +35,6 @@ public:
 
 	explicit Npc(const std::shared_ptr<NpcType> &npcType);
 	Npc() = default;
-	~Npc();
 
 	// Singleton - ensures we don't accidentally copy it
 	Npc(const Npc &) = delete;
@@ -76,7 +75,7 @@ public:
 	}
 
 	void setName(std::string newName) {
-		npcType->name = newName;
+		npcType->name = std::move(newName);
 	}
 
 	CreatureType_t getType() const override {
@@ -198,13 +197,13 @@ private:
 	std::shared_ptr<NpcType> npcType;
 	std::shared_ptr<SpawnNpc> spawnNpc;
 
-	uint8_t speechBubble;
+	uint8_t speechBubble {};
 
 	uint32_t yellTicks = 0;
 	uint32_t walkTicks = 0;
 	uint32_t soundTicks = 0;
 
-	bool ignoreHeight;
+	bool ignoreHeight {};
 
 	phmap::flat_hash_set<std::shared_ptr<Player>> playerSpectators;
 	Position masterPos;

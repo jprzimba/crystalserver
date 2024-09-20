@@ -54,8 +54,8 @@ private:
 		FAILED
 	};
 
-	RSA &rsa;
 	Logger &logger;
+	RSA &rsa;
 	ServiceManager &serviceManager;
 
 	std::atomic<LoaderStatus> loaderStatus = LoaderStatus::LOADING;

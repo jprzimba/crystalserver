@@ -188,7 +188,7 @@ public:
 	}
 	void addVocEquipMap(std::string vocName) {
 		uint16_t vocationId = g_vocations().getVocationId(vocName);
-		if (vocationId != -1) {
+		if (vocationId != 65535) {
 			vocEquipMap[vocationId] = true;
 		}
 	}

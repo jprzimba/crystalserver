@@ -39,7 +39,7 @@ public:
 		hunt_area(initHunt_area),
 		questID(initQuestID),
 		leaderGuid(initLeaderGuid),
-		membersMap(initMembersMap) { }
+		membersMap(std::move(initMembersMap)) { }
 	virtual ~TeamFinder() = default;
 
 	uint16_t minLevel = 0;
