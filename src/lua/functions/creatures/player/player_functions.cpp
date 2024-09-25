@@ -1765,6 +1765,11 @@ int PlayerFunctions::luaPlayerSetStorageValue(lua_State* L) {
 		return 1;
 	}
 
+	if (key == 0) {
+		reportErrorFunc("Storage key is nil");
+		return 1;
+	}
+
 	if (player) {
 		player->addStorageValue(key, value);
 		pushBoolean(L, true);
