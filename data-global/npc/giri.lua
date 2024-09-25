@@ -67,7 +67,7 @@ npcConfig.shop = {
 	{ itemName = "eldritch crystal", clientId = 36835, sell = 48000 },
 	{ itemName = "fiery tear", clientId = 39040, sell = 1070000 },
 	{ itemName = "gemmed figurine", clientId = 24392, sell = 3500 },
-	{ itemName = "giant amethyst", clientId = 30061, sell = 60000 },
+	{ itemName = "giant amethyst", clientId = 32622, sell = 60000 },
 	{ itemName = "giant emerald", clientId = 30060, sell = 90000 },
 	{ itemName = "giant ruby", clientId = 30059, sell = 70000 },
 	{ itemName = "giant sapphire", clientId = 30061, sell = 50000 },

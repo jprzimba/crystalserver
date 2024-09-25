@@ -9,7 +9,7 @@ npcConfig.health = 100
 npcConfig.maxHealth = npcConfig.health
 npcConfig.walkInterval = 2000
 npcConfig.walkRadius = 2
-
+ 
 npcConfig.outfit = {
 	lookType = 138,
 	lookHead = 59,
@@ -24,6 +24,14 @@ npcConfig.flags = {
 }
 
 local itemsTable = {
+	["exercise weapons"] = {
+		{ itemName = "durable exercise rod", clientId = 35283, buy = 1250000, count = 1800 },
+		{ itemName = "durable exercise wand", clientId = 35284, buy = 1250000, count = 1800 },
+		{ itemName = "exercise rod", clientId = 28556, buy = 347222, count = 500 },
+		{ itemName = "exercise wand", clientId = 28557, buy = 347222, count = 500 },
+		{ itemName = "lasting exercise rod", clientId = 35289, buy = 10000000, count = 14400 },
+		{ itemName = "lasting exercise wand", clientId = 35290, buy = 10000000, count = 14400 },
+	},
 	["potions"] = {
 		{ itemName = "empty potion flask", clientId = 283, sell = 5 },
 		{ itemName = "empty potion flask", clientId = 284, sell = 5 },
