@@ -372,7 +372,13 @@ private:
 		registerMethod(L, "Player", "addAchievementPoints", PlayerFunctions::luaPlayerAddAchievementPoints);
 		registerMethod(L, "Player", "removeAchievementPoints", PlayerFunctions::luaPlayerRemoveAchievementPoints);
 
+		// Badge Functions
 		registerMethod(L, "Player", "addBadge", PlayerFunctions::luaPlayerAddBadge);
+
+		// Title Functions
+		registerMethod(L, "Player", "addTitle", PlayerFunctions::luaPlayerAddTitle);
+		registerMethod(L, "Player", "getTitles", PlayerFunctions::luaPlayerGetTitles);
+		registerMethod(L, "Player", "setCurrentTitle", PlayerFunctions::luaPlayerSetCurrentTitle);
 
 		registerMethod(L, "Player", "addDeflectCondition", PlayerFunctions::luaPlayerAddDeflectCondition);
 		registerMethod(L, "Player", "removeDeflectCondition", PlayerFunctions::luaPlayerRemoveDeflectCondition);
@@ -732,7 +738,12 @@ private:
 	static int luaPlayerGetAchievementPoints(lua_State* L);
 	static int luaPlayerAddAchievementPoints(lua_State* L);
 	static int luaPlayerRemoveAchievementPoints(lua_State* L);
+
 	static int luaPlayerAddBadge(lua_State* L);
+
+	static int luaPlayerAddTitle(lua_State* L);
+	static int luaPlayerGetTitles(lua_State* L);
+	static int luaPlayerSetCurrentTitle(lua_State* L);
 
 	static int luaPlayerAddDeflectCondition(lua_State* L);
 	static int luaPlayerRemoveDeflectCondition(lua_State* L);

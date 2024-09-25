@@ -466,7 +466,7 @@ public:
 
 	static const std::string getAugmentNameByType(Augment_t augmentType);
 
-	static const bool isAugmentWithoutValueDescription(Augment_t augmentType) {
+	static bool isAugmentWithoutValueDescription(Augment_t augmentType) {
 		static std::vector<Augment_t> vector = {
 			Augment_t::Increased_Damage,
 			Augment_t::Powerful_Impact,

@@ -22,6 +22,7 @@
 #include "creatures/creature.hpp"
 #include "enums/forge_conversion.hpp"
 #include "creatures/players/cyclopedia/player_badge.hpp"
+#include "creatures/players/cyclopedia/player_title.hpp"
 
 class NetworkMessage;
 class Player;
