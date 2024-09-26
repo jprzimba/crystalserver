@@ -37,9 +37,9 @@ class FrozenPathingConditionCall;
  * Map class.
  * Holds all the actual map-data
  */
-class Map : protected MapCache {
+class Map : public MapCache {
 public:
-	static uint32_t clean();
+	uint32_t clean();
 
 	std::filesystem::path getPath() const {
 		return path;
@@ -138,10 +138,6 @@ public:
 	}
 
 	std::map<std::string, Position> waypoints;
-
-	QTreeLeafNode* getQTNode(uint16_t x, uint16_t y) {
-		return QTreeNode::getLeafStatic<QTreeLeafNode*, QTreeNode*>(&root, x, y);
-	}
 
 	// Storage made by "loadFromXML" of houses, monsters and npcs for main map
 	SpawnsMonster spawnsMonster;
