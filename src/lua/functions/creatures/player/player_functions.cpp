@@ -3045,15 +3045,14 @@ int PlayerFunctions::luaPlayerSetGhostMode(lua_State* L) {
 	if (player->isInGhostMode()) {
 		for (const auto &it : g_game().getPlayers()) {
 			if (!it.second->isAccessPlayer()) {
-				it.second->notifyStatusChange(player, VIPSTATUS_OFFLINE);
+				it.second->vip()->notifyStatusChange(player, VipStatus_t::Offline);
 			}
 		}
 		IOLoginData::updateOnlineStatus(player->getGUID(), false);
 	} else {
 		for (const auto &it : g_game().getPlayers()) {
 			if (!it.second->isAccessPlayer()) {
-				VipStatus_t newStatus = it.second->isExerciseTraining() ? VIPSTATUS_TRAINING : VIPSTATUS_ONLINE;	
-				it.second->notifyStatusChange(player, newStatus);
+				it.second->vip()->notifyStatusChange(player, player->vip()->getStatus());
 			}
 		}
 		IOLoginData::updateOnlineStatus(player->getGUID(), true);
