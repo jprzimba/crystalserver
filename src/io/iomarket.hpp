@@ -22,8 +22,6 @@
 #include "lib/di/container.hpp"
 
 class IOMarket {
-	using StatisticsMap = std::map<uint16_t, std::map<uint8_t, MarketStatistics>>;
-
 public:
 	IOMarket() = default;
 
@@ -51,10 +49,11 @@ public:
 
 	void updateStatistics();
 
-	StatisticsMap getPurchaseStatistics() const {
+	using StatisticsMap = std::map<uint16_t, std::map<uint8_t, MarketStatistics>>;
+	const StatisticsMap &getPurchaseStatistics() const {
 		return purchaseStatistics;
 	}
-	StatisticsMap getSaleStatistics() const {
+	const StatisticsMap &getSaleStatistics() const {
 		return saleStatistics;
 	}
 
