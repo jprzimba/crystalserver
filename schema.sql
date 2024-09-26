@@ -218,7 +218,7 @@ CREATE TABLE IF NOT EXISTS `account_viplist` (
 
 -- Table structure `account_vipgroup`
 CREATE TABLE IF NOT EXISTS `account_vipgroups` (
-    `id` tinyint(3) UNSIGNED NOT NULL,
+    `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
     `account_id` int(11) UNSIGNED NOT NULL COMMENT 'id of account whose vip group entry it is',
     `name` varchar(128) NOT NULL,
     `customizable` BOOLEAN NOT NULL DEFAULT '1',
@@ -229,9 +229,9 @@ CREATE TABLE IF NOT EXISTS `account_vipgroups` (
 --
 DELIMITER //
 CREATE TRIGGER `oncreate_accounts` AFTER INSERT ON `accounts` FOR EACH ROW BEGIN
-    INSERT INTO `account_vipgroups` (`id`, `account_id`, `name`, `customizable`) VALUES (1, NEW.`id`, 'Enemies', 0);
-    INSERT INTO `account_vipgroups` (`id`, `account_id`, `name`, `customizable`) VALUES (2, NEW.`id`, 'Friends', 0);
-    INSERT INTO `account_vipgroups` (`id`, `account_id`, `name`, `customizable`) VALUES (3, NEW.`id`, 'Trading Partner', 0);
+    INSERT INTO `account_vipgroups` (`account_id`, `name`, `customizable`) VALUES (NEW.`id`, 'Enemies', 0);
+    INSERT INTO `account_vipgroups` (`account_id`, `name`, `customizable`) VALUES (NEW.`id`, 'Friends', 0);
+    INSERT INTO `account_vipgroups` (`account_id`, `name`, `customizable`) VALUES (NEW.`id`, 'Trading Partner', 0);
 END
 //
 DELIMITER ;
@@ -239,7 +239,7 @@ DELIMITER ;
 CREATE TABLE IF NOT EXISTS `account_vipgrouplist` (
     `account_id` int(11) UNSIGNED NOT NULL COMMENT 'id of account whose viplist entry it is',
     `player_id` int(11) NOT NULL COMMENT 'id of target player of viplist entry',
-    `vipgroup_id` tinyint(3) UNSIGNED NOT NULL COMMENT 'id of vip group that player belongs',
+    `vipgroup_id` int(11) UNSIGNED NOT NULL COMMENT 'id of vip group that player belongs',
     INDEX `account_id` (`account_id`),
     INDEX `player_id` (`player_id`),
     INDEX `vipgroup_id` (`vipgroup_id`),
@@ -257,31 +257,35 @@ CREATE TABLE IF NOT EXISTS `boosted_boss` (
     `boostname` TEXT,
     `date` varchar(250) NOT NULL DEFAULT '',
     `raceid` varchar(250) NOT NULL DEFAULT '',
-    `looktypeEx` int(11) NOT NULL DEFAULT "0",
-    `looktype` int(11) NOT NULL DEFAULT "136",
-    `lookfeet` int(11) NOT NULL DEFAULT "0",
-    `looklegs` int(11) NOT NULL DEFAULT "0",
-    `lookhead` int(11) NOT NULL DEFAULT "0",
-    `lookbody` int(11) NOT NULL DEFAULT "0",
-    `lookaddons` int(11) NOT NULL DEFAULT "0",
-    `lookmount` int(11) DEFAULT "0",
+    `looktypeEx` int(11) NOT NULL DEFAULT 0,
+    `looktype` int(11) NOT NULL DEFAULT 136,
+    `lookfeet` int(11) NOT NULL DEFAULT 0,
+    `looklegs` int(11) NOT NULL DEFAULT 0,
+    `lookhead` int(11) NOT NULL DEFAULT 0,
+    `lookbody` int(11) NOT NULL DEFAULT 0,
+    `lookaddons` int(11) NOT NULL DEFAULT 0,
+    `lookmount` int(11) DEFAULT 0,
     PRIMARY KEY (`date`)
-) AS SELECT 0 AS date, "default" AS boostname, 0 AS raceid;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+INSERT INTO `boosted_boss` (`boostname`, `date`, `raceid`) VALUES ('default', 0, 0);
 
 -- Table structure `boosted_creature`
 CREATE TABLE IF NOT EXISTS `boosted_creature` (
     `boostname` TEXT,
     `date` varchar(250) NOT NULL DEFAULT '',
     `raceid` varchar(250) NOT NULL DEFAULT '',
-    `looktype` int(11) NOT NULL DEFAULT "136",
-    `lookfeet` int(11) NOT NULL DEFAULT "0",
-    `looklegs` int(11) NOT NULL DEFAULT "0",
-    `lookhead` int(11) NOT NULL DEFAULT "0",
-    `lookbody` int(11) NOT NULL DEFAULT "0",
-    `lookaddons` int(11) NOT NULL DEFAULT "0",
-    `lookmount` int(11) DEFAULT "0",
+    `looktype` int(11) NOT NULL DEFAULT 136,
+    `lookfeet` int(11) NOT NULL DEFAULT 0,
+    `looklegs` int(11) NOT NULL DEFAULT 0,
+    `lookhead` int(11) NOT NULL DEFAULT 0,
+    `lookbody` int(11) NOT NULL DEFAULT 0,
+    `lookaddons` int(11) NOT NULL DEFAULT 0,
+    `lookmount` int(11) DEFAULT 0,
     PRIMARY KEY (`date`)
-) AS SELECT 0 AS date, "default" AS boostname, 0 AS raceid;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+INSERT INTO `boosted_creature` (`boostname`, `date`, `raceid`) VALUES ('default', 0, 0);
 
 -- --------------------------------------------------------
 
@@ -853,7 +857,7 @@ INSERT INTO `players`
 (6, 'GOD Crystal', 6, 1, 2, 0, 155, 155, 100, 113, 115, 95, 39, 75, 0, 60, 60, 0, 8, '', 410, 1, 10, 0, 10, 0, 10, 0, 10, 0);
 
 -- Create vip groups for GOD account
-INSERT INTO `account_vipgroups` (`id`, `name`, `account_id`, `customizable`) VALUES
-(1, 'Friends', 1, 0),
-(2, 'Enemies', 1, 0),
-(3, 'Trading Partners', 1, 0);
+INSERT INTO `account_vipgroups` (`name`, `account_id`, `customizable`) VALUES
+('Friends', 1, 0),
+('Enemies', 1, 0),
+('Trading Partners', 1, 0);
