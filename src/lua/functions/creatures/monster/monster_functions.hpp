@@ -124,6 +124,7 @@ private:
 	static int luaMonsterIsForgeable(lua_State* L);
 
 	static int luaMonsterGetName(lua_State* L);
+	static int luaMonsterSetName(lua_State* L);
 
 	static int luaMonsterHazard(lua_State* L);
 	static int luaMonsterHazardCrit(lua_State* L);
