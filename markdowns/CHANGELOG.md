@@ -12,6 +12,10 @@
   - Screenshots configurable in config.lua enableScreenshots ([Tryller](https://github.com/jprzimba)).
   - Augments system ([phacUFPE](https://github.com/phacUFPE)).
   - Add Cyclopedia character titles ([Tryller](https://github.com/jprzimba)).
+  - Monster rename functionality ([luanluciano93](https://github.com/luanluciano93)).
+  - Updated monsters and npcs like Tibia RL ([Tryller](https://github.com/jprzimba)).
+  - Add items from Winter Update 2023 ([Tryller](https://github.com/jprzimba), [dguprado](https://github.com/dguprado)).
+ - Add V.I.P groups ([phacUFPE](https://github.com/phacUFPE)).
 
 ### Bug Fixes
   - Fixed chain system. Now works properly for Mages and Paladins ([Tryller](https://github.com/jprzimba)).
@@ -31,6 +35,7 @@
   - Fixed avatar cooldown reduction ([phacUFPE](https://github.com/phacUFPE)).
   - Fixed imbuement elemental damage only to physical damag ([carlospess0a](https://github.com/carlospess0a)).
   - Fixed bed issues ([phacUFPE](https://github.com/phacUFPE)).
+  - Fixed crash on moving creatures ([mehah](https://github.com/mehah)).
 
 ### Changed Features
   - Removed old "removeBeginningWeaponAmmunition" and implemented "removeBreakWeaponsCharges" at config.lua ([Tryller](https://github.com/jprzimba)).
