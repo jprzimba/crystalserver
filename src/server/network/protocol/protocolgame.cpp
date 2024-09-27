@@ -6586,8 +6586,8 @@ void ProtocolGame::sendAddCreature(std::shared_ptr<Creature> creature, const Pos
 
 	if (isLogin) {
 		sendMagicEffect(pos, CONST_ME_TELEPORT);
-		sendDisableLoginMusic();
 		sendHotkeyPreset();
+		sendDisableLoginMusic();
 	}
 
 	for (int i = CONST_SLOT_FIRST; i <= CONST_SLOT_LAST; ++i) {
