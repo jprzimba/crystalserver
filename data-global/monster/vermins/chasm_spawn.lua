@@ -2,7 +2,7 @@ local mType = Game.createMonsterType("Chasm Spawn")
 local monster = {}
 
 monster.description = "a chasm spawn"
-monster.experience = 2700
+monster.experience = 3600
 monster.outfit = {
 	lookType = 1037,
 	lookHead = 0,
