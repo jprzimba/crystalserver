@@ -259,17 +259,23 @@ void Creature::addEventWalk(bool firstStep) {
 		return;
 	}
 
-	g_dispatcher().context().tryAddEvent([ticks, self = getCreature()]() {
-		// Take first step right away, but still queue the next
-		if (ticks == 1) {
-			g_game().checkCreatureWalk(self->getID());
-		}
+	g_dispatcher().context().tryAddEvent(
+		[ticks, self = getCreature()]() {
+			// Take first step right away, but still queue the next
+			if (ticks == 1) {
+				g_game().checkCreatureWalk(self->getID());
+			}
 
-		self->eventWalk = g_dispatcher().scheduleEvent(
-			static_cast<uint32_t>(ticks),
-			[creatureId = self->getID()] { g_game().checkCreatureWalk(creatureId); }, "Creature::checkCreatureWalk"
-		);
-	});
+			self->eventWalk = g_dispatcher().scheduleEvent(
+				static_cast<uint32_t>(ticks),
+				[creatureId = self->getID()] {
+					g_game().checkCreatureWalk(creatureId);
+				},
+				"Game::checkCreatureWalk"
+			);
+		},
+		"Game::checkCreatureWalk"
+	);
 }
 
 void Creature::stopEventWalk() {
@@ -1058,12 +1064,16 @@ void Creature::goToFollowCreature_async(std::function<void()> &&onComplete) {
 
 	pathfinderRunning.store(true);
 	g_dispatcher().asyncEvent([self = getCreature()] {
+		if (!self || self->isRemoved()) {
+			return;
+		}
+
 		self->goToFollowCreature();
 		self->pathfinderRunning.store(false);
 	});
 
 	if (onComplete) {
-		g_dispatcher().context().addEvent(std::move(onComplete));
+		g_dispatcher().context().addEvent(std::move(onComplete), __FUNCTION__);
 	}
 }
 

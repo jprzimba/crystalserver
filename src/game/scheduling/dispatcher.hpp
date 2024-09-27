@@ -64,10 +64,10 @@ struct DispatcherContext {
 	}
 
 	// postpone the event
-	void addEvent(std::function<void(void)> &&f) const;
+	void addEvent(std::function<void(void)> &&f, std::string_view context) const;
 
 	// if the context is async, the event will be postponed, if not, it will be executed immediately.
-	void tryAddEvent(std::function<void(void)> &&f) const;
+	void tryAddEvent(std::function<void(void)> &&f, std::string_view context) const;
 
 private:
 	void reset() {
@@ -78,7 +78,7 @@ private:
 
 	DispatcherType type = DispatcherType::None;
 	TaskGroup group = TaskGroup::ThreadPool;
-	std::string_view taskName = "";
+	std::string_view taskName;
 
 	friend class Dispatcher;
 };
@@ -92,7 +92,7 @@ class Dispatcher {
 public:
 	explicit Dispatcher(ThreadPool &threadPool) :
 		threadPool(threadPool) {
-		threads.reserve(threadPool.getNumberOfThreads() + 1);
+		threads.reserve(threadPool.get_thread_count() + 1);
 		for (uint_fast16_t i = 0; i < threads.capacity(); ++i) {
 			threads.emplace_back(std::make_unique<ThreadTask>());
 		}
@@ -116,6 +116,7 @@ public:
 	}
 
 	void asyncEvent(std::function<void(void)> &&f, TaskGroup group = TaskGroup::GenericParallel);
+	void asyncWait(size_t size, std::function<void(size_t i)> &&f);
 
 	uint64_t asyncCycleEvent(uint32_t delay, std::function<void(void)> &&f, TaskGroup group = TaskGroup::GenericParallel) {
 		return scheduleEvent(
@@ -181,6 +182,22 @@ private:
 		}
 	}
 
+	std::vector<std::pair<uint64_t, uint64_t>> generatePartition(size_t size) const {
+		if (size == 0) {
+			return {};
+		}
+
+		std::vector<std::pair<uint64_t, uint64_t>> list;
+		list.reserve(threadPool.get_thread_count());
+
+		const auto size_per_block = std::ceil(size / static_cast<float>(threadPool.get_thread_count()));
+		for (uint_fast64_t i = 0; i < size; i += size_per_block) {
+			list.emplace_back(i, std::min<uint64_t>(size, i + size_per_block));
+		}
+
+		return list;
+	}
+
 	uint_fast64_t dispatcherCycle = 0;
 
 	ThreadPool &threadPool;
@@ -207,6 +224,8 @@ private:
 	std::array<std::vector<Task>, static_cast<uint8_t>(TaskGroup::Last)> m_tasks;
 	phmap::btree_multiset<std::shared_ptr<Task>, Task::Compare> scheduledTasks;
 	phmap::parallel_flat_hash_map_m<uint64_t, std::shared_ptr<Task>> scheduledTasksRef;
+
+	bool asyncWaitDisabled = false;
 
 	friend class CrystalServer;
 };
