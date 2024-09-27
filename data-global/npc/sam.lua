@@ -210,6 +210,7 @@ npcConfig.shop = {
 	{ itemName = "legion helmet", clientId = 3374, sell = 22 },
 	{ itemName = "longsword", clientId = 3285, buy = 160, sell = 51 },
 	{ itemName = "mace", clientId = 3286, buy = 90, sell = 30 },
+	{ itemName = "magic plate armor", clientId = 3366, sell = 6400 },
 	{ itemName = "morning star", clientId = 3282, buy = 430, sell = 100 },
 	{ itemName = "orcish axe", clientId = 3316, sell = 350 },
 	{ itemName = "plate armor", clientId = 3357, buy = 1200, sell = 400 },
