@@ -14,8 +14,8 @@ Event callbacks are available for several categories of game entities, such as `
 ### These are the functions available to use
 
 - `(bool)` `creatureOnChangeOutfit`
-- `(bool)` `creatureOnAreaCombat`
-- `(bool)` `creatureOnTargetCombat`
+- `(ReturnValue)` `creatureOnAreaCombat`
+- `(ReturnValue)` `creatureOnTargetCombat`
 - `(void)` `creatureOnHear`
 - `(void)` `creatureOnDrainHealth`
 - `(bool)` `partyOnJoin`
@@ -66,7 +66,7 @@ local callback = EventCallback()
 
 function callback.creatureOnAreaCombat(creature, tile, isAggressive)
 	-- custom behavior when a creature enters combat area
-	return true
+	return RETURNVALUE_NOERROR
 end
 
 callback:register()
@@ -134,11 +134,11 @@ local callback = EventCallback()
 function callback.creatureOnAreaCombat(creature, tile, isAggressive)
 	-- if the creature is not aggressive, stop the execution of the C++ function
 	if not isAggressive then
-		return false
+		return RETURNVALUE_NOTPOSSIBLE
 	end
 
 	-- custom behavior when an aggressive creature enters a combat area
-	return true
+	return RETURNVALUE_NOERROR
 end
 
 callback:register()
