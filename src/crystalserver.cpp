@@ -241,7 +241,7 @@ void CrystalServer::toggleForceCloseButton() {
 void CrystalServer::badAllocationHandler() {
 	// Use functions that only use stack allocation
 	g_logger().error("Allocation failed, server out of memory, "
-					 "decrease the size of your map or compile in 64 bits mode");
+	                 "decrease the size of your map or compile in 64 bits mode");
 
 	if (isatty(STDIN_FILENO)) {
 		getchar();
@@ -325,7 +325,7 @@ void CrystalServer::initializeDatabase() {
 	DatabaseManager::updateDatabase();
 
 	if (g_configManager().getBoolean(OPTIMIZE_DATABASE, __FUNCTION__)
-		&& !DatabaseManager::optimizeTables()) {
+	    && !DatabaseManager::optimizeTables()) {
 		logger.debug("No tables were optimized");
 	}
 }
