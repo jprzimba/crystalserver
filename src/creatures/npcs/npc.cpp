@@ -109,14 +109,13 @@ void Npc::onRemoveCreature(std::shared_ptr<Creature> creature, bool isLogout) {
 	}
 
 	if (auto player = creature->getPlayer()) {
+		removeShopPlayer(player->getGUID());
 		onPlayerDisappear(player);
 	}
 
 	if (spawnNpc) {
 		spawnNpc->startSpawnNpcCheck();
 	}
-
-	shopPlayers.clear();
 }
 
 void Npc::onCreatureMove(const std::shared_ptr<Creature> &creature, const std::shared_ptr<Tile> &newTile, const Position &newPos, const std::shared_ptr<Tile> &oldTile, const Position &oldPos, bool teleport) {

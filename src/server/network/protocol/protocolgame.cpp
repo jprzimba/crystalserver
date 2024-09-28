@@ -3389,7 +3389,7 @@ void ProtocolGame::sendAddMarker(const Position &pos, uint8_t markType, const st
 	msg.addByte(0xDD);
 
 	if (!oldProtocol) {
-		msg.addByte(0x00); // unknow
+		msg.addByte(enumToValue(CyclopediaMapData_t::MinimapMarker));
 	}
 
 	msg.addPosition(pos);
@@ -7468,7 +7468,7 @@ void ProtocolGame::AddCreature(NetworkMessage &msg, std::shared_ptr<Creature> cr
 		}
 
 		if (!oldProtocol && creature->isHealthHidden()) {
-			msg.addString("", "ProtocolGame::AddCreature - empty");
+			msg.addString(std::string());
 		} else {
 			msg.addString(creature->getName(), "ProtocolGame::AddCreature - creature->getName()");
 		}
