@@ -1824,6 +1824,31 @@ std::string getPlayerReflexivePronoun(PlayerPronoun_t pronoun, PlayerSex_t sex, 
 	}
 }
 
+std::string formatWithArticle(const std::string &value, bool withSpace) {
+	if (value.empty()) {
+		return "";
+	}
+
+	auto removeArticle = [](const std::string &str) -> std::string {
+		const std::string articles[] = { "a ", "an " };
+		for (const auto &article : articles) {
+			if (str.size() > article.size() && std::equal(article.begin(), article.end(), str.begin(), [](char a, char b) { return std::tolower(a) == std::tolower(b); })) {
+				return str.substr(article.size());
+			}
+		}
+		return str;
+	};
+
+	std::string modifiedValue = removeArticle(value);
+	if (modifiedValue.empty()) {
+		return "";
+	}
+
+	const char &character = std::tolower(modifiedValue.front());
+	auto article = character == 'a' || character == 'e' || character == 'i' || character == 'o' || character == 'u' ? "an" : "a";
+	return fmt::format("{}{} {}.", withSpace ? " " : "", article, modifiedValue);
+}
+
 std::string getVerbForPronoun(PlayerPronoun_t pronoun, bool pastTense) {
 	if (pronoun == PLAYERPRONOUN_THEY) {
 		return pastTense ? "were" : "are";

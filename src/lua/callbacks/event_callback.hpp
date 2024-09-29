@@ -140,7 +140,5 @@ public:
 	void zoneAfterCreatureEnter(std::shared_ptr<Zone> zone, std::shared_ptr<Creature> creature) const;
 	void zoneAfterCreatureLeave(std::shared_ptr<Zone> zone, std::shared_ptr<Creature> creature) const;
 
-	/**
-	 * @note here end the lua binder functions }
-	 */
+	void mapOnLoad(const std::string &mapFullPath) const;
 };

@@ -17,6 +17,8 @@
 
 #include "pch.hpp"
 
+#include "lua/functions/creatures/player/player_functions.hpp"
+
 #include "creatures/combat/spells.hpp"
 #include "creatures/creature.hpp"
 #include "creatures/interactions/chat.hpp"
@@ -24,12 +26,12 @@
 #include "creatures/players/wheel/player_wheel.hpp"
 #include "creatures/players/achievement/player_achievement.hpp"
 #include "creatures/players/cyclopedia/player_badge.hpp"
+#include "creatures/players/cyclopedia/player_cyclopedia.hpp"
 #include "creatures/players/cyclopedia/player_title.hpp"
 #include "game/game.hpp"
 #include "io/iologindata.hpp"
 #include "io/ioprey.hpp"
 #include "items/item.hpp"
-#include "lua/functions/creatures/player/player_functions.hpp"
 #include "game/scheduling/save_manager.hpp"
 #include "game/scheduling/dispatcher.hpp"
 #include "map/spectators.hpp"
@@ -2291,10 +2293,23 @@ int PlayerFunctions::luaPlayerGetParty(lua_State* L) {
 }
 
 int PlayerFunctions::luaPlayerAddOutfit(lua_State* L) {
-	// player:addOutfit(lookType)
+	// player:addOutfit(lookType or name, addon = 0)
 	std::shared_ptr<Player> player = getUserdataShared<Player>(L, 1);
 	if (player) {
-		player->addOutfit(getNumber<uint16_t>(L, 2), 0);
+		auto addon = getNumber<uint8_t>(L, 3, 0);
+		if (lua_isnumber(L, 2)) {
+			player->addOutfit(getNumber<uint16_t>(L, 2), addon);
+		} else if (lua_isstring(L, 2)) {
+			const std::string &outfitName = getString(L, 2);
+			const auto &outfit = Outfits::getInstance().getOutfitByName(player->getSex(), outfitName);
+			if (!outfit) {
+				reportErrorFunc("Outfit not found");
+				return 1;
+			}
+
+			player->addOutfit(outfit->lookType, addon);
+		}
+
 		pushBoolean(L, true);
 	} else {
 		lua_pushnil(L);
@@ -2753,7 +2768,7 @@ int PlayerFunctions::luaPlayerRemoveBlessing(lua_State* L) {
 }
 
 int PlayerFunctions::luaPlayerGetBlessingCount(lua_State* L) {
-	// player:getBlessingCount(index)
+	// player:getBlessingCount(index[, storeCount = false])
 	std::shared_ptr<Player> player = getUserdataShared<Player>(L, 1);
 	uint8_t index = getNumber<uint8_t>(L, 2);
 	if (index == 0) {
@@ -2761,7 +2776,7 @@ int PlayerFunctions::luaPlayerGetBlessingCount(lua_State* L) {
 	}
 
 	if (player) {
-		lua_pushnumber(L, player->getBlessingCount(index));
+		lua_pushnumber(L, player->getBlessingCount(index, getBoolean(L, 3, false)));
 	} else {
 		lua_pushnil(L);
 	}
@@ -4311,36 +4326,6 @@ int PlayerFunctions::luaPlayerRemoveAchievementPoints(lua_State* L) {
 	return 1;
 }
 
-int PlayerFunctions::luaPlayerAddDeflectCondition(lua_State* L) {
-	// player:addDeflectCondition(source, conditionType, deflectChance)
-	const auto &player = getUserdataShared<Player>(L, 1);
-	if (!player) {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
-		return 1;
-	}
-	auto source = getString(L, 2);
-	auto conditionType = getNumber<ConditionType_t>(L, 3);
-	auto deflectChance = getNumber<uint8_t>(L, 4);
-	player->addDeflectCondition(source, conditionType, deflectChance);
-	pushBoolean(L, true);
-	return 1;
-}
-
-int PlayerFunctions::luaPlayerRemoveDeflectCondition(lua_State* L) {
-	// player:removeDeflectCondition(source, conditionType, deflectChance)
-	const auto &player = getUserdataShared<Player>(L, 1);
-	if (!player) {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
-		return 1;
-	}
-	auto source = getString(L, 2);
-	auto conditionType = getNumber<ConditionType_t>(L, 3);
-	auto deflectChance = getNumber<uint8_t>(L, 4);
-	player->removeDeflectCondition(source, conditionType, deflectChance);
-	pushBoolean(L, true);
-	return 1;
-}
-
 int PlayerFunctions::luaPlayerAddBadge(lua_State* L) {
 	// player:addBadge(id)
 	const auto &player = getUserdataShared<Player>(L, 1);
@@ -4404,6 +4389,28 @@ int PlayerFunctions::luaPlayerSetCurrentTitle(lua_State* L) {
 	}
 
 	player->title()->setCurrentTitle(title.m_id);
+	pushBoolean(L, true);
+	return 1;
+}
+
+int PlayerFunctions::luaPlayerCreateTransactionSummary(lua_State* L) {
+	// player:createTransactionSummary(type, amount[, id = 0])
+	const auto &player = getUserdataShared<Player>(L, 1);
+	if (!player) {
+		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
+		return 1;
+	}
+
+	auto type = getNumber<uint8_t>(L, 2, 0);
+	if (type == 0) {
+		reportErrorFunc(getErrorDesc(LUA_ERROR_VARIANT_NOT_FOUND));
+		return 1;
+	}
+
+	auto amount = getNumber<uint16_t>(L, 3, 1);
+	auto id = getString(L, 4, "");
+
+	player->cyclopedia()->updateStoreSummary(type, amount, id);
 	pushBoolean(L, true);
 	return 1;
 }

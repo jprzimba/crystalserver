@@ -380,10 +380,10 @@ private:
 		registerMethod(L, "Player", "getTitles", PlayerFunctions::luaPlayerGetTitles);
 		registerMethod(L, "Player", "setCurrentTitle", PlayerFunctions::luaPlayerSetCurrentTitle);
 
-		registerMethod(L, "Player", "addDeflectCondition", PlayerFunctions::luaPlayerAddDeflectCondition);
-		registerMethod(L, "Player", "removeDeflectCondition", PlayerFunctions::luaPlayerRemoveDeflectCondition);
-
 		registerMethod(L, "Player", "takeScreenshot", PlayerFunctions::luaPlayerTakeScreenshot);
+
+		// Store Summary
+		registerMethod(L, "Player", "createTransactionSummary", PlayerFunctions::luaPlayerCreateTransactionSummary);
 
 		GroupFunctions::init(L);
 		GuildFunctions::init(L);
@@ -745,8 +745,7 @@ private:
 	static int luaPlayerGetTitles(lua_State* L);
 	static int luaPlayerSetCurrentTitle(lua_State* L);
 
-	static int luaPlayerAddDeflectCondition(lua_State* L);
-	static int luaPlayerRemoveDeflectCondition(lua_State* L);
+	static int luaPlayerCreateTransactionSummary(lua_State* L);
 
 	static int luaPlayerTakeScreenshot(lua_State* L);
 

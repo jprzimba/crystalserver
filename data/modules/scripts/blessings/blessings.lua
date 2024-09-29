@@ -21,7 +21,7 @@ Blessings.Credits = {
 
 Blessings.Config = {
 	AdventurerBlessingLevel = configManager.getNumber(configKeys.ADVENTURERSBLESSING_LEVEL), -- Free full bless until level
-	HasToF = false, -- Enables/disables twist of fate
+	HasToF = not configManager.getBoolean(configKeys.TOGGLE_SERVER_IS_RETRO), -- Enables/disables twist of fate
 	InquisitonBlessPriceMultiplier = 1.1, -- Bless price multiplied by henricus
 	SkulledDeathLoseStoreItem = configManager.getBoolean(configKeys.SKULLED_DEATH_LOSE_STORE_ITEM), -- Destroy all items on store when dying with red/blackskull
 	InventoryGlowOnFiveBless = configManager.getBoolean(configKeys.INVENTORY_GLOW), -- Glow in yellow inventory items when the player has 5 or more bless,
@@ -142,7 +142,7 @@ Blessings.sendBlessDialog = function(player)
 			msg:addU16(Blessings.BitWiseTable[v.id])
 			msg:addByte(player:getBlessingCount(v.id))
 			if player:getClient().version > 1200 then
-				msg:addByte(0) -- Store Blessings Count
+				msg:addByte(player:getBlessingCount(v.id, true)) -- Store Blessings Count
 			end
 		end
 	end
@@ -395,7 +395,7 @@ Blessings.PlayerDeath = function(player, corpse, killer)
 	--Blessings.ClearBless(player, killer, curBless) IMPLEMENTED IN SOURCE BECAUSE THIS WAS HAPPENING BEFORE SKILL/EXP CALCULATIONS
 
 	if not player:getSlotItem(CONST_SLOT_BACKPACK) then
-		player:addItemEx(Game.createItem(ITEM_BAG), CONST_SLOT_BACKPACK)
+		player:addItem(ITEM_BAG, 1, false, CONST_SLOT_BACKPACK)
 	end
 
 	return true

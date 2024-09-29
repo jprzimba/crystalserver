@@ -21,50 +21,13 @@
 	#include <cstdint>
 #endif
 
-enum CyclopediaBadge_t : uint8_t {
-	ACCOUNT_AGE = 1,
-	LOYALTY,
-	ACCOUNT_ALL_LEVEL,
-	ACCOUNT_ALL_VOCATIONS,
-	TOURNAMENT_PARTICIPATION,
-	TOURNAMENT_POINTS,
-};
-
-enum CyclopediaTitle_t : uint8_t {
-	NOTHING = 0,
-	GOLD,
-	MOUNTS,
-	OUTFITS,
-	LEVEL,
-	HIGHSCORES,
-	BESTIARY,
-	BOSSTIARY,
-	DAILY_REWARD,
-	TASK,
-	MAP,
-	OTHERS,
-};
-
-enum Summary_t : uint8_t {
-	HOUSE_ITEMS = 9,
-	BOOSTS = 10,
-	PREY_CARDS = 12,
-	BLESSINGS = 14,
-	ALL_BLESSINGS = 17,
-	INSTANT_REWARDS = 18,
-	HIRELINGS = 20,
-};
-
-enum class CyclopediaMapData_t : uint8_t {
-	MinimapMarker = 0,
-	DiscoveryData = 1,
-	ActiveRaid = 2,
-	ImminentRaidMainArea = 3,
-	ImminentRaidSubArea = 4,
-	SetDiscoveryArea = 5,
-	Passage = 6,
-	SubAreaMonsters = 7,
-	MonsterBestiary = 8,
-	Donations = 9,
-	SetCurrentArea = 10,
+enum class Blessings : uint8_t {
+	TwistOfFate = 1,
+	TheWisdomOfSolitude = 2,
+	TheSparkOfThePhoenix = 3,
+	TheFireOfTheSuns = 4,
+	TheSpiritualShielding = 5,
+	TheEmbraceOfTibia = 6,
+	BloodOfTheMountain = 7,
+	HearthOfTheMountain = 8
 };

@@ -17,40 +17,38 @@
 
 #pragma once
 
+#include "creatures/creatures_definitions.hpp"
+#include "enums/player_cyclopedia.hpp"
+
 class Player;
 class KV;
 
-struct Achievement {
-	Achievement() = default;
+struct Summary {
+	uint16_t m_preyWildcards = 0;
+	uint16_t m_instantRewards = 0;
+	uint16_t m_hirelings = 0;
 
-	std::string name;
-	std::string description;
-
-	bool secret = false;
-
-	uint8_t grade = 0;
-	uint8_t points = 0;
-
-	uint16_t id = 0;
+	[[maybe_unused]] Summary(uint16_t mPreyWildcards, uint16_t mInstantRewards, uint16_t mHirelings) :
+		m_preyWildcards(mPreyWildcards), m_instantRewards(mInstantRewards), m_hirelings(mHirelings) { }
 };
 
-class PlayerAchievement {
+class PlayerCyclopedia {
 public:
-	explicit PlayerAchievement(Player &player);
-	bool add(uint16_t id, bool message = true, uint32_t timestamp = 0);
-	bool remove(uint16_t id);
-	[[nodiscard]] bool isUnlocked(uint16_t id) const;
-	[[nodiscard]] uint16_t getPoints() const;
-	void addPoints(uint16_t toAddPoints);
-	void removePoints(uint16_t toRemovePoints);
-	[[nodiscard]] std::vector<std::pair<uint16_t, uint32_t>> getUnlockedAchievements() const;
-	void loadUnlockedAchievements();
-	void sendUnlockedSecretAchievements();
-	const std::shared_ptr<KV> &getUnlockedKV();
+	explicit PlayerCyclopedia(Player &player);
+
+	Summary getSummary();
+
+	void loadSummaryData();
+	void loadDeathHistory(uint16_t page, uint16_t entriesPerPage);
+	void loadRecentKills(uint16_t page, uint16_t entriesPerPage);
+
+	void updateStoreSummary(uint8_t type, uint16_t amount = 1, const std::string &id = "");
+	uint16_t getAmount(uint8_t type);
+	void updateAmount(uint8_t type, uint16_t amount = 1);
+
+	[[nodiscard]] std::map<uint16_t, uint16_t> getResult(uint8_t type) const;
+	void insertValue(uint8_t type, uint16_t amount = 1, const std::string &id = "");
 
 private:
-	// {achievement ID, time when it was unlocked}
-	std::shared_ptr<KV> m_unlockedKV;
-	std::vector<std::pair<uint16_t, uint32_t>> m_achievementsUnlocked;
 	Player &m_player;
 };

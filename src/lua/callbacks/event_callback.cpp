@@ -1243,3 +1243,22 @@ void EventCallback::zoneAfterCreatureLeave(std::shared_ptr<Zone> zone, std::shar
 
 	getScriptInterface()->callVoidFunction(2);
 }
+
+void EventCallback::mapOnLoad(const std::string &mapFullPath) const {
+	if (!getScriptInterface()->reserveScriptEnv()) {
+		g_logger().error("[{} - "
+		                 "Call stack overflow. Too many lua script calls being nested.",
+		                 __FUNCTION__);
+		return;
+	}
+
+	ScriptEnvironment* scriptEnvironment = getScriptInterface()->getScriptEnv();
+	scriptEnvironment->setScriptId(getScriptId(), getScriptInterface());
+
+	lua_State* L = getScriptInterface()->getLuaState();
+	getScriptInterface()->pushFunction(getScriptId());
+
+	LuaScriptInterface::pushString(L, mapFullPath);
+
+	getScriptInterface()->callVoidFunction(1);
+}

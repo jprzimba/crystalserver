@@ -25,6 +25,7 @@
 #include "creatures/players/wheel/player_wheel.hpp"
 #include "creatures/players/achievement/player_achievement.hpp"
 #include "creatures/players/cyclopedia/player_badge.hpp"
+#include "creatures/players/cyclopedia/player_cyclopedia.hpp"
 #include "creatures/players/cyclopedia/player_title.hpp"
 #include "creatures/players/storages/storages.hpp"
 #include "game/game.hpp"
@@ -48,6 +49,7 @@
 #include "enums/account_errors.hpp"
 #include "enums/account_type.hpp"
 #include "enums/account_group_type.hpp"
+#include "enums/player_blessings.hpp"
 
 MuteCountMap Player::muteCountMap;
 
@@ -61,6 +63,7 @@ Player::Player(ProtocolGame_ptr p) :
 	m_wheelPlayer = std::make_unique<PlayerWheel>(*this);
 	m_playerAchievement = std::make_unique<PlayerAchievement>(*this);
 	m_playerBadge = std::make_unique<PlayerBadge>(*this);
+	m_playerCyclopedia = std::make_unique<PlayerCyclopedia>(*this);
 	m_playerTitle = std::make_unique<PlayerTitle>(*this);
 }
 
@@ -639,20 +642,6 @@ phmap::flat_hash_map<uint8_t, std::shared_ptr<Item>> Player::getAllSlotItems() c
 	}
 
 	return itemMap;
-}
-
-phmap::flat_hash_map<Blessings_t, std::string> Player::getBlessingNames() const {
-	static phmap::flat_hash_map<Blessings_t, std::string> blessingNames = {
-		{ TWIST_OF_FATE, "Twist of Fate" },
-		{ WISDOM_OF_SOLITUDE, "The Wisdom of Solitude" },
-		{ SPARK_OF_THE_PHOENIX, "The Spark of the Phoenix" },
-		{ FIRE_OF_THE_SUNS, "The Fire of the Suns" },
-		{ SPIRITUAL_SHIELDING, "The Spiritual Shielding" },
-		{ EMBRACE_OF_TIBIA, "The Embrace of Tibia" },
-		{ BLOOD_OF_THE_MOUNTAIN, "Blood of the Mountain" },
-		{ HEARTH_OF_THE_MOUNTAIN, "Heart of the Mountain" },
-	};
-	return blessingNames;
 }
 
 void Player::setTraining(bool value) {
@@ -4936,7 +4925,7 @@ bool Player::canWear(uint16_t lookType, uint8_t addons) const {
 		return true;
 	}
 
-	const auto &outfit = Outfits::getInstance().getOutfitByLookType(sex, lookType);
+	const auto &outfit = Outfits::getInstance().getOutfitByLookType(getPlayer(), lookType);
 	if (!outfit) {
 		return false;
 	}
@@ -5837,6 +5826,10 @@ bool Player::toggleMount(bool mount) {
 		return false;
 	}
 
+	if (isWearingSupportOutfit()) {
+		return false;
+	}
+
 	if (mount) {
 		if (isMounted()) {
 			return false;
@@ -5848,7 +5841,7 @@ bool Player::toggleMount(bool mount) {
 			return false;
 		}
 
-		const auto &playerOutfit = Outfits::getInstance().getOutfitByLookType(getSex(), defaultOutfit.lookType);
+		const auto &playerOutfit = Outfits::getInstance().getOutfitByLookType(getPlayer(), defaultOutfit.lookType);
 		if (!playerOutfit) {
 			return false;
 		}
@@ -6386,11 +6379,6 @@ void Player::addItemImbuementStats(const Imbuement* imbuement) {
 		bonusCapacity = (capacity * imbuement->capacity) / 100;
 	}
 
-	// Add imbuement deflect conditions
-	for (const auto &[condition, chance] : imbuement->deflectConditions) {
-		addDeflectCondition("imbuement", condition, chance);
-	}
-
 	if (requestUpdate) {
 		sendStats();
 		sendSkills();
@@ -6428,13 +6416,6 @@ void Player::removeItemImbuementStats(const Imbuement* imbuement) {
 	if (imbuement->capacity != 0) {
 		requestUpdate = true;
 		bonusCapacity = 0;
-	}
-
-	// Remove imbuement deflect conditions
-	if (getDeflectConditions().size() > 0) {
-		for (const auto &[condition, chance] : imbuement->deflectConditions) {
-			removeDeflectCondition("imbuement", condition, chance);
-		}
 	}
 
 	if (requestUpdate) {
@@ -6631,33 +6612,24 @@ void Player::initializeTaskHunting() {
 }
 
 std::string Player::getBlessingsName() const {
-	uint8_t count = 0;
-	std::for_each(blessings.begin(), blessings.end(), [&count](uint8_t amount) {
-		if (amount != 0) {
-			count++;
+	std::vector<std::string> blessingNames;
+	for (auto bless : magic_enum::enum_values<Blessings>()) {
+		if (hasBlessing(enumToValue(bless))) {
+			std::string name = toStartCaseWithSpace(magic_enum::enum_name(bless).data());
+			blessingNames.emplace_back(name);
 		}
-	});
+	}
 
-	auto BlessingNames = getBlessingNames();
 	std::ostringstream os;
-	for (uint8_t i = 1; i <= 8; i++) {
-		if (hasBlessing(i)) {
-			if (auto blessName = BlessingNames.find(static_cast<Blessings_t>(i));
-				blessName != BlessingNames.end()) {
-				os << (*blessName).second;
-			} else {
-				continue;
-			}
-
-			--count;
-			if (count > 1) {
-				os << ", ";
-			} else if (count == 1) {
-				os << " and ";
-			} else {
-				os << ".";
-			}
+	if (!blessingNames.empty()) {
+		// Join all elements but the last with ", " and add the last one with " and "
+		for (size_t i = 0; i < blessingNames.size() - 1; ++i) {
+			os << blessingNames[i] << ", ";
 		}
+		if (blessingNames.size() > 1) {
+			os << "and ";
+		}
+		os << blessingNames.back() << ".";
 	}
 
 	return os.str();
@@ -7815,11 +7787,10 @@ SoundEffect_t Player::getAttackSoundEffect() const {
 bool Player::canAutoWalk(const Position &toPosition, const std::function<void()> &function, uint32_t delay /* = 500*/) {
 	if (!Position::areInRange<1, 1>(getPosition(), toPosition)) {
 		// Check if can walk to the toPosition and send event to use function
-		stdext::arraylist<Direction> listDir(128);
+		std::vector<Direction> listDir;
 		if (getPathTo(toPosition, listDir, 0, 1, true, true)) {
-			g_dispatcher().addEvent([creatureId = getID(), dirs = listDir.data()] { g_game().playerAutoWalk(creatureId, dirs); }, __FUNCTION__);
-
-			std::shared_ptr<Task> task = createPlayerTask(delay, function, __FUNCTION__);
+			g_dispatcher().addEvent([creatureId = getID(), listDir] { g_game().playerAutoWalk(creatureId, listDir); }, __FUNCTION__);
+			const auto &task = createPlayerTask(delay, function, __FUNCTION__);
 			setNextWalkActionTask(task);
 			return true;
 		} else {
@@ -8028,6 +7999,14 @@ std::unique_ptr<PlayerVIP> &Player::vip() {
 }
 const std::unique_ptr<PlayerVIP> &Player::vip() const {
 	return m_playerVIP;
+}
+
+// Cyclopedia
+std::unique_ptr<PlayerCyclopedia> &Player::cyclopedia() {
+	return m_playerCyclopedia;
+}
+const std::unique_ptr<PlayerCyclopedia> &Player::cyclopedia() const {
+	return m_playerCyclopedia;
 }
 
 void Player::sendLootMessage(const std::string &message) const {

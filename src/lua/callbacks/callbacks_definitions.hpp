@@ -76,4 +76,5 @@ enum class EventCallback_t : uint16_t {
 	zoneBeforeCreatureLeave,
 	zoneAfterCreatureEnter,
 	zoneAfterCreatureLeave,
+	mapOnLoad,
 };

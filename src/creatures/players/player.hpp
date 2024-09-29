@@ -44,6 +44,7 @@
 #include "enums/object_category.hpp"
 #include "enums/player_cyclopedia.hpp"
 #include "creatures/players/cyclopedia/player_badge.hpp"
+#include "creatures/players/cyclopedia/player_cyclopedia.hpp"
 #include "creatures/players/cyclopedia/player_title.hpp"
 #include "creatures/players/vip/player_vip.hpp"
 
@@ -61,6 +62,8 @@ class TaskHuntingSlot;
 class Spell;
 class PlayerWheel;
 class PlayerAchievement;
+class PlayerBadge;
+class PlayerCyclopedia;
 class PlayerTitle;
 class PlayerVIP;
 class Spectators;
@@ -69,6 +72,8 @@ class Account;
 struct ModalWindow;
 struct Achievement;
 struct Badge;
+struct Title;
+struct VIPGroup;
 
 struct ForgeHistory {
 	ForgeAction_t actionType = ForgeAction_t::FUSION;
@@ -480,8 +485,17 @@ public:
 	bool hasBlessing(uint8_t index) const {
 		return blessings[index - 1] != 0;
 	}
-	uint8_t getBlessingCount(uint8_t index) const {
-		return blessings[index - 1];
+	uint8_t getBlessingCount(uint8_t index, bool storeCount = false) const {
+		if (!storeCount) {
+			if (index > 0 && index <= blessings.size()) {
+				return blessings[index - 1];
+			} else {
+				g_logger().error("[{}] - index outside range 0-10.", __FUNCTION__);
+				return 0;
+			}
+		}
+		auto amount = kv()->scoped("summary")->scoped("blessings")->scoped(fmt::format("{}", index))->get("amount");
+		return amount ? static_cast<uint8_t>(amount->getNumber()) : 0;
 	}
 	std::string getBlessingsName() const;
 
@@ -1576,9 +1590,6 @@ public:
 			client->sendOutfitWindow();
 		}
 	}
-	bool isWearingSupportOutfit(uint16_t outfitType) {
-		return (outfitType == 75 || outfitType == 266 || outfitType == 302);
-	}
 
 	// Imbuements
 	void onApplyImbuement(Imbuement* imbuement, std::shared_ptr<Item> item, uint8_t slot, bool protectionCharm);
@@ -1650,11 +1661,7 @@ public:
 			client->sendCyclopediaCharacterRecentDeaths(page, pages, entries);
 		}
 	}
-	void sendCyclopediaCharacterRecentPvPKills(
-		uint16_t page, uint16_t pages,
-		const std::vector<
-			RecentPvPKillEntry> &entries
-	) {
+	void sendCyclopediaCharacterRecentPvPKills(uint16_t page, uint16_t pages, const std::vector<RecentPvPKillEntry> &entries) {
 		if (client) {
 			client->sendCyclopediaCharacterRecentPvPKills(page, pages, entries);
 		}
@@ -2632,9 +2639,6 @@ public:
 	// This get all players slot items
 	phmap::flat_hash_map<uint8_t, std::shared_ptr<Item>> getAllSlotItems() const;
 
-	// This get all blessings
-	phmap::flat_hash_map<Blessings_t, std::string> getBlessingNames() const;
-
 	// Gets the equipped items with augment by type
 	std::vector<std::shared_ptr<Item>> getEquippedAugmentItemsByType(Augment_t augmentType) const;
 
@@ -2664,6 +2668,10 @@ public:
 	std::unique_ptr<PlayerTitle> &title();
 	const std::unique_ptr<PlayerTitle> &title() const;
 
+	// Player summary interface
+	std::unique_ptr<PlayerCyclopedia> &cyclopedia();
+	const std::unique_ptr<PlayerCyclopedia> &cyclopedia() const;
+
 	// Player vip interface
 	std::unique_ptr<PlayerVIP> &vip();
 	const std::unique_ptr<PlayerVIP> &vip() const;
@@ -2679,50 +2687,6 @@ public:
 	bool canSpeakWithHireling(uint8_t speechbubble);
 
 	uint16_t getPlayerVocationEnum() const;
-
-	/*******************************************************************************
-	 * Deflect Condition
-	 * Responsible for defining the conditions that when trying to be
-	 * added to the player or being updated, there is a chance to prevent these actions
-	 ******************************************************************************/
-	struct DeflectCondition {
-		DeflectCondition(std::string source, ConditionType_t condition, uint8_t chance) :
-			source(source), condition(condition), chance(chance) { }
-		std::string source;
-		uint8_t chance = 0;
-		ConditionType_t condition = CONDITION_NONE;
-	};
-
-	const std::vector<DeflectCondition> &getDeflectConditions() const {
-		return deflectConditions;
-	}
-
-	// Searches according to a conditionType the higest chance found among the player's
-	// deflect conditions. Return defaults to 0 if no condition is met.
-	uint8_t getDeflectConditionChance(const ConditionType_t &conditionType) const {
-		uint8_t maxChance = 0;
-		for (const auto &dc : deflectConditions) {
-			if (conditionType == dc.condition && dc.chance > maxChance) {
-				maxChance = dc.chance;
-			}
-		}
-		return maxChance;
-	}
-
-	// Removes a deflect condition from a player from a given source
-	void removeDeflectCondition(const std::string_view &source, const ConditionType_t &conditionType, const uint8_t &chance) {
-		auto it = std::find_if(deflectConditions.begin(), deflectConditions.end(), [source, conditionType, chance](const DeflectCondition &dc) {
-			return source == dc.source && conditionType == dc.condition && chance == dc.chance;
-		});
-		if (it != deflectConditions.end()) {
-			deflectConditions.erase(it);
-		}
-	}
-
-	void addDeflectCondition(std::string source, ConditionType_t conditionType, uint8_t chance) {
-		deflectConditions.emplace_back(source, conditionType, chance);
-	}
-	/*******************************************************************************/
 
 private:
 	friend class PlayerLock;
@@ -3031,6 +2995,8 @@ private:
 	int32_t magicShieldCapacityFlat = 0;
 	int32_t magicShieldCapacityPercent = 0;
 
+	int32_t marriageSpouse = -1;
+
 	void updateItemsLight(bool internal = false);
 	uint16_t getStepSpeed() const override {
 		return std::max<uint16_t>(PLAYER_MIN_SPEED, std::min<uint16_t>(PLAYER_MAX_SPEED, getSpeed()));
@@ -3107,12 +3073,14 @@ private:
 	friend class IOLoginDataSave;
 	friend class PlayerAchievement;
 	friend class PlayerBadge;
+	friend class PlayerCyclopedia;
 	friend class PlayerTitle;
 	friend class PlayerVIP;
 
 	std::unique_ptr<PlayerWheel> m_wheelPlayer;
 	std::unique_ptr<PlayerAchievement> m_playerAchievement;
 	std::unique_ptr<PlayerBadge> m_playerBadge;
+	std::unique_ptr<PlayerCyclopedia> m_playerCyclopedia;
 	std::unique_ptr<PlayerTitle> m_playerTitle;
 	std::unique_ptr<PlayerVIP> m_playerVIP;
 
@@ -3139,10 +3107,10 @@ private:
 
 	void checkAndShowBlessingMessage();
 
-	// Stores of conditions to be deflected from various sources, including from "imbuements".
-	// Different DeflectCondition containing the same data may be present.
-	// This is allowed because, for example, if armor and boots have a common imbument,
-	// unequipping the armor does not influence the boot's imbuement.
-	// When present simultaneously, the one with the greatest chance of occurrence will prevail.
-	std::vector<DeflectCondition> deflectConditions;
+	void setMarriageSpouse(const int32_t spouseId) {
+		marriageSpouse = spouseId;
+	}
+	int32_t getMarriageSpouse() const {
+		return marriageSpouse;
+	}
 };
