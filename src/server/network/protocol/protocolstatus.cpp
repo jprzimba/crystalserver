@@ -27,7 +27,7 @@
 #include "server/network/message/outputmessage.hpp"
 
 std::map<uint32_t, int64_t> ProtocolStatus::ipConnectMap;
-const uint64_t ProtocolStatus::start = OTSYS_TIME();
+const uint64_t ProtocolStatus::start = OTSYS_TIME(true);
 
 void ProtocolStatus::onRecvFirstMessage(NetworkMessage &msg) {
 	uint32_t ip = getIP();
