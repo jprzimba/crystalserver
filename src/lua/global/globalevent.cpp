@@ -74,6 +74,14 @@ void GlobalEvents::startup() const {
 	execute(GLOBALEVENT_STARTUP);
 }
 
+void GlobalEvents::shutdown() const {
+	execute(GLOBALEVENT_SHUTDOWN);
+}
+
+void GlobalEvents::save() const {
+	execute(GLOBALEVENT_SAVE);
+}
+
 void GlobalEvents::timer() {
 	time_t now = time(nullptr);
 
@@ -119,9 +127,7 @@ void GlobalEvents::think() {
 	int64_t now = OTSYS_TIME();
 
 	int64_t nextScheduledTime = std::numeric_limits<int64_t>::max();
-	for (auto &it : thinkMap) {
-		const auto globalEvent = it.second;
-
+	for (const auto &[globalEventName, globalEvent] : thinkMap) {
 		int64_t nextExecutionTime = globalEvent->getNextExecution() - now;
 		if (nextExecutionTime > 0) {
 			if (nextExecutionTime < nextScheduledTime) {
@@ -134,8 +140,8 @@ void GlobalEvents::think() {
 
 		if (!globalEvent->executeEvent()) {
 			g_logger().error("[GlobalEvents::think] - "
-							 "Failed to execute event: {}",
-							 globalEvent->getName());
+			                 "Failed to execute event: {}",
+			                 globalEvent->getName());
 		}
 
 		nextExecutionTime = globalEvent->getInterval();
@@ -155,8 +161,7 @@ void GlobalEvents::think() {
 }
 
 void GlobalEvents::execute(GlobalEvent_t type) const {
-	for (const auto &it : serverMap) {
-		const auto globalEvent = it.second;
+	for (const auto &[globalEventName, globalEvent] : serverMap) {
 		if (globalEvent->getEventType() == type) {
 			globalEvent->executeEvent();
 		}
@@ -173,7 +178,8 @@ GlobalEventMap GlobalEvents::getEventMap(GlobalEvent_t type) {
 		case GLOBALEVENT_PERIODCHANGE:
 		case GLOBALEVENT_STARTUP:
 		case GLOBALEVENT_SHUTDOWN:
-		case GLOBALEVENT_RECORD: {
+		case GLOBALEVENT_RECORD:
+		case GLOBALEVENT_SAVE: {
 			GlobalEventMap retMap;
 			for (const auto &it : serverMap) {
 				if (it.second->getEventType() == type) {
@@ -204,6 +210,8 @@ std::string GlobalEvent::getScriptTypeName() const {
 			return "onPeriodChange";
 		case GLOBALEVENT_ON_THINK:
 			return "onThink";
+		case GLOBALEVENT_SAVE:
+			return "onSave";
 		default:
 			g_logger().error("[GlobalEvent::getScriptTypeName] - Invalid event type");
 			return std::string();
@@ -214,8 +222,8 @@ bool GlobalEvent::executePeriodChange(LightState_t lightState, LightInfo lightIn
 	// onPeriodChange(lightState, lightTime)
 	if (!getScriptInterface()->reserveScriptEnv()) {
 		g_logger().error("[GlobalEvent::executePeriodChange - {}] "
-						 "Call stack overflow. Too many lua script calls being nested.",
-						 getName());
+		                 "Call stack overflow. Too many lua script calls being nested.",
+		                 getName());
 		return false;
 	}
 
@@ -234,8 +242,8 @@ bool GlobalEvent::executeRecord(uint32_t current, uint32_t old) {
 	// onRecord(current, old)
 	if (!getScriptInterface()->reserveScriptEnv()) {
 		g_logger().error("[GlobalEvent::executeRecord - {}] "
-						 "Call stack overflow. Too many lua script calls being nested.",
-						 getName());
+		                 "Call stack overflow. Too many lua script calls being nested.",
+		                 getName());
 		return false;
 	}
 
@@ -253,8 +261,8 @@ bool GlobalEvent::executeRecord(uint32_t current, uint32_t old) {
 bool GlobalEvent::executeEvent() const {
 	if (!getScriptInterface()->reserveScriptEnv()) {
 		g_logger().error("[GlobalEvent::executeEvent - {}] "
-						 "Call stack overflow. Too many lua script calls being nested.",
-						 getName());
+		                 "Call stack overflow. Too many lua script calls being nested.",
+		                 getName());
 		return false;
 	}
 
