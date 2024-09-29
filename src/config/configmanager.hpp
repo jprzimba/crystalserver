@@ -34,6 +34,8 @@ public:
 	bool load();
 	bool reload();
 
+	void missingConfigWarning(const char* identifier);
+
 	const std::string &setConfigFileLua(const std::string &what) {
 		configFileLua = { what };
 		return configFileLua;
