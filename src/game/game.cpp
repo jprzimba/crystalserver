@@ -2370,7 +2370,7 @@ std::tuple<ReturnValue, uint32_t, uint32_t> Game::addItemBatch(const std::shared
 				if (item->getContainer()) {
 					containersCreated++;
 				}
-				totalAdded++;
+				totalAdded += item->getItemCount();
 			}
 
 			ret = returnError;
