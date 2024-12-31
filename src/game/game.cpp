@@ -5946,15 +5946,46 @@ void Game::playerFollowCreature(uint32_t playerId, uint32_t creatureId) {
 	player->setFollowCreature(getCreatureByID(creatureId));
 }
 
-void Game::playerSetFightModes(uint32_t playerId, FightMode_t fightMode, bool chaseMode, bool secureMode) {
+void Game::playerSetFightModes(uint32_t playerId, FightMode_t fightMode, PvpMode_t pvpMode, bool chaseMode, bool secureMode) {
 	const auto &player = getPlayerByID(playerId);
 	if (!player) {
 		return;
 	}
 
+	PvpMode_t oldPvpMode = player->getPvPMode();
+	bool expertPvp = isExpertPvpEnabled();
+
 	player->setFightMode(fightMode);
 	player->setChaseMode(chaseMode);
-	player->setSecureMode(secureMode);
+
+	if (expertPvp) {
+		WorldType_t worldType = getWorldType();
+		if (worldType == WORLD_TYPE_NO_PVP && pvpMode == PVP_MODE_RED_FIST) {
+			player->setPvpMode(player->pvpMode);
+		} else if (worldType == WORLD_TYPE_PVP_ENFORCED && pvpMode != PVP_MODE_RED_FIST) {
+			player->setPvpMode(PVP_MODE_RED_FIST);
+		} else {
+			player->setPvpMode(pvpMode);
+		}
+
+		if ((worldType == WORLD_TYPE_NO_PVP && !secureMode) || (worldType == WORLD_TYPE_PVP_ENFORCED && secureMode)) {
+			player->setSecureMode(!secureMode);
+		} else {
+			if (player->getPvPMode() == PVP_MODE_RED_FIST) {
+				player->setSecureMode(false);
+			} else {
+				player->setSecureMode(secureMode);
+			}
+
+			if (oldPvpMode == PVP_MODE_RED_FIST) {
+				player->setSecureMode(true);
+			}
+		}
+
+		player->sendFightModes();
+	} else {
+		player->setSecureMode(secureMode);
+	}
 }
 
 void Game::playerRequestAddVip(uint32_t playerId, const std::string &name) {
@@ -10916,5 +10947,51 @@ void Game::updatePlayersOnline() const {
 	const bool success = DBTransaction::executeWithinTransaction(updateOperation);
 	if (!success) {
 		g_logger().error("[Game::updatePlayersOnline] Failed to update players online.");
+	}
+}
+
+bool Game::isExpertPvpEnabled() {
+	return g_configManager().getBoolean(TOGGLE_EXPERT_PVP);
+}
+
+void Game::updateSpectatorsPvp(const std::shared_ptr<Thing> &thing) {
+	if (!thing) {
+		return;
+	}
+
+	if (std::shared_ptr<Creature> creature = thing->getCreature()) {
+		std::shared_ptr<Player> player = creature->getPlayer();
+		if (!player) {
+			return;
+		}
+
+		for (const auto &spectator : Spectators().find<Player>(player->getPosition(), true)) {
+			std::shared_ptr<Player> itPlayer = spectator->getPlayer();
+			if (!itPlayer) {
+				continue;
+			}
+
+			SquareColor_t sqColor = SQ_COLOR_NONE;
+			if (player->hasPvpActivity(itPlayer)) {
+				sqColor = SQ_COLOR_YELLOW;
+			} else if (itPlayer->isInPvpSituation()) {
+				if (itPlayer == player) {
+					sqColor = SQ_COLOR_YELLOW;
+				} else if (player->hasPvpActivity(itPlayer, true)) {
+					// if this player attacked anyone of players's guild/party
+					sqColor = SQ_COLOR_ORANGE;
+				} else {
+					// meaning that the fight you are not involved.
+					sqColor = SQ_COLOR_BROWN;
+				}
+			} else {
+				// player isn't enganged at any pvp situation! ( even if self)
+				player->sendCreatureSquare(itPlayer, SQ_COLOR_NONE, 0);
+			}
+
+			if (sqColor != SQ_COLOR_NONE) {
+				player->sendPvpSquare(itPlayer, sqColor);
+			}
+		}
 	}
 }

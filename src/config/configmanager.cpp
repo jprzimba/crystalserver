@@ -171,6 +171,7 @@ bool ConfigManager::load() {
 	loadBoolConfig(L, HALF_LOSS_MAGIC, "halfLossMagicLevel", true);
 	loadBoolConfig(L, CHAIN_SYSTEM_VIP_ONLY, "chainSystemVipOnly", false);
 	loadBoolConfig(L, BEDS_ONLY_PREMIUM, "bedsOnlyPremium", true);
+	loadBoolConfig(L, TOGGLE_EXPERT_PVP, "toggleExpertPvp", false);
 	loadBoolConfig(L, SPELL_NAME_INSTEAD_WORDS, "spellNameInsteadOfWords", false);
 
 	loadFloatConfig(L, BESTIARY_RATE_CHARM_SHOP_PRICE, "bestiaryRateCharmShopPrice", 1.0);
