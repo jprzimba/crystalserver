@@ -5996,7 +5996,7 @@ void Game::playerRequestAddVip(uint32_t playerId, const std::string &name) {
 			return;
 		}
 
-		player->vip()->add(guid, formattedName, VipStatus_t::OFFLINE);
+		player->vip()->add(guid, formattedName, VIPSTATUS_OFFLINE);
 	} else {
 		if (vipPlayer->hasFlag(PlayerFlags_t::SpecialVIP) && !player->hasFlag(PlayerFlags_t::SpecialVIP)) {
 			player->sendTextMessage(MESSAGE_FAILURE, "You can not add this player");
@@ -6004,11 +6004,11 @@ void Game::playerRequestAddVip(uint32_t playerId, const std::string &name) {
 		}
 
 		if (!vipPlayer->isInGhostMode() || player->isAccessPlayer()) {
-			player->vip()->add(vipPlayer->getGUID(), vipPlayer->getName(), VipStatus_t::ONLINE);
+			player->vip()->add(vipPlayer->getGUID(), vipPlayer->getName(), VIPSTATUS_ONLINE);
 		} else if (vipPlayer->isExerciseTraining()) {
-			player->vip()->add(vipPlayer->getGUID(), vipPlayer->getName(), VipStatus_t::TRAINING);
+			player->vip()->add(vipPlayer->getGUID(), vipPlayer->getName(), VIPSTATUS_TRAINING);
 		} else {
-			player->vip()->add(vipPlayer->getGUID(), vipPlayer->getName(), VipStatus_t::OFFLINE);
+			player->vip()->add(vipPlayer->getGUID(), vipPlayer->getName(), VIPSTATUS_OFFLINE);
 		}
 	}
 }

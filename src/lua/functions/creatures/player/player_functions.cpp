@@ -21,6 +21,7 @@
 #include "creatures/appearance/mounts/mounts.hpp"
 #include "creatures/combat/spells.hpp"
 #include "creatures/creature.hpp"
+#include "creatures/creatures_definitions.hpp"
 #include "creatures/interactions/chat.hpp"
 #include "creatures/monsters/monsters.hpp"
 #include "creatures/players/achievement/player_achievement.hpp"
@@ -3485,13 +3486,13 @@ int PlayerFunctions::luaPlayerSetGhostMode(lua_State* L) {
 	if (player->isInGhostMode()) {
 		for (const auto &it : g_game().getPlayers()) {
 			if (!it.second->isAccessPlayer()) {
-				it.second->vip()->notifyStatusChange(player, VipStatus_t::OFFLINE);
+				it.second->vip()->notifyStatusChange(player, VIPSTATUS_OFFLINE);
 			}
 		}
 	} else {
 		for (const auto &it : g_game().getPlayers()) {
 			if (!it.second->isAccessPlayer()) {
-				VipStatus_t status = it.second->isExerciseTraining() ? VipStatus_t::TRAINING : VipStatus_t::ONLINE;
+				VipStatus_t status = it.second->isExerciseTraining() ? VIPSTATUS_TRAINING : VIPSTATUS_ONLINE;
 				it.second->vip()->notifyStatusChange(player, status);
 			}
 		}

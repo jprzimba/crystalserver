@@ -31,7 +31,7 @@ enum OperatingSystem_t : uint8_t;
 enum ChannelEvent_t : uint8_t;
 enum CyclopediaCharacterInfoType_t : uint8_t;
 enum Resource_t : uint8_t;
-enum class VipStatus_t : uint8_t;
+enum VipStatus_t : uint8_t;
 enum SpellGroup_t : uint8_t;
 enum Slots_t : uint8_t;
 enum CombatType_t : uint8_t;

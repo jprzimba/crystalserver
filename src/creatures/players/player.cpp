@@ -2858,7 +2858,7 @@ void Player::setTraining(bool value) {
 	}
 
 	exerciseTraining = value;
-	VipStatus_t newStatus = exerciseTraining ? VipStatus_t::TRAINING : VipStatus_t::ONLINE;
+	VipStatus_t newStatus = exerciseTraining ? VIPSTATUS_TRAINING : VIPSTATUS_ONLINE;
 	for (const auto &[key, player] : g_game().getPlayers()) {
 		if (!this->isInGhostMode() || player->isAccessPlayer()) {
 			player->vip()->notifyStatusChange(static_self_cast<Player>(), newStatus, false);
@@ -3976,7 +3976,7 @@ bool Player::spawn() {
 	// notify status change when login after dead
 	for (const auto &[key, player] : g_game().getPlayers()) {
 		if (!this->isInGhostMode() || player->isAccessPlayer()) {
-			VipStatus_t status = player->isExerciseTraining() ? VipStatus_t::TRAINING : VipStatus_t::ONLINE;
+			VipStatus_t status = player->isExerciseTraining() ? VIPSTATUS_TRAINING : VIPSTATUS_ONLINE;
 			player->vip()->notifyStatusChange(static_self_cast<Player>(), status, false);
 		}
 	}
@@ -4032,7 +4032,7 @@ void Player::despawn() {
 
 	// show player as pending
 	for (const auto &[key, player] : g_game().getPlayers()) {
-		player->vip()->notifyStatusChange(static_self_cast<Player>(), VipStatus_t::PENDING, false);
+		player->vip()->notifyStatusChange(static_self_cast<Player>(), VIPSTATUS_PENDING, false);
 	}
 
 	setDead(true);
@@ -4131,13 +4131,13 @@ void Player::removeList() {
 	g_game().removePlayer(static_self_cast<Player>());
 
 	for (const auto &[key, player] : g_game().getPlayers()) {
-		player->vip()->notifyStatusChange(static_self_cast<Player>(), VipStatus_t::OFFLINE);
+		player->vip()->notifyStatusChange(static_self_cast<Player>(), VIPSTATUS_OFFLINE);
 	}
 }
 
 void Player::addList() {
 	for (const auto &[key, player] : g_game().getPlayers()) {
-		VipStatus_t status = player->isExerciseTraining() ? VipStatus_t::TRAINING : VipStatus_t::ONLINE;
+		VipStatus_t status = player->isExerciseTraining() ? VIPSTATUS_TRAINING : VIPSTATUS_ONLINE;
 		player->vip()->notifyStatusChange(static_self_cast<Player>(), status);
 	}
 
