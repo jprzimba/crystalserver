@@ -2503,12 +2503,14 @@ bool ConditionInvisible::startCondition(std::shared_ptr<Creature> creature) {
 		return false;
 	}
 
-	g_game().internalCreatureChangeVisible(creature, false);
+	if (!creature->isInGhostMode()) {
+		g_game().internalCreatureChangeVisible(creature, false);
+	}
 	return true;
 }
 
 void ConditionInvisible::endCondition(std::shared_ptr<Creature> creature) {
-	if (!creature->isInvisible()) {
+	if (!creature->isInGhostMode() && !creature->isInvisible()) {
 		g_game().internalCreatureChangeVisible(creature, true);
 	}
 }

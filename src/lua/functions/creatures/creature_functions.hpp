@@ -121,4 +121,7 @@ private:
 	static int luaCreatureGetIcon(lua_State* L);
 	static int luaCreatureRemoveIcon(lua_State* L);
 	static int luaCreatureClearIcons(lua_State* L);
+
+	static int luaCreatureGetDisplayName(lua_State* L);
+	static int luaCreatureSetDisplayName(lua_State* L);
 };

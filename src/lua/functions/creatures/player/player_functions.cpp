@@ -3468,16 +3468,22 @@ int PlayerFunctions::luaPlayerSetGhostMode(lua_State* L) {
 
 	const auto &tile = player->getTile();
 	const Position &position = player->getPosition();
+	const bool isInvisible = player->isInvisible();
 
 	for (const auto &spectator : Spectators().find<Player>(position, true)) {
 		const auto &tmpPlayer = spectator->getPlayer();
 		if (tmpPlayer != player && !tmpPlayer->isAccessPlayer()) {
+			int32_t stackpos = tile ? tile->getStackposOfCreature(tmpPlayer, player) : -1;
 			if (enabled) {
-				tmpPlayer->sendRemoveTileThing(position, tile->getStackposOfCreature(tmpPlayer, player));
+				tmpPlayer->sendRemoveTileCreature(player, position, tile->getClientIndexOfCreature(tmpPlayer, player));
 			} else {
 				tmpPlayer->sendCreatureAppear(player, position, true);
 			}
 		} else {
+			if (isInvisible) {
+				continue;
+			}
+
 			tmpPlayer->sendCreatureChangeVisible(player, !enabled);
 		}
 	}

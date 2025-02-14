@@ -97,6 +97,9 @@ void CreatureFunctions::init(lua_State* L) {
 	Lua::registerMethod(L, "Creature", "removeIcon", CreatureFunctions::luaCreatureRemoveIcon);
 	Lua::registerMethod(L, "Creature", "clearIcons", CreatureFunctions::luaCreatureClearIcons);
 
+	Lua::registerMethod(L, "Creature", "getDisplayName", CreatureFunctions::luaCreatureGetDisplayName);
+	Lua::registerMethod(L, "Creature", "setDisplayName", CreatureFunctions::luaCreatureSetDisplayName);
+
 	CombatFunctions::init(L);
 	MonsterFunctions::init(L);
 	NpcFunctions::init(L);
@@ -1191,6 +1194,36 @@ int CreatureFunctions::luaCreatureClearIcons(lua_State* L) {
 		return 1;
 	}
 	creature->clearIcons();
+	Lua::pushBoolean(L, true);
+	return 1;
+}
+
+int CreatureFunctions::luaCreatureGetDisplayName(lua_State* L)
+{
+	// creature:getDisplayName()
+	const auto &creature = Lua::getUserdataShared<Creature>(L, 1);
+	if (!creature) {
+		Lua::reportErrorFunc(Lua::getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
+		Lua::pushBoolean(L, false);
+		return 1;
+	}
+
+	Lua::pushString(L, creature->getDisplayName());
+	return 1;
+}
+
+int CreatureFunctions::luaCreatureSetDisplayName(lua_State* L)
+{
+	// creature:setDisplayName()
+	const auto &creature = Lua::getUserdataShared<Creature>(L, 1);
+	if (!creature) {
+		Lua::reportErrorFunc(Lua::getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
+		Lua::pushBoolean(L, false);
+		return 1;
+	}
+
+	creature->setDisplayName(Lua::getString(L, 2));
+	creature->updateCreatures();
 	Lua::pushBoolean(L, true);
 	return 1;
 }

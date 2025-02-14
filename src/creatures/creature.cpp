@@ -74,6 +74,18 @@ bool Creature::canSeeCreature(const std::shared_ptr<Creature> &creature) const {
 	return true;
 }
 
+void Creature::updateCreatures()
+{
+	const auto &tile = getTile();
+	if (!tile) {
+		return;
+	}
+
+	for (const auto &spectator : Spectators().find<Player>(tile->getPosition(), true)) {
+		spectator->getPlayer()->sendUpdateTileCreature(getCreature());
+	}
+}
+
 void Creature::setSkull(Skulls_t newSkull) {
 	skull = newSkull;
 	g_game().updateCreatureSkull(static_self_cast<Creature>());

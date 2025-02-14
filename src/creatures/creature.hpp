@@ -123,6 +123,14 @@ public:
 
 	virtual CreatureType_t getType() const = 0;
 
+	const std::string& getDisplayName() const {
+		return displayName;
+	}
+
+	void setDisplayName(const std::string& name) {
+		displayName = name;
+	}
+
 	bool isPlayer() const {
 		return getType() == CreatureType_t::CREATURETYPE_PLAYER;
 	}
@@ -144,6 +152,8 @@ public:
 
 	virtual bool canSee(const Position &pos);
 	virtual bool canSeeCreature(const std::shared_ptr<Creature> &creature) const;
+
+	void updateCreatures();
 
 	virtual RaceType_t getRace() const {
 		return RACE_NONE;
@@ -733,6 +743,7 @@ protected:
 	std::weak_ptr<Creature> m_master;
 	std::weak_ptr<Creature> m_followCreature;
 
+	std::string displayName;
 	/**
 	 * We need to persist if this creature is summon or not because when we
 	 * increment the bestiary count, the master might be gone before we can

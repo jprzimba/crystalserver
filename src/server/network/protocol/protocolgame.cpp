@@ -6528,10 +6528,6 @@ void ProtocolGame::removeMagicEffect(const Position &pos, uint16_t type) {
 }
 
 void ProtocolGame::sendCreatureHealth(const std::shared_ptr<Creature> &creature) {
-	if (creature->isHealthHidden()) {
-		return;
-	}
-
 	NetworkMessage msg;
 	msg.addByte(0x8C);
 	msg.add<uint32_t>(creature->getID());
@@ -6732,6 +6728,26 @@ void ProtocolGame::sendRemoveTileThing(const Position &pos, uint32_t stackpos) {
 	writeToOutputBuffer(msg);
 }
 
+void ProtocolGame::sendRemoveTileCreature(const std::shared_ptr<Creature> &creature, const Position &pos, uint32_t stackpos)
+{
+	if (stackpos < 10) {
+		if (!canSee(pos)) {
+			return;
+		}
+
+		NetworkMessage msg;
+		RemoveTileThing(msg, pos, stackpos);
+		writeToOutputBuffer(msg);
+		return;
+	}
+
+	NetworkMessage msg;
+	msg.addByte(0x6C);
+	msg.add<uint16_t>(0xFFFF);
+	msg.add<uint32_t>(creature->getID());
+	writeToOutputBuffer(msg);
+}
+
 void ProtocolGame::sendUpdateTileCreature(const Position &pos, uint32_t stackpos, const std::shared_ptr<Creature> &creature) {
 	if (!canSee(pos)) {
 		return;
@@ -6740,12 +6756,11 @@ void ProtocolGame::sendUpdateTileCreature(const Position &pos, uint32_t stackpos
 	NetworkMessage msg;
 	msg.addByte(0x6B);
 	msg.addPosition(pos);
-	msg.addByte(static_cast<uint8_t>(stackpos));
+	msg.addByte(stackpos);
 
-	bool known;
-	uint32_t removedKnown;
-	checkCreatureAsKnown(creature->getID(), known, removedKnown);
-	AddCreature(msg, creature, false, removedKnown);
+	// send creature as "new" (known: false, cache id to overwrite: creature id)
+	AddCreature(msg, creature, false, creature->getID());
+
 	writeToOutputBuffer(msg);
 }
 
@@ -6968,9 +6983,7 @@ void ProtocolGame::sendMoveCreature(const std::shared_ptr<Creature> &creature, c
 		if (oldStackPos >= 10) {
 			sendMapDescription(newPos);
 		} else if (teleport) {
-			NetworkMessage msg;
-			RemoveTileThing(msg, oldPos, oldStackPos);
-			writeToOutputBuffer(msg);
+			sendRemoveTileCreature(creature, oldPos, oldStackPos);
 			sendMapDescription(newPos);
 		} else {
 			NetworkMessage msg;
@@ -7008,18 +7021,25 @@ void ProtocolGame::sendMoveCreature(const std::shared_ptr<Creature> &creature, c
 		}
 	} else if (canSee(oldPos) && canSee(newPos)) {
 		if (teleport || (oldPos.z == MAP_INIT_SURFACE_LAYER && newPos.z >= MAP_INIT_SURFACE_LAYER + 1) || oldStackPos >= 10) {
-			sendRemoveTileThing(oldPos, oldStackPos);
+			sendRemoveTileCreature(creature, oldPos, oldStackPos);
 			sendAddCreature(creature, newPos, newStackPos, false);
+			sendUpdateTileCreature(newPos, newStackPos, creature);
 		} else {
 			NetworkMessage msg;
 			msg.addByte(0x6D);
-			msg.addPosition(oldPos);
-			msg.addByte(static_cast<uint8_t>(oldStackPos));
-			msg.addPosition(newPos);
+			if (oldStackPos < 10) {
+				msg.addPosition(oldPos);
+				msg.addByte(oldStackPos);
+			} else {
+				msg.add<uint16_t>(0xFFFF);
+				msg.add<uint32_t>(creature->getID());
+			}
+			msg.addPosition(creature->getPosition());
 			writeToOutputBuffer(msg);
 		}
 	} else if (canSee(oldPos)) {
 		sendRemoveTileThing(oldPos, oldStackPos);
+		sendRemoveTileCreature(creature, oldPos, oldStackPos);
 	} else if (canSee(newPos)) {
 		sendAddCreature(creature, newPos, newStackPos, false);
 	}
@@ -7771,8 +7791,10 @@ void ProtocolGame::AddCreature(NetworkMessage &msg, const std::shared_ptr<Creatu
 			}
 		}
 
-		if (!oldProtocol && creature->isHealthHidden()) {
-			msg.addString(std::string());
+		const auto displayName = creature->getDisplayName();
+		const auto nameToShow = !displayName.empty() ? displayName : (creature->isHealthHidden() ? "" : creature->getName());		
+		if (!oldProtocol) {
+			msg.addString(nameToShow);
 		} else {
 			msg.addString(creature->getName());
 		}
@@ -8173,7 +8195,7 @@ void ProtocolGame::RemoveTileThing(NetworkMessage &msg, const Position &pos, uin
 
 	msg.addByte(0x6C);
 	msg.addPosition(pos);
-	msg.addByte(static_cast<uint8_t>(stackpos));
+	msg.addByte(stackpos);
 }
 
 void ProtocolGame::sendKillTrackerUpdate(const std::shared_ptr<Container> &corpse, const std::string &name, const Outfit_t creatureOutfit) {

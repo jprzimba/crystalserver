@@ -6540,6 +6540,12 @@ void Player::sendRemoveTileThing(const Position &pos, int32_t stackpos) const {
 	}
 }
 
+void Player::sendRemoveTileCreature(const std::shared_ptr<Creature> &creature, const Position& pos, int32_t stackpos) {
+	if (client) {
+		client->sendRemoveTileCreature(creature, pos, stackpos);
+	}
+}
+
 void Player::sendUpdateTileCreature(const std::shared_ptr<Creature> &creature) {
 	if (client) {
 		client->sendUpdateTileCreature(creature->getPosition(), creature->getTile()->getClientIndexOfCreature(static_self_cast<Player>(), creature), creature);
@@ -8225,7 +8231,7 @@ void Player::sendCreatureChangeVisible(const std::shared_ptr<Creature> &creature
 		if (!tile) {
 			return;
 		}
-		int32_t stackpos = tile->getStackposOfCreature(static_self_cast<Player>(), creature);
+		int32_t stackpos = tile->getClientIndexOfCreature(static_self_cast<Player>(), creature);
 		if (stackpos == -1) {
 			return;
 		}
@@ -8233,7 +8239,7 @@ void Player::sendCreatureChangeVisible(const std::shared_ptr<Creature> &creature
 		if (visible) {
 			client->sendAddCreature(creature, creature->getPosition(), stackpos, false);
 		} else {
-			client->sendRemoveTileThing(creature->getPosition(), stackpos);
+			client->sendRemoveTileCreature(creature, creature->getPosition(), stackpos);
 		}
 	}
 }
