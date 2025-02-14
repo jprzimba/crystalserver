@@ -123,11 +123,11 @@ public:
 
 	virtual CreatureType_t getType() const = 0;
 
-	const std::string& getDisplayName() const {
+	const std::string &getDisplayName() const {
 		return displayName;
 	}
 
-	void setDisplayName(const std::string& name) {
+	void setDisplayName(const std::string &name) {
 		displayName = name;
 	}
 

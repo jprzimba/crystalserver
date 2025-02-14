@@ -6540,7 +6540,7 @@ void Player::sendRemoveTileThing(const Position &pos, int32_t stackpos) const {
 	}
 }
 
-void Player::sendRemoveTileCreature(const std::shared_ptr<Creature> &creature, const Position& pos, int32_t stackpos) {
+void Player::sendRemoveTileCreature(const std::shared_ptr<Creature> &creature, const Position &pos, int32_t stackpos) {
 	if (client) {
 		client->sendRemoveTileCreature(creature, pos, stackpos);
 	}

@@ -6728,8 +6728,7 @@ void ProtocolGame::sendRemoveTileThing(const Position &pos, uint32_t stackpos) {
 	writeToOutputBuffer(msg);
 }
 
-void ProtocolGame::sendRemoveTileCreature(const std::shared_ptr<Creature> &creature, const Position &pos, uint32_t stackpos)
-{
+void ProtocolGame::sendRemoveTileCreature(const std::shared_ptr<Creature> &creature, const Position &pos, uint32_t stackpos) {
 	if (stackpos < 10) {
 		if (!canSee(pos)) {
 			return;
@@ -7792,7 +7791,7 @@ void ProtocolGame::AddCreature(NetworkMessage &msg, const std::shared_ptr<Creatu
 		}
 
 		const auto displayName = creature->getDisplayName();
-		const auto nameToShow = !displayName.empty() ? displayName : (creature->isHealthHidden() ? "" : creature->getName());		
+		const auto nameToShow = !displayName.empty() ? displayName : (creature->isHealthHidden() ? "" : creature->getName());
 		if (!oldProtocol) {
 			msg.addString(nameToShow);
 		} else {

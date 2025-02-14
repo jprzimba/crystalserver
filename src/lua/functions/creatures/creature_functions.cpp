@@ -1198,8 +1198,7 @@ int CreatureFunctions::luaCreatureClearIcons(lua_State* L) {
 	return 1;
 }
 
-int CreatureFunctions::luaCreatureGetDisplayName(lua_State* L)
-{
+int CreatureFunctions::luaCreatureGetDisplayName(lua_State* L) {
 	// creature:getDisplayName()
 	const auto &creature = Lua::getUserdataShared<Creature>(L, 1);
 	if (!creature) {
@@ -1212,8 +1211,7 @@ int CreatureFunctions::luaCreatureGetDisplayName(lua_State* L)
 	return 1;
 }
 
-int CreatureFunctions::luaCreatureSetDisplayName(lua_State* L)
-{
+int CreatureFunctions::luaCreatureSetDisplayName(lua_State* L) {
 	// creature:setDisplayName()
 	const auto &creature = Lua::getUserdataShared<Creature>(L, 1);
 	if (!creature) {

@@ -74,8 +74,7 @@ bool Creature::canSeeCreature(const std::shared_ptr<Creature> &creature) const {
 	return true;
 }
 
-void Creature::updateCreatures()
-{
+void Creature::updateCreatures() {
 	const auto &tile = getTile();
 	if (!tile) {
 		return;
