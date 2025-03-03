@@ -20,37 +20,37 @@
 #include "game/movement/position.hpp"
 
 enum Offer_t {
-	DISABLED=0,
-	ITEM=1,
-	STACKABLE_ITEM=2,
-	OUTFIT=3,
-	OUTFIT_ADDON=4,
-	MOUNT=5,
-	NAMECHANGE=6,
-	SEXCHANGE=7,
-	PROMOTION=8,
+	DISABLED = 0,
+	ITEM = 1,
+	STACKABLE_ITEM = 2,
+	OUTFIT = 3,
+	OUTFIT_ADDON = 4,
+	MOUNT = 5,
+	NAMECHANGE = 6,
+	SEXCHANGE = 7,
+	PROMOTION = 8,
 	PREMIUM_TIME,
 	TELEPORT,
 	BLESSING,
-	BOOST_XP, //not using yet
-	BOOST_STAMINA, //not using yet
+	BOOST_XP, // not using yet
+	BOOST_STAMINA, // not using yet
 	WRAP_ITEM
 };
 
-enum ClientOffer_t{
-	SIMPLE=0,
-	ADDITIONALINFO=1
+enum ClientOffer_t {
+	SIMPLE = 0,
+	ADDITIONALINFO = 1
 };
 
 enum StoreState_t {
-	NORMAL=0,
+	NORMAL = 0,
 	NEW,
 	SALE,
 	LIMITED_TIME
 };
 
-enum GameStoreError_t{
-	STORE_ERROR_PURCHASE=0,
+enum GameStoreError_t {
+	STORE_ERROR_PURCHASE = 0,
 	STORE_ERROR_NETWORK,
 	STORE_ERROR_HISTORY,
 	STORE_ERROR_TRANSFER,
@@ -63,7 +63,7 @@ enum StoreService_t {
 	SERVICE_MOUNT = 4
 };
 
-struct BaseOffer{
+struct BaseOffer {
 	uint32_t id;
 	std::string name;
 	std::string description;
@@ -73,12 +73,12 @@ struct BaseOffer{
 	std::vector<std::string> icons;
 };
 
-struct ItemOffer : BaseOffer{
+struct ItemOffer : BaseOffer {
 	uint16_t productId;
 	uint16_t count;
 };
 
-struct MountOffer: BaseOffer{
+struct MountOffer : BaseOffer {
 	uint8_t mountId;
 };
 
@@ -88,19 +88,19 @@ struct OutfitOffer : BaseOffer {
 	uint8_t addonNumber;
 };
 
-struct TeleportOffer : BaseOffer{
+struct TeleportOffer : BaseOffer {
 	Position position;
 };
 
-struct PremiumTimeOffer : BaseOffer{
+struct PremiumTimeOffer : BaseOffer {
 	uint16_t days;
 };
 
-struct BlessingOffer : BaseOffer{
+struct BlessingOffer : BaseOffer {
 	std::vector<uint8_t> blessings;
 };
 
-struct StoreCategory{
+struct StoreCategory {
 	std::string name;
 	std::string description;
 	StoreState_t state;
@@ -109,40 +109,39 @@ struct StoreCategory{
 };
 
 class GameStore {
-	public:
-		static uint16_t HISTORY_ENTRIES_PER_PAGE;
-		static void startup() {
-			HISTORY_ENTRIES_PER_PAGE=16;
-		}
+public:
+	static uint16_t HISTORY_ENTRIES_PER_PAGE;
+	static void startup() {
+		HISTORY_ENTRIES_PER_PAGE = 16;
+	}
 
-		bool isLoaded() {
-			return loaded;
-		}
+	bool isLoaded() {
+		return loaded;
+	}
 
-		bool reload();
-		bool loadFromXml();
-		uint16_t getOffersCount();
+	bool reload();
+	bool loadFromXml();
+	uint16_t getOffersCount();
 
-		uint16_t getCategoryCount() {
-			return (uint16_t) storeCategoryOffers.size();
-		}
+	uint16_t getCategoryCount() {
+		return (uint16_t)storeCategoryOffers.size();
+	}
 
-		std::vector<StoreCategory*> getCategoryOffers() {
-			return storeCategoryOffers;
-		};
+	std::vector<StoreCategory*> getCategoryOffers() {
+		return storeCategoryOffers;
+	};
 
-		const int8_t getCategoryIndexByName(std::string categoryName) const;
-		bool haveCategoryByState(StoreState_t state);
-		const BaseOffer* getOfferByOfferId(uint32_t offerId);
+	const int8_t getCategoryIndexByName(std::string categoryName) const;
+	bool haveCategoryByState(StoreState_t state);
+	const BaseOffer* getOfferByOfferId(uint32_t offerId);
 
-		static GameStore &getInstance();
+	static GameStore &getInstance();
 
-	private:
-		uint32_t offerCount=0;
-		bool loaded=false;
-		std::vector<StoreCategory*> storeCategoryOffers;
+private:
+	uint32_t offerCount = 0;
+	bool loaded = false;
+	std::vector<StoreCategory*> storeCategoryOffers;
 };
-
 
 struct HistoryStoreOffer {
 	uint32_t time;
@@ -154,9 +153,8 @@ struct HistoryStoreOffer {
 using HistoryStoreOfferList = std::vector<HistoryStoreOffer>;
 
 class IOGameStore {
-	public:
-		static HistoryStoreOfferList getHistoryEntries(uint32_t account_id, uint32_t page);
+public:
+	static HistoryStoreOfferList getHistoryEntries(uint32_t account_id, uint32_t page);
 };
-
 
 constexpr auto g_gamestore = GameStore::getInstance;
