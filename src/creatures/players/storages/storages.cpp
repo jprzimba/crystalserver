@@ -24,7 +24,7 @@ Storages &Storages::getInstance() {
 	return inject<Storages>();
 }
 
-bool Storages::loadFromXML() {
+bool Storages::loadFromXml() {
 	pugi::xml_document doc;
 	auto folder = g_configManager().getString(CORE_DIRECTORY) + "/XML/storages.xml";
 	pugi::xml_parse_result result = doc.load_file(folder.c_str());

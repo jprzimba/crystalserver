@@ -627,11 +627,11 @@ void Game::setGameState(GameState_t newState) {
 			groups.load();
 			g_chat().load();
 
-			// Load monsters and npcs stored by the "loadFromXML" function
+			// Load monsters and npcs stored by the "loadFromXml" function
 			map.spawnsMonster.startup();
 			map.spawnsNpc.startup();
 
-			// Load monsters and npcs custom stored by the "loadFromXML" function
+			// Load monsters and npcs custom stored by the "loadFromXml" function
 			for (int i = 0; i < 50; i++) {
 				map.spawnsNpcCustomMaps[i].startup();
 				map.spawnsMonsterCustomMaps[i].startup();

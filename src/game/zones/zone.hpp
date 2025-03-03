@@ -216,7 +216,7 @@ public:
 	}
 	static void clearZones();
 
-	static bool loadFromXML(const std::string &fileName, uint16_t shiftID = 0);
+	static bool loadFromXml(const std::string &fileName, uint16_t shiftID = 0);
 
 protected:
 	bool contains(const Position &position) const;

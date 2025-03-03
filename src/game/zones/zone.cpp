@@ -272,7 +272,7 @@ void Zone::setMonsterVariant(const std::string &variant) {
 	removeMonsters();
 }
 
-bool Zone::loadFromXML(const std::string &fileName, uint16_t shiftID /* = 0 */) {
+bool Zone::loadFromXml(const std::string &fileName, uint16_t shiftID /* = 0 */) {
 	pugi::xml_document doc;
 	g_logger().debug("Loading zones from {}", fileName);
 	pugi::xml_parse_result result = doc.load_file(fileName.c_str());

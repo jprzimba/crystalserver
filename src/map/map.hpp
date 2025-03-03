@@ -140,13 +140,13 @@ public:
 
 	std::map<std::string, Position> waypoints;
 
-	// Storage made by "loadFromXML" of houses, monsters and npcs for main map
+	// Storage made by "loadFromXml" of houses, monsters and npcs for main map
 	SpawnsMonster spawnsMonster;
 	SpawnsNpc spawnsNpc;
 	Towns towns;
 	Houses houses;
 
-	// Storage made by "loadFromXML" of houses, monsters and npcs for custom maps
+	// Storage made by "loadFromXml" of houses, monsters and npcs for custom maps
 	SpawnsMonster spawnsMonsterCustomMaps[50];
 	SpawnsNpc spawnsNpcCustomMaps[50];
 	Houses housesCustomMaps[50];

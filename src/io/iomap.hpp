@@ -45,7 +45,7 @@ public:
 			map->monsterfile += "-monster.xml";
 		}
 
-		return map->spawnsMonster.loadFromXML(map->monsterfile);
+		return map->spawnsMonster.loadFromXml(map->monsterfile);
 	}
 
 	/**
@@ -61,7 +61,7 @@ public:
 			map->zonesfile += "-zones.xml";
 		}
 
-		return Zone::loadFromXML(map->zonesfile);
+		return Zone::loadFromXml(map->zonesfile);
 	}
 
 	/**
@@ -108,7 +108,7 @@ public:
 			map->monsterfile = mapName;
 			map->monsterfile += "-monster.xml";
 		}
-		return map->spawnsMonsterCustomMaps[customMapIndex].loadFromXML(map->monsterfile);
+		return map->spawnsMonsterCustomMaps[customMapIndex].loadFromXml(map->monsterfile);
 	}
 
 	/**
@@ -123,7 +123,7 @@ public:
 			map->zonesfile = mapName;
 			map->zonesfile += "-zones.xml";
 		}
-		return Zone::loadFromXML(map->zonesfile, customMapIndex);
+		return Zone::loadFromXml(map->zonesfile, customMapIndex);
 	}
 
 	/**

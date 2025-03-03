@@ -35,7 +35,7 @@
 static constexpr int32_t MONSTER_MINSPAWN_INTERVAL = 1000; // 1 second
 static constexpr int32_t MONSTER_MAXSPAWN_INTERVAL = 86400000; // 1 day
 
-bool SpawnsMonster::loadFromXML(const std::string &filemonstername) {
+bool SpawnsMonster::loadFromXml(const std::string &filemonstername) {
 	if (isLoaded()) {
 		return true;
 	}

@@ -27,7 +27,7 @@ public:
 
 	static Storages &getInstance();
 
-	bool loadFromXML();
+	bool loadFromXml();
 
 	const std::map<std::string, uint32_t> &getStorageMap() const;
 

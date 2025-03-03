@@ -26,6 +26,7 @@
 #include "database/databasemanager.hpp"
 #include "declarations.hpp"
 #include "game/game.hpp"
+#include "game/gamestore/gamestore.hpp"
 #include "game/scheduling/dispatcher.hpp"
 #include "game/scheduling/events_scheduler.hpp"
 #include "game/zones/zone.hpp"
@@ -346,7 +347,8 @@ void CrystalServer::loadModules() {
 	modulesLoadHelper(Outfits::getInstance().loadFromXml(), "XML/outfits.xml");
 	modulesLoadHelper(Familiars::getInstance().loadFromXml(), "XML/familiars.xml");
 	modulesLoadHelper(g_imbuements().loadFromXml(), "XML/imbuements.xml");
-	modulesLoadHelper(g_storages().loadFromXML(), "XML/storages.xml");
+	modulesLoadHelper(g_storages().loadFromXml(), "XML/storages.xml");
+	modulesLoadHelper(g_gamestore().loadFromXml(), "XML/gamestore.xml");
 
 	modulesLoadHelper(Item::items.loadFromXml(), "items.xml");
 
