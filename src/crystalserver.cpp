@@ -71,7 +71,7 @@ int CrystalServer::run() {
 			try {
 				loadConfigLua();
 
-				std::clog << "Server protocol: "  << CLIENT_VERSION_UPPER << "."  << CLIENT_VERSION_LOWER << (g_configManager().getBoolean(OLD_PROTOCOL) ? " and 10x allowed!" : "") << std::endl;
+				std::clog << "Server protocol: " << CLIENT_VERSION_UPPER << "." << CLIENT_VERSION_LOWER << (g_configManager().getBoolean(OLD_PROTOCOL) ? " and 10x allowed!" : "") << std::endl;
 #ifdef FEATURE_METRICS
 				metrics::Options metricsOptions;
 				metricsOptions.enablePrometheusExporter = g_configManager().getBoolean(METRICS_ENABLE_PROMETHEUS);
