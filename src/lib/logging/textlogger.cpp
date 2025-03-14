@@ -19,82 +19,80 @@
 #include "utils/tools.hpp"
 #include "config/configmanager.hpp"
 
-void GameLogger::open()
-{
+void GameLogger::open() {
 	m_files[LOGFILE_ASSERTIONS] = fopen("data/logs/client_assertions.txt", "a");
 
 	m_loaded = true;
 }
 
-void GameLogger::close()
-{
+void GameLogger::close() {
 	m_loaded = false;
-	for(uint8_t i = 0; i <= LOGFILE_LAST; i++)
-	{
-		if(m_files[i])
+	for (uint8_t i = 0; i <= LOGFILE_LAST; i++) {
+		if (m_files[i]) {
 			fclose(m_files[i]);
+		}
 	}
 }
 
-void GameLogger::iFile(LogFile_t file, std::string output, bool newLine)
-{
-	if(!m_loaded || !m_files[file])
+void GameLogger::iFile(LogFile_t file, std::string output, bool newLine) {
+	if (!m_loaded || !m_files[file]) {
 		return;
+	}
 
 	internal(m_files[file], output, newLine);
 	fflush(m_files[file]);
 }
 
 void GameLogger::eFile(std::string file, std::string output, bool newLine) {
-    const auto &coreFolder = g_configManager().getString(CORE_DIRECTORY);
-    std::string filePath = coreFolder + "/logs/" + file;
-    FILE* f = fopen(filePath.c_str(), "a");
-    if (!f) {
-        return;
-    }
+	const auto &coreFolder = g_configManager().getString(CORE_DIRECTORY);
+	std::string filePath = coreFolder + "/logs/" + file;
+	FILE* f = fopen(filePath.c_str(), "a");
+	if (!f) {
+		return;
+	}
 
-    internal(f, "[" + formatDateEx() + "] " + output, newLine);
-    fclose(f);
+	internal(f, "[" + formatDateEx() + "] " + output, newLine);
+	fclose(f);
 }
 
-void GameLogger::internal(FILE* file, std::string output, bool newLine)
-{
-	if(!file)
+void GameLogger::internal(FILE* file, std::string output, bool newLine) {
+	if (!file) {
 		return;
+	}
 
-	if(newLine)
+	if (newLine) {
 		output += "\n";
+	}
 
 	fprintf(file, "%s", output.c_str());
 }
 
-OutputHandler::OutputHandler()
-{
+OutputHandler::OutputHandler() {
 	log = std::clog.rdbuf(this);
 	err = std::cerr.rdbuf(this);
 }
 
-OutputHandler::~OutputHandler()
-{
+OutputHandler::~OutputHandler() {
 	std::clog.rdbuf(log);
 	std::cerr.rdbuf(err);
 }
 
-std::streambuf::int_type OutputHandler::overflow(std::streambuf::int_type c/* = traits_type::eof()*/)
-{
+std::streambuf::int_type OutputHandler::overflow(std::streambuf::int_type c /* = traits_type::eof()*/) {
 	m_cache += c;
-	if(c != '\n' && c != '\r')
+	if (c != '\n' && c != '\r') {
 		return c;
+	}
 
-	if(m_cache.size() > 1)
+	if (m_cache.size() > 1) {
 		std::cout << "[" << formatTimeEx(0, true) << "] ";
+	}
 
 	std::cout.write(m_cache.c_str(), m_cache.size());
-	if (GameLogger::getInstance()->isLoaded())
-	{
+	if (GameLogger::getInstance()->isLoaded()) {
 		std::stringstream s;
-		if(m_cache.size() > 1)
+		if (m_cache.size() > 1) {
 			s << "[" << formatDateEx() << "] ";
+		}
 
 		s.write(m_cache.c_str(), m_cache.size());
 		GameLogger::getInstance()->iFile(LOGFILE_OUTPUT, s.str(), false);

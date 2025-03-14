@@ -17,66 +17,66 @@
 
 #pragma once
 
-enum LogFile_t
-{
+enum LogFile_t {
 	LOGFILE_FIRST = 0,
 	LOGFILE_OUTPUT = LOGFILE_FIRST,
 	LOGFILE_ASSERTIONS = 1,
 	LOGFILE_LAST = LOGFILE_ASSERTIONS
 };
 
-enum LogType_t
-{
+enum LogType_t {
 	LOGTYPE_EVENT,
 	LOGTYPE_NOTICE,
 	LOGTYPE_WARNING,
 	LOGTYPE_ERROR,
 };
 
-class GameLogger
-{
-	public:
-		virtual ~GameLogger() {close();}
-		static GameLogger* getInstance()
-		{
-			static GameLogger instance;
-			return &instance;
-		}
+class GameLogger {
+public:
+	virtual ~GameLogger() {
+		close();
+	}
+	static GameLogger* getInstance() {
+		static GameLogger instance;
+		return &instance;
+	}
 
-		void open();
-		void close();
+	void open();
+	void close();
 
-		bool isLoaded() const {return m_loaded;}
+	bool isLoaded() const {
+		return m_loaded;
+	}
 
-		void iFile(LogFile_t file, std::string output, bool newLine);
-		void eFile(std::string file, std::string output, bool newLine);
+	void iFile(LogFile_t file, std::string output, bool newLine);
+	void eFile(std::string file, std::string output, bool newLine);
 
-	private:
-        GameLogger() {m_loaded = false;}
-		void internal(FILE* file, std::string output, bool newLine);
+private:
+	GameLogger() {
+		m_loaded = false;
+	}
+	void internal(FILE* file, std::string output, bool newLine);
 
-		FILE* m_files[LOGFILE_LAST + 1];
-		bool m_loaded;
+	FILE* m_files[LOGFILE_LAST + 1];
+	bool m_loaded;
 };
 
 #define LOG_MESSAGE(type, message, channel) \
-GameLogger::getInstance()->log(__PRETTY_FUNCTION__, type, message, channel);
+	GameLogger::getInstance()->log(__PRETTY_FUNCTION__, type, message, channel);
 
-class OutputHandler : public std::streambuf
-{
-	public:
-		virtual ~OutputHandler();
-		static OutputHandler* getInstance()
-		{
-			static OutputHandler instance;
-			return &instance;
-		}
+class OutputHandler : public std::streambuf {
+public:
+	virtual ~OutputHandler();
+	static OutputHandler* getInstance() {
+		static OutputHandler instance;
+		return &instance;
+	}
 
-	protected:
-		OutputHandler();
-		std::streambuf::int_type overflow(std::streambuf::int_type c = traits_type::eof());
+protected:
+	OutputHandler();
+	std::streambuf::int_type overflow(std::streambuf::int_type c = traits_type::eof());
 
-		std::streambuf* log;
-		std::streambuf* err;
-		std::string m_cache;
+	std::streambuf* log;
+	std::streambuf* err;
+	std::string m_cache;
 };
