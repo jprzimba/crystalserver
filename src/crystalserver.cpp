@@ -71,7 +71,7 @@ int CrystalServer::run() {
 			try {
 				loadConfigLua();
 
-				logger.info("Server protocol: {}.{}{}", CLIENT_VERSION_UPPER, CLIENT_VERSION_LOWER, g_configManager().getBoolean(OLD_PROTOCOL) ? " and 10x allowed!" : "");
+				std::clog << "Server protocol: "  << CLIENT_VERSION_UPPER << "."  << CLIENT_VERSION_LOWER << (g_configManager().getBoolean(OLD_PROTOCOL) ? " and 10x allowed!" : "") << std::endl;
 #ifdef FEATURE_METRICS
 				metrics::Options metricsOptions;
 				metricsOptions.enablePrometheusExporter = g_configManager().getBoolean(METRICS_ENABLE_PROMETHEUS);
@@ -205,8 +205,6 @@ void CrystalServer::setupHousesRent() {
 }
 
 void CrystalServer::logInfos() {
-	std::clog << SOFTWARE_NAME << " - Version " << SOFTWARE_VERSION << "." << std::endl;
-
 #if defined(GIT_RETRIEVED_STATE) && GIT_RETRIEVED_STATE
 	std::clog << SOFTWARE_NAME << " - Version [" << SOFTWARE_VERSION << "] dated [" << GIT_COMMIT_DATE_ISO8601 << "]" << std::endl;
 	#if GIT_IS_DIRTY
@@ -311,13 +309,13 @@ void CrystalServer::loadConfigLua() {
 }
 
 void CrystalServer::initializeDatabase() {
-	logger.info("Establishing database connection... ");
+	std::clog << "Loading database driver... " << std::flush;
 	if (!Database::getInstance().connect()) {
 		throw FailedToInitializeCrystalServer("Failed to connect to database!");
 	}
-	logger.debug("MySQL Version: {}", Database::getClientVersion());
+	std::clog << "MySQL Version: " << Database::getClientVersion() << std::endl;
 
-	logger.debug("Running database manager...");
+	std::clog << "Running database manager" << std::endl;
 	if (!DatabaseManager::isDatabaseSetup()) {
 		throw FailedToInitializeCrystalServer(fmt::format(
 			"The database you have specified in {} is empty, please import the schema.sql to your database.",
@@ -327,15 +325,12 @@ void CrystalServer::initializeDatabase() {
 
 	DatabaseManager::updateDatabase();
 
-	if (g_configManager().getBoolean(OPTIMIZE_DATABASE)
-	    && !DatabaseManager::optimizeTables()) {
-		logger.debug("No tables were optimized");
+	if (g_configManager().getBoolean(OPTIMIZE_DATABASE) && !DatabaseManager::optimizeTables()) {
+		std::clog << "No tables were optimized." << std::endl;
 	}
-	g_logger().info("Database connection established!");
 }
 
 void CrystalServer::loadModules() {
-	logger.debug("Initializing lua environment...");
 	if (!g_luaEnvironment().getLuaState()) {
 		g_luaEnvironment().initState();
 	}
@@ -355,7 +350,7 @@ void CrystalServer::loadModules() {
 	modulesLoadHelper(Item::items.loadFromXml(), "items.xml");
 
 	const auto datapackFolder = g_configManager().getString(DATA_DIRECTORY);
-	logger.debug("Loading core scripts on folder: {}/", coreFolder);
+	std::clog << "Loading core scripts on folder: " << coreFolder << "/" << std::endl;
 	// Load first core Lua libs
 	modulesLoadHelper((g_luaEnvironment().loadFile(coreFolder + "/core.lua", "core.lua") == 0), "core.lua");
 	modulesLoadHelper(g_scripts().loadScripts(coreFolder + "/scripts/lib", true, false), coreFolder + "/scripts/libs");
@@ -365,7 +360,7 @@ void CrystalServer::loadModules() {
 	modulesLoadHelper(g_events().loadFromXml(), "events/events.xml");
 	modulesLoadHelper(g_modules().loadFromXml(), "modules/modules.xml");
 
-	logger.info("Using datapack folder in: {}/", datapackFolder);
+	std::clog << "Using datapack folder in: " << datapackFolder << "/" << std::endl;
 	modulesLoadHelper(g_scripts().loadScripts(datapackFolder + "/scripts/lib", true, false), datapackFolder + "/scripts/libs");
 
 	// Load scripts

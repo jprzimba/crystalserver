@@ -441,7 +441,7 @@ public:
 
 	void setBoostedName(std::string name) {
 		boostedCreature = name;
-		g_logger().info("Boosted creature: {}", name);
+		std::clog << "Boosted creature: " << name << std::endl;
 	}
 
 	std::string getBoostedMonsterName() const {

@@ -37,7 +37,9 @@ ThreadPool::ThreadPool(Logger &logger) :
 }
 
 void ThreadPool::start() const {
-	logger.info("Running with {} threads.", get_thread_count());
+	std::ostringstream logMessage;
+	logMessage << "Running with " << get_thread_count() << " threads.";
+	std::clog << logMessage.str() << std::endl;
 }
 
 void ThreadPool::shutdown() {

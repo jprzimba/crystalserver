@@ -55,7 +55,7 @@ void IOBosstiary::loadBoostedBoss() {
 		bossId = result->getNumber<uint16_t>("raceid");
 		setBossBoostedName(bossName);
 		setBossBoostedId(bossId);
-		g_logger().info("Boosted boss: {}", bossName);
+		std::clog << "Boosted boss: " << bossName << std::endl;
 		return;
 	}
 
