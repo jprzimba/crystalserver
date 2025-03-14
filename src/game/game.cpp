@@ -2291,35 +2291,22 @@ ReturnValue Game::internalAddItem(std::shared_ptr<Cylinder> toCylinder, const st
 
 ReturnValue Game::internalAddItem(std::shared_ptr<Cylinder> toCylinder, const std::shared_ptr<Item> &item, int32_t index, uint32_t flags, bool test, uint32_t &remainderCount) {
 	metrics::method_latency measure(__METRICS_METHOD_NAME__);
-	if (toCylinder == nullptr) {
-		g_logger().error("[{}] fromCylinder is nullptr", __FUNCTION__);
+	if (!toCylinder || !item) {
+		g_logger().error("[{}] toCylinder or item is nullptr", __FUNCTION__);
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
-	if (item == nullptr) {
-		g_logger().error("[{}] item is nullptr", __FUNCTION__);
-		return RETURNVALUE_NOTPOSSIBLE;
-	}
-
-	auto addedItem = toCylinder->getItem();
 
 	std::shared_ptr<Cylinder> destCylinder = toCylinder;
 	std::shared_ptr<Item> toItem = nullptr;
 	toCylinder = toCylinder->queryDestination(index, item, toItem, flags);
-
-	// check if we can add this item
-	ReturnValue ret = toCylinder->queryAdd(index, item, item->getItemCount(), flags);
-	if (ret != RETURNVALUE_NOERROR) {
-		return ret;
-	}
 
 	/*
 	Check if we can move add the whole amount, we do this by checking against the original cylinder,
 	since the queryDestination can return a cylinder that might only hold a part of the full amount.
 	*/
 	uint32_t maxQueryCount = 0;
-	ret = destCylinder->queryMaxCount(INDEX_WHEREEVER, item, item->getItemCount(), maxQueryCount, flags);
-
-	if (ret != RETURNVALUE_NOERROR && addedItem && addedItem->getID() != ITEM_REWARD_CONTAINER) {
+	ReturnValue ret = toCylinder->queryMaxCount(INDEX_WHEREEVER, item, item->getItemCount(), maxQueryCount, flags);
+	if (ret != RETURNVALUE_NOERROR && toItem && toItem->getID() != ITEM_REWARD_CONTAINER) {
 		return ret;
 	}
 
@@ -2343,7 +2330,6 @@ ReturnValue Game::internalAddItem(std::shared_ptr<Cylinder> toCylinder, const st
 				}
 			} else {
 				toCylinder->addThing(index, item);
-
 				int32_t itemIndex = toCylinder->getThingIndex(item);
 				if (itemIndex != -1) {
 					toCylinder->postAddNotification(item, nullptr, itemIndex);
@@ -2367,10 +2353,10 @@ ReturnValue Game::internalAddItem(std::shared_ptr<Cylinder> toCylinder, const st
 		}
 	}
 
-	if (addedItem && addedItem->isQuiver()
-	    && addedItem->getHoldingPlayer()
-	    && addedItem->getHoldingPlayer()->getThing(CONST_SLOT_RIGHT) == addedItem) {
-		addedItem->getHoldingPlayer()->sendInventoryItem(CONST_SLOT_RIGHT, addedItem);
+	if (auto addedItem = toCylinder->getItem(); addedItem && addedItem->isQuiver()) {
+		if (auto player = addedItem->getHoldingPlayer(); player && player->getThing(CONST_SLOT_RIGHT) == addedItem) {
+			player->sendInventoryItem(CONST_SLOT_RIGHT, addedItem);
+		}
 	}
 
 	return RETURNVALUE_NOERROR;
@@ -2442,95 +2428,110 @@ std::tuple<ReturnValue, uint32_t, uint32_t> Game::addItemBatch(const std::shared
 	uint32_t totalAdded = 0;
 	uint32_t containersCreated = 0;
 	ReturnValue ret = RETURNVALUE_NOTPOSSIBLE;
-	if (dropOnMap) {
-		for (const auto &item : items) {
-			auto returnError = internalAddItem(toCylinder->getTile(), item, INDEX_WHEREEVER, FLAG_NOLIMIT);
-			if (returnError == RETURNVALUE_NOERROR) {
-				if (item->getContainer()) {
-					containersCreated++;
-				}
-				totalAdded += item->getItemCount();
-			}
 
-			ret = returnError;
-		}
-
-		return std::make_tuple(ret, totalAdded, containersCreated);
-	}
-
-	metrics::method_latency measure(__METRICS_METHOD_NAME__);
-	const auto &player = toCylinder->getPlayer();
-	bool dropping = false;
 	auto setupDestination = [&]() -> std::shared_ptr<Cylinder> {
 		if (autoContainerId == 0) {
 			return toCylinder;
 		}
+	
+		// Create and add the auto-container
 		auto autoContainer = Item::CreateItem(autoContainerId);
 		if (!autoContainer) {
 			g_logger().error("[{}] Failed to create auto container", __FUNCTION__);
 			return toCylinder;
 		}
-		if (internalAddItem(toCylinder, autoContainer, CONST_SLOT_WHEREEVER, flags) != RETURNVALUE_NOERROR) {
-			if (internalAddItem(toCylinder->getTile(), autoContainer, INDEX_WHEREEVER, FLAG_NOLIMIT) != RETURNVALUE_NOERROR) {
-				g_logger().error("[{}] Failed to add auto container", __FUNCTION__);
-				return toCylinder;
-			}
+	
+		// Try adding the auto-container to the player's inventory or map
+		if (internalAddItem(toCylinder, autoContainer, CONST_SLOT_WHEREEVER, flags) != RETURNVALUE_NOERROR &&
+			internalAddItem(toCylinder->getTile(), autoContainer, INDEX_WHEREEVER, FLAG_NOLIMIT) != RETURNVALUE_NOERROR) {
+			g_logger().error("[{}] Failed to add auto container", __FUNCTION__);
+			return toCylinder;
 		}
+	
+		// Ensure the auto-container is valid
 		auto container = autoContainer->getContainer();
 		if (!container) {
 			g_logger().error("[{}] Failed to get auto container", __FUNCTION__);
 			return toCylinder;
 		}
+	
 		containersCreated++;
 		return container;
 	};
+	
+	// If dropping directly on the map, skip auto-container logic
+	if (dropOnMap) {
+		for (const auto &item : items) {
+			ret = internalAddItem(toCylinder->getTile(), item, INDEX_WHEREEVER, FLAG_NOLIMIT);
+			if (ret == RETURNVALUE_NOERROR) {
+				totalAdded += item->getItemCount();
+				if (item->getContainer()) {
+					containersCreated++;
+				}
+			}
+		}
+		return std::make_tuple(ret, totalAdded, containersCreated);
+	}
+	
+	// Set up the initial destination
 	auto destination = setupDestination();
-
+	bool dropping = false;
+	
+	// Process each item in the batch
 	for (const auto &item : items) {
+		// Check if the current container is full and needs a new one
 		auto container = destination->getContainer();
 		if (container && container->getFreeSlots() == 0) {
 			destination = setupDestination();
 		}
-		if (!dropping) {
-			uint32_t remainderCount = 0;
-			bool addedToAutoContainer = false;
-			// First, try adding to the autoContainer, if it is set
-			if (autoContainerId != 0) {
+	
+		uint32_t remainderCount = 0;
+		bool addedToAutoContainer = false;
+	
+		// Try adding to the auto-container first, if applicable
+		if (autoContainerId != 0) {
+			ret = internalAddItem(destination, item, CONST_SLOT_WHEREEVER, flags, false, remainderCount);
+			if (ret == RETURNVALUE_NOERROR) {
+				addedToAutoContainer = true;
+			}
+		}
+	
+		// If not added to the auto-container, use the fallback logic
+		if (!addedToAutoContainer) {
+			ret = internalCollectManagedItems(toCylinder->getPlayer(), item, g_game().getObjectCategory(item), false);
+	
+			// If the fallback logic fails, try adding normally
+			if (ret != RETURNVALUE_NOERROR) {
 				ret = internalAddItem(destination, item, CONST_SLOT_WHEREEVER, flags, false, remainderCount);
-				if (ret == RETURNVALUE_NOERROR) {
-					addedToAutoContainer = true;
-				}
 			}
-			// If it failed to add to the autoContainer, or it's not set, use the current logic
-			if (!addedToAutoContainer) {
-				ret = internalCollectManagedItems(player, item, g_game().getObjectCategory(item), false);
-				// If it can't place in the player's backpacks, add normally
-				if (ret != RETURNVALUE_NOERROR) {
-					ret = internalAddItem(destination, item, CONST_SLOT_WHEREEVER, flags, false, remainderCount);
-				}
-			}
-
-			if (remainderCount != 0) {
-				std::shared_ptr<Item> remainderItem = Item::CreateItem(item->getID(), remainderCount);
+		}
+	
+		// Handle remainder items
+		if (remainderCount != 0) {
+			auto remainderItem = Item::CreateItem(item->getID(), remainderCount);
+			if (remainderItem) {
 				ReturnValue remaindRet = internalAddItem(destination->getTile(), remainderItem, INDEX_WHEREEVER, FLAG_NOLIMIT);
-				if (player && remaindRet != RETURNVALUE_NOERROR) {
-					player->sendLootStats(item, static_cast<uint8_t>(item->getItemCount()));
+				if (remaindRet != RETURNVALUE_NOERROR && toCylinder->getPlayer()) {
+					toCylinder->getPlayer()->sendLootStats(item, static_cast<uint8_t>(item->getItemCount()));
 				}
 			}
 		}
-
+	
+		// If all else fails, drop the item on the map
 		if (dropping || (ret != RETURNVALUE_NOERROR && dropOnMap)) {
 			dropping = true;
 			ret = internalAddItem(destination->getTile(), item, INDEX_WHEREEVER, FLAG_NOLIMIT);
 		}
-
-		if (player && ret == RETURNVALUE_NOERROR) {
-			player->sendForgingData();
+	
+		// Update forging data and increment totals if successful
+		if (toCylinder->getPlayer() && ret == RETURNVALUE_NOERROR) {
+			toCylinder->getPlayer()->sendForgingData();
 		}
-		if (ret != RETURNVALUE_NOERROR) {
-			break;
-		} else {
+	
+		if (ret == RETURNVALUE_NOERROR) {
 			totalAdded += item->getItemCount();
+		} else {
+			break;
 		}
 	}
 
@@ -2540,27 +2541,33 @@ std::tuple<ReturnValue, uint32_t, uint32_t> Game::addItemBatch(const std::shared
 std::tuple<ReturnValue, uint32_t, uint32_t> Game::createItemBatch(const std::shared_ptr<Cylinder> &toCylinder, const std::vector<std::tuple<uint16_t, uint32_t, uint16_t>> &itemCounts, uint32_t flags /* = 0 */, bool dropOnMap /* = true */, uint32_t autoContainerId /* = 0 */) {
 	metrics::method_latency measure(__METRICS_METHOD_NAME__);
 	std::vector<std::shared_ptr<Item>> items;
+
 	for (const auto &[itemId, count, subType] : itemCounts) {
 		const auto &itemType = Item::items[itemId];
-		if (itemType.id <= 0) {
+		if (itemType.id <= 0 || count == 0) {
 			continue;
 		}
-		if (count == 0) {
-			continue;
-		}
-		uint32_t countPerItem = itemType.stackable ? itemType.stackSize : 1;
+
+		bool isStackable = itemType.stackable;
+		bool isWrappable = itemType.isWrappable();
+		uint32_t stackSize = isStackable ? itemType.stackSize : 1;
+
 		for (uint32_t i = 0; i < count; ++i) {
 			std::shared_ptr<Item> item;
-			if (itemType.isWrappable()) {
-				countPerItem = 1;
-				item = Item::CreateItem(ITEM_DECORATION_KIT, subType);
-				item->setAttribute(ItemAttribute_t::DESCRIPTION, "Unwrap this item in your own house to create a <" + itemType.name + ">.");
-				item->setCustomAttribute("unWrapId", static_cast<int64_t>(itemId));
+			if (isWrappable) {
+				item = createWrappableItem(itemId, subType, itemType.name);
 			} else {
-				item = Item::CreateItem(itemId, itemType.stackable ? std::min<uint32_t>(countPerItem, count - i) : subType);
+				uint32_t itemCount = isStackable ? std::min<uint32_t>(stackSize, count - i) : subType;
+				item = Item::CreateItem(itemId, itemCount);
 			}
+
+			if (!item) {
+				g_logger().error("[{}] Failed to create item with ID: {}", __FUNCTION__, itemId);
+				return {RETURNVALUE_NOTPOSSIBLE, 0, 0};
+			}
+
 			items.push_back(item);
-			i += countPerItem - 1;
+			i += stackSize - 1;
 		}
 	}
 
@@ -2569,6 +2576,17 @@ std::tuple<ReturnValue, uint32_t, uint32_t> Game::createItemBatch(const std::sha
 
 std::tuple<ReturnValue, uint32_t, uint32_t> Game::createItem(const std::shared_ptr<Cylinder> &toCylinder, uint16_t itemId, uint32_t count, uint16_t subType, uint32_t flags /* = 0 */, bool dropOnMap /* = true */, uint32_t autoContainerId /* = 0 */) {
 	return createItemBatch(toCylinder, { std::make_tuple(itemId, count, subType) }, flags, dropOnMap, autoContainerId);
+}
+
+std::shared_ptr<Item> Game::createWrappableItem(uint16_t itemId, uint16_t subType, const std::string &itemName) {
+	auto item = Item::CreateItem(ITEM_DECORATION_KIT, subType);
+	if (!item) {
+		return nullptr;
+	}
+
+	item->setAttribute(ItemAttribute_t::DESCRIPTION, "Unwrap this item in your own house to create a <" + itemName + ">.");
+	item->setCustomAttribute("unWrapId", static_cast<int64_t>(itemId));
+    return item;
 }
 
 ReturnValue Game::internalPlayerAddItem(const std::shared_ptr<Player> &player, const std::shared_ptr<Item> &item, bool dropOnMap /*= true*/, Slots_t slot /*= CONST_SLOT_WHEREEVER*/) {
