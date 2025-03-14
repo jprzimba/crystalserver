@@ -28,6 +28,11 @@
 #include "absl/debugging/symbolize.h"
 
 #include <boost/locale.hpp>
+#include <iostream>
+#include <iomanip>
+#include <sstream>
+#include <chrono>
+#include <ctime>
 
 void printXMLError(const std::string &where, const std::string &fileName, const pugi::xml_parse_result &result) {
 	g_logger().error("[{}] Failed to load {}: {}", where, fileName, result.description());
@@ -452,6 +457,22 @@ std::string convertIPToString(uint32_t ip) {
 	return std::string(buffer.data());
 }
 
+std::string formatDateEx(time_t _time/* = 0*/) {
+	if(!_time) {
+		_time = time(nullptr);
+	}
+
+	const tm* tms = localtime(&_time);
+	std::stringstream s;
+	if (tms) {
+		s << tms->tm_mday << "/" << (tms->tm_mon + 1) << "/" << (tms->tm_year + 1900) << " " << tms->tm_hour << ":" << tms->tm_min << ":" << tms->tm_sec;
+	} else {
+		s << "UNIX Time: " << (int32_t)_time;
+	}
+
+	return s.str();
+}
+
 std::string formatDate(time_t time) {
 	try {
 		return fmt::format("{:%d/%m/%Y %H:%M:%S}", fmt::localtime(time));
@@ -477,6 +498,37 @@ std::string formatTime(time_t time) {
 		g_logger().error("Failed to format time with error code {}", exception.what());
 	}
 	return {};
+}
+
+std::string formatTimeEx(time_t _time /* = 0*/, bool ms /* = false*/) {
+    if (!_time) {
+        _time = std::time(nullptr);
+    } else if (ms) {
+        ms = false; // Disable milliseconds if `_time` is explicitly provided
+    }
+
+    const std::tm* tms = std::localtime(&_time);
+    std::stringstream s;
+
+    if (tms) {
+        s << std::setfill('0') << std::setw(2) << tms->tm_hour << ":"
+          << std::setfill('0') << std::setw(2) << tms->tm_min << ":"
+          << std::setfill('0') << std::setw(2) << tms->tm_sec;
+
+        if (ms) {
+            // Get current time with milliseconds precision
+            auto now = std::chrono::system_clock::now();
+            auto milliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(
+                now.time_since_epoch()
+            ).count() % 1000;
+
+            s << "." << std::setfill('0') << std::setw(3) << milliseconds;
+        }
+    } else {
+        s << "UNIX Time: " << static_cast<int32_t>(_time);
+    }
+
+    return s.str();
 }
 
 std::string formatEnumName(std::string_view name) {

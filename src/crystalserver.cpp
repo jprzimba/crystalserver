@@ -41,6 +41,7 @@
 #include "server/network/protocol/protocolstatus.hpp"
 #include "server/network/webhook/webhook.hpp"
 #include "creatures/players/vocations/vocation.hpp"
+#include "lib/logging/textlogger.hpp"
 
 CrystalServer::CrystalServer(
 	Logger &logger,
@@ -50,6 +51,7 @@ CrystalServer::CrystalServer(
 	logger(logger),
 	rsa(rsa),
 	serviceManager(serviceManager) {
+	OutputHandler::getInstance();
 	logInfos();
 	toggleForceCloseButton();
 	g_game().setGameState(GAME_STATE_STARTUP);
@@ -203,23 +205,25 @@ void CrystalServer::setupHousesRent() {
 }
 
 void CrystalServer::logInfos() {
+	std::clog << SOFTWARE_NAME << " - Version " << SOFTWARE_VERSION << "." << std::endl;
+
 #if defined(GIT_RETRIEVED_STATE) && GIT_RETRIEVED_STATE
-	logger.debug("{} - Version [{}] dated [{}]", SOFTWARE_NAME, SOFTWARE_VERSION, GIT_COMMIT_DATE_ISO8601);
+	std::clog << SOFTWARE_NAME << " - Version [" << SOFTWARE_VERSION << "] dated [" << GIT_COMMIT_DATE_ISO8601 << "]" << std::endl;
 	#if GIT_IS_DIRTY
-	logger.debug("DIRTY - NOT OFFICIAL RELEASE");
+	std::clog << "DIRTY - NOT OFFICIAL RELEASE" << std::endl;
 	#endif
 #else
-	logger.info("{} - Version {}", SOFTWARE_NAME, SOFTWARE_VERSION);
+	std::clog << SOFTWARE_NAME << " - Version " << SOFTWARE_VERSION << std::endl;
 #endif
 
-	logger.debug("Compiled with {}, on {} {}, for platform {}", getCompiler(), __DATE__, __TIME__, getPlatform());
+	std::clog << "Compiled with " << getCompiler() << ", on " << __DATE__ << " " << __TIME__ << ", for platform " << getPlatform() << std::endl;
 
 #if defined(LUAJIT_VERSION)
-	logger.debug("Linked with {} for Lua support", LUAJIT_VERSION);
+	std::clog << "Linked with " << LUAJIT_VERSION << " for Lua support" << std::endl;
 #endif
 
-	logger.info("A server developed by: {}", SOFTWARE_DEVELOPERS);
-	logger.info("Visit our GitHub:  https://github.com/jprzimba/crystalserver");
+	std::clog << "A server developed by: " << SOFTWARE_DEVELOPERS << std::endl;
+	std::clog << "Visit our GitHub: https://github.com/jprzimba/crystalserver" << std::endl;
 }
 
 /**
@@ -379,7 +383,7 @@ void CrystalServer::loadModules() {
 }
 
 void CrystalServer::modulesLoadHelper(bool loaded, std::string moduleName) {
-	logger.debug("Loading {}", moduleName);
+	std::clog << "Loading " << moduleName << std::endl;
 	if (!loaded) {
 		throw FailedToInitializeCrystalServer(fmt::format("Cannot load: {}", moduleName));
 	}

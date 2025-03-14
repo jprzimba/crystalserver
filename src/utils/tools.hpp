@@ -96,9 +96,12 @@ Direction getDirectionTo(const Position &from, const Position &to, bool exactDia
 
 std::string getFirstLine(const std::string &str);
 
+std::string formatDateEx(time_t _time = 0);
 std::string formatDate(time_t time);
 std::string formatDateShort(time_t time);
 std::string formatTime(time_t time);
+std::string formatTimeEx(time_t _time = 0, bool miliseconds = false);
+
 /**
  * @brief Format the enum name by replacing underscores with spaces and converting to lowercase.
  * @param name The enum name to format.
