@@ -5994,6 +5994,16 @@ void Game::playerRequestAddVip(uint32_t playerId, const std::string &name) {
 		return;
 	}
 
+	auto vipListExhaustation = g_configManager().getNumber(VIP_ACTION_EXAUSTRION);
+	if (vipListExhaustation < 0) {
+		vipListExhaustation = 1000;
+	}
+
+	if (player->isUIExhausted(vipListExhaustation)) {
+		player->sendCancelMessage(RETURNVALUE_YOUAREEXHAUSTED);
+		return;
+	}
+
 	std::shared_ptr<Player> vipPlayer = getPlayerByName(name);
 	if (!vipPlayer) {
 		uint32_t guid;
@@ -6024,6 +6034,8 @@ void Game::playerRequestAddVip(uint32_t playerId, const std::string &name) {
 			player->vip()->add(vipPlayer->getGUID(), vipPlayer->getName(), VipStatus_t::OFFLINE);
 		}
 	}
+
+	player->updateUIExhausted();
 }
 
 void Game::playerRequestRemoveVip(uint32_t playerId, uint32_t guid) {
@@ -6032,7 +6044,18 @@ void Game::playerRequestRemoveVip(uint32_t playerId, uint32_t guid) {
 		return;
 	}
 
+	auto vipListExhaustation = g_configManager().getNumber(VIP_ACTION_EXAUSTRION);
+	if (vipListExhaustation < 0) {
+		vipListExhaustation = 1000;
+	}
+
+	if (player->isUIExhausted(vipListExhaustation)) {
+		player->sendCancelMessage(RETURNVALUE_YOUAREEXHAUSTED);
+		return;
+	}
+
 	player->vip()->remove(guid);
+	player->updateUIExhausted();
 }
 
 void Game::playerRequestEditVip(uint32_t playerId, uint32_t guid, const std::string &description, uint32_t icon, bool notify, std::vector<uint8_t> vipGroupsId) {
@@ -6041,12 +6064,28 @@ void Game::playerRequestEditVip(uint32_t playerId, uint32_t guid, const std::str
 		return;
 	}
 
+	auto vipListExhaustation = g_configManager().getNumber(VIP_ACTION_EXAUSTRION);
+	if (vipListExhaustation < 0) {
+		vipListExhaustation = 1000;
+	}
+
+	if (player->isUIExhausted(vipListExhaustation)) {
+		player->sendCancelMessage(RETURNVALUE_YOUAREEXHAUSTED);
+		return;
+	}
+
 	player->vip()->edit(guid, description, icon, notify, vipGroupsId);
+	player->updateUIExhausted();
 }
 
 void Game::playerApplyImbuement(uint32_t playerId, uint16_t imbuementid, uint8_t slot, bool protectionCharm) {
 	const auto &player = getPlayerByID(playerId);
 	if (!player) {
+		return;
+	}
+
+	if (player->isUIExhausted()) {
+		player->sendCancelMessage(RETURNVALUE_YOUAREEXHAUSTED);
 		return;
 	}
 
@@ -6071,11 +6110,17 @@ void Game::playerApplyImbuement(uint32_t playerId, uint16_t imbuementid, uint8_t
 	}
 
 	player->onApplyImbuement(imbuement, item, slot, protectionCharm);
+	player->updateUIExhausted();
 }
 
 void Game::playerClearImbuement(uint32_t playerid, uint8_t slot) {
 	const auto &player = getPlayerByID(playerid);
 	if (!player) {
+		return;
+	}
+
+	if (player->isUIExhausted()) {
+		player->sendCancelMessage(RETURNVALUE_YOUAREEXHAUSTED);
 		return;
 	}
 
@@ -6089,6 +6134,7 @@ void Game::playerClearImbuement(uint32_t playerid, uint8_t slot) {
 	}
 
 	player->onClearImbuement(item, slot);
+	player->updateUIExhausted();
 }
 
 void Game::playerCloseImbuementWindow(uint32_t playerid) {
@@ -6128,7 +6174,13 @@ void Game::playerRequestOutfit(uint32_t playerId) {
 		return;
 	}
 
+	if (player->isUIExhausted()) {
+		player->sendCancelMessage(RETURNVALUE_YOUAREEXHAUSTED);
+		return;
+	}
+
 	player->sendOutfitWindow();
+	player->updateUIExhausted();
 }
 
 void Game::playerToggleMount(uint32_t playerId, bool mount) {
@@ -6137,7 +6189,13 @@ void Game::playerToggleMount(uint32_t playerId, bool mount) {
 		return;
 	}
 
+	if (player->isUIExhausted()) {
+		player->sendCancelMessage(RETURNVALUE_YOUAREEXHAUSTED);
+		return;
+	}
+
 	player->toggleMount(mount);
+	player->updateUIExhausted();
 }
 
 void Game::playerChangeOutfit(uint32_t playerId, Outfit_t outfit, uint8_t isMountRandomized /* = 0*/) {
@@ -9057,7 +9115,12 @@ bool checkCanInitCreateMarketOffer(const std::shared_ptr<Player> &player, uint8_
 		return false;
 	}
 
-	if (player->isUIExhausted(1000)) {
+	auto marketActionExhaustation = g_configManager().getNumber(MARKET_ACTION_EXAUSTRION);
+	if (marketActionExhaustation < 0) {
+		marketActionExhaustation = 1000;
+	}
+
+	if (player->isUIExhausted(marketActionExhaustation)) {
 		player->sendCancelMessage(RETURNVALUE_YOUAREEXHAUSTED);
 		return false;
 	}
@@ -9186,7 +9249,12 @@ void Game::playerCancelMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 		return;
 	}
 
-	if (player->isUIExhausted(1000)) {
+	auto marketActionExhaustation = g_configManager().getNumber(MARKET_ACTION_EXAUSTRION);
+	if (marketActionExhaustation < 0) {
+		marketActionExhaustation = 1000;
+	}
+
+	if (player->isUIExhausted(marketActionExhaustation)) {
 		player->sendCancelMessage(RETURNVALUE_YOUAREEXHAUSTED);
 		return;
 	}
@@ -9273,7 +9341,12 @@ void Game::playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 		return;
 	}
 
-	if (player->isUIExhausted(1000)) {
+	auto marketActionExhaustation = g_configManager().getNumber(MARKET_ACTION_EXAUSTRION);
+	if (marketActionExhaustation < 0) {
+		marketActionExhaustation = 1000;
+	}
+
+	if (player->isUIExhausted(marketActionExhaustation)) {
 		player->sendCancelMessage(RETURNVALUE_YOUAREEXHAUSTED);
 		return;
 	}
