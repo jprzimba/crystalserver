@@ -3,7 +3,7 @@ function onUpdateDatabase()
 
 	db.query([[
         ALTER TABLE `players`
-            ADD `rebirth` int(11) NOT NULL DEFAULT '0';
+            ADD `rebirth` int(11) NOT NULL DEFAULT '0' AFTER `level`;
     ]])
 end
 
