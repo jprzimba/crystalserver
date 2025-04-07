@@ -193,6 +193,7 @@ bool IOLoginDataSave::savePlayerFirst(const std::shared_ptr<Player> &player) {
 	query << "UPDATE `players` SET ";
 	query << "`name` = " << db.escapeString(player->name) << ",";
 	query << "`level` = " << player->level << ",";
+	query << "`rebirth` = " << player->rebirth << ",";
 	query << "`group_id` = " << player->group->id << ",";
 	query << "`vocation` = " << player->getVocationId() << ",";
 	query << "`health` = " << player->health << ",";

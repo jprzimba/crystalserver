@@ -400,8 +400,8 @@ bool ConfigManager::load() {
 	loadIntConfig(L, MARKET_ACTIONS_DELAY_INTERVAL, "marketActionsDelay", 1000);
 	loadIntConfig(L, IMBUEMENT_ACTIONS_DELAY_INTERVAL, "imbueActionsDelay", 1000);
 	loadIntConfig(L, REBORN_STATBONUS, "rebornStatBonus", 0);
-	loadIntConfig(L, REBORN_LEVEL, "rebornLevel", 0);
-	loadIntConfig(L, REBORN_DMGBONUS, "rebornDmgBonus", 0);
+	loadIntConfig(L, REBORN_LEVEL, "rebornLevel", 1);
+	loadIntConfig(L, REBORN_DMGBONUS, "rebornDamageBonus", 1);
 
 	loadStringConfig(L, CORE_DIRECTORY, "coreDirectory", "data");
 	loadStringConfig(L, DATA_DIRECTORY, "dataPackDirectory", "data-global");

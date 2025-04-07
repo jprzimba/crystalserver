@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS `server_config` (
     CONSTRAINT `server_config_pk` PRIMARY KEY (`config`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO `server_config` (`config`, `value`) VALUES ('db_version', '50'), ('motd_hash', ''), ('motd_num', '0'), ('players_record', '0');
+INSERT INTO `server_config` (`config`, `value`) VALUES ('db_version', '52'), ('motd_hash', ''), ('motd_num', '0'), ('players_record', '0');
 
 -- Table structure `accounts`
 CREATE TABLE IF NOT EXISTS `accounts` (
@@ -50,6 +50,7 @@ CREATE TABLE IF NOT EXISTS `players` (
     `group_id` int(11) NOT NULL DEFAULT '1',
     `account_id` int(11) UNSIGNED NOT NULL DEFAULT '0',
     `level` int(11) NOT NULL DEFAULT '1',
+    `rebirth` int(11) NOT NULL DEFAULT '0',
     `vocation` int(11) NOT NULL DEFAULT '0',
     `health` int(11) NOT NULL DEFAULT '150',
     `healthmax` int(11) NOT NULL DEFAULT '150',
@@ -762,6 +763,18 @@ CREATE TABLE IF NOT EXISTS `player_rewards` (
     CONSTRAINT `player_rewards_players_fk`
         FOREIGN KEY (`player_id`) REFERENCES `players` (`id`)
         ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- Table structure `player_oldnames`
+CREATE TABLE IF NOT EXISTS `player_oldnames` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `player_id` int(11) NOT NULL,
+    `former_name` varchar(255) NOT NULL DEFAULT '',
+    `name` varchar(255) NOT NULL,
+    `old_name` varchar(255) NOT NULL,
+    `date` int(11) NOT NULL,
+    PRIMARY KEY (`id`),
+    INDEX `player_id_index` (`player_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Table structure `player_spells`

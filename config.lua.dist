@@ -40,11 +40,11 @@ rookSlotRight = 3270
 rookSlotLeft = 0
 rookSlotAmmo = 0
 
--- Reborn system
+-- Rebirth system
 toggleRebirthSystem = false
-rebornStatBonus = 5
-rebornDmgBonus = 5
-rebornLevel = 9
+rebornLevel = 9999
+rebornStatBonus = 2
+rebornDamageBonus = 2
 
 -- Combat settings
 -- NOTE: valid values for worldType are: "pvp", "no-pvp" and "pvp-enforced"
