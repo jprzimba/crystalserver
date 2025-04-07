@@ -122,14 +122,20 @@ void Player::doReborn() {
 	bonusRebirth /= 100;
 	bonusRebirth += 1;
 
-	mana = 90 * bonusRebirth;
-	manaMax = mana;
-	health = 185 * bonusRebirth;
-	healthMax = health;
+	manaMax = static_cast<int>(std::round(manaMax * bonusRebirth));
+	mana = manaMax;
+	healthMax = static_cast<int>(std::round(healthMax * bonusRebirth));
+	health = healthMax;
+
 	// capacity = 470 * bonusRebirth;
 	experience = 4200;
 	level = 8;
 	levelPercent = 0;
+
+	std::ostringstream ss;
+	ss << "Congratulations! You have been reborn and are now on rebirth " << rebirth << ". Your attributes have been reset, and you've received a bonus of " << (bonusRebirth - 1) * 100 << "%!";
+	sendTextMessage(MESSAGE_EVENT_ADVANCE, ss.str());
+	sendTakeScreenshot(SCREENSHOT_TYPE_LEVELUP);
 	sendStats();
 }
 
@@ -3275,6 +3281,10 @@ void Player::addExperience(const std::shared_ptr<Creature> &target, uint64_t exp
 
 		currLevelExp = nextLevelExp;
 		nextLevelExp = getExpForLevel(level + 1);
+		if (g_configManager().getBoolean(REBIRTH_SYSTEM) && level >= g_configManager().getNumber(REBORN_LEVEL)) {
+			doReborn();
+		}
+
 		if (currLevelExp >= nextLevelExp) {
 			// player has reached max level
 			break;
