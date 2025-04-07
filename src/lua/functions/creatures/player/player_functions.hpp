@@ -400,5 +400,8 @@ class PlayerFunctions {
 	static int luaPlayerRemoveAnimusMastery(lua_State* L);
 	static int luaPlayerHasAnimusMastery(lua_State* L);
 
+	static int luaPlayerGetRebirth(lua_State* L);
+	static int luaPlayerDoRebirth(lua_State* L);
+
 	friend class CreatureFunctions;
 };

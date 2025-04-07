@@ -424,6 +424,9 @@ void PlayerFunctions::init(lua_State* L) {
 	Lua::registerMethod(L, "Player", "removeAnimusMastery", PlayerFunctions::luaPlayerRemoveAnimusMastery);
 	Lua::registerMethod(L, "Player", "hasAnimusMastery", PlayerFunctions::luaPlayerHasAnimusMastery);
 
+	Lua::registerMethod(L, "Player", "getRebirth", PlayerFunctions::luaPlayerGetRebirth);
+	Lua::registerMethod(L, "Player", "doRebirth", PlayerFunctions::luaPlayerDoRebirth);
+
 	GroupFunctions::init(L);
 	GuildFunctions::init(L);
 	MountFunctions::init(L);
@@ -4983,5 +4986,29 @@ int PlayerFunctions::luaPlayerRemoveDeflectCondition(lua_State* L) {
 	auto deflectChance = Lua::getNumber<uint8_t>(L, 4);
 	player->removeDeflectCondition(source, conditionType, deflectChance);
 	Lua::pushBoolean(L, true);
+	return 1;
+}
+
+int PlayerFunctions::luaPlayerDoRebirth(lua_State* L) {
+	// player:doRebirth()
+	const auto &player = Lua::getUserdataShared<Player>(L, 1);
+	if (!player) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	player->doReborn();
+	Lua::pushBoolean(L, true);
+	return 1;
+}
+
+int PlayerFunctions::luaPlayerGetRebirth(lua_State* L) {
+	// player:getRebirth()
+	const auto &player = Lua::getUserdataShared<Player>(L, 1);
+	if (player) {
+		lua_pushnumber(L, player->getRebirth());
+	} else {
+		lua_pushnil(L);
+	}
 	return 1;
 }

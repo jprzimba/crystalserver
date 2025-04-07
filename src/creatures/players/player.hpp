@@ -209,7 +209,10 @@ public:
 	bool hasAnyMount() const;
 	uint8_t getRandomMountId() const;
 	void dismount();
+
 	uint16_t getDodgeChance() const;
+
+	void doReborn();
 
 	uint8_t isRandomMounted() const;
 	void setRandomMount(uint8_t isMountRandomized);
@@ -460,6 +463,9 @@ public:
 	void setLevel(uint32_t newLevel) {
 		level = newLevel;
 	}
+    uint32_t getRebirth() const {
+		return rebirth;
+    }
 	uint8_t getLevelPercent() const {
 		return levelPercent;
 	}
@@ -1534,6 +1540,7 @@ private:
 	std::bitset<ConditionType_t::CONDITION_COUNT> m_conditionSuppressions;
 
 	uint32_t level = 1;
+	uint32_t rebirth = 0;
 	uint32_t magLevel = 0;
 	uint32_t actionTaskEvent = 0;
 	uint32_t actionTaskEventPush = 0;
