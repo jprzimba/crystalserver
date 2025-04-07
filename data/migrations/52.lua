@@ -6,4 +6,3 @@ function onUpdateDatabase()
             ADD `rebirth` int(11) NOT NULL DEFAULT '0' AFTER `level`;
     ]])
 end
-
