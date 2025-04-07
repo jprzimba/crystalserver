@@ -7330,19 +7330,17 @@ bool Game::combatChangeHealth(const std::shared_ptr<Creature> &attacker, const s
 
 		// Wheel of destiny apply combat effects
 		applyWheelOfDestinyEffectsToDamage(damage, attackerPlayer, target);
-	
-		double bonusRebirth = 0.0;		
+
+		double bonusRebirth = 0.0;
 		if (g_configManager().getBoolean(REBIRTH_SYSTEM)) {
-			if(attackerPlayer != nullptr){
+			if (attackerPlayer != nullptr) {
 				bonusRebirth = attackerPlayer->rebirth * g_configManager().getNumber(REBORN_DMGBONUS);
 				bonusRebirth /= 10;
 				bonusRebirth /= 100;
 				bonusRebirth += 1;
-			}
-			else {
+			} else {
 				bonusRebirth = 1.0;
 			}
-		
 		}
 		std::cout << bonusRebirth << std::endl;
 
