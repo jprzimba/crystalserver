@@ -463,9 +463,9 @@ public:
 	void setLevel(uint32_t newLevel) {
 		level = newLevel;
 	}
-    uint32_t getRebirth() const {
+	uint32_t getRebirth() const {
 		return rebirth;
-    }
+	}
 	uint8_t getLevelPercent() const {
 		return levelPercent;
 	}

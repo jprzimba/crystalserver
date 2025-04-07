@@ -121,12 +121,12 @@ void Player::doReborn() {
 	double bonusRebirth = rebirth * g_configManager().getNumber(REBORN_STATBONUS);
 	bonusRebirth /= 100;
 	bonusRebirth += 1;
-		
+
 	mana = 90 * bonusRebirth;
 	manaMax = mana;
 	health = 185 * bonusRebirth;
 	healthMax = health;
-	//capacity = 470 * bonusRebirth;
+	// capacity = 470 * bonusRebirth;
 	experience = 4200;
 	level = 8;
 	levelPercent = 0;
@@ -3257,7 +3257,7 @@ void Player::addExperience(const std::shared_ptr<Creature> &target, uint64_t exp
 			bonusRebirth /= 100;
 			bonusRebirth += 1;
 		}
-	
+
 		++level;
 		auto currentVocation = vocation;
 		if (currentVocation->getId() != VOCATION_NONE && g_configManager().getBoolean(ROOK_SYSTEM) && level <= (uint32_t)g_configManager().getNumber(MIN_LEVEL_LEAVE_ROOK)) {
